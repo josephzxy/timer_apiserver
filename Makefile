@@ -4,7 +4,7 @@
 MAIN_PREFIX := "Main:"
 
 .PHONY: all
-all: tidy format lint
+all: tidy format lint build
 
 # Includes
 include scripts/make_rules/common.mk # must always be the first
