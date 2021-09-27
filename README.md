@@ -122,3 +122,26 @@ Example request body and response is similar to the one in [RESTful API-Create](
 Example response is similar to the one in [RESTful API-Create](#Create)
 
 ### gRPC API
+The service definition file is like below.
+
+```proto3
+syntax = "proto3";
+
+package proto;
+
+service Resource {
+    rpc ListPendingTimers(ListPendingTimersReq) returns (ListPendingTimersResp) {}
+}
+
+message TimerInfo {
+    string name = 1;
+    string trigger_at = 2;
+}
+
+message ListPendingTimersReq {
+}
+
+message ListPendingTimersResp {
+    repeated TimerInfo items = 1;
+}
+```
