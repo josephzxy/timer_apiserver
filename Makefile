@@ -4,7 +4,7 @@
 MAIN_PREFIX := "Main:"
 
 .PHONY: all
-all: tidy format lint build
+all: tidy format lint test build
 
 # Includes
 include scripts/make_rules/common.mk # must always be the first
@@ -19,6 +19,9 @@ format: go.format
 
 .PHONY: lint
 lint: go.lint
+
+.PHONY: test
+test: go.test
 
 .PHONY: build
 build: go.build

@@ -23,6 +23,11 @@ go.lint: tools.verify.golangci-lint
 	@echo "=======> $(GOLANG_MK_PREFIX) linting source code"
 	@golangci-lint run $(PROJECT_ROOT)/...
 
+.PHONY: go.test
+go.test:
+	@echo "=======> $(GOLANG_MK_PREFIX) running unit tests"
+	@$(GO) test -v -short -timeout=10m $(PROJECT_ROOT)/...
+
 .PHONY: go.build
 go.build: go.build.$(GO_BIN).$(PLATFORM)
 
