@@ -15,8 +15,8 @@ go.tidy:
 .PHONY: go.format
 go.format: tools.verify.goimports
 	@echo "=======> $(GOLANG_MK_PREFIX) formatting source code"
-	@gofmt -s -w .
-	@goimports -w -local $(GO_MODULE) .
+	@gofmt -s -w $(PROJECT_ROOT)
+	@goimports -w -local $(GO_MODULE) $(PROJECT_ROOT)
 
 .PHONY: go.lint
 go.lint: tools.verify.golangci-lint
@@ -40,4 +40,4 @@ go.build.%:
 .PHONY: go.clean
 go.clean:
 	@echo "=======> $(GOLANG_MK_PREFIX) cleaning"
-	@go clean -x `go list ./...`
+	@go clean -x `go list $(PROJECT_ROOT)/...`
