@@ -56,9 +56,10 @@ Example request body
 ```json
 {
     "name": "test_timer",
-    "triggerAt": "2021-09-16T00:00:00+08:00" // RFC3339 format
+    "triggerAt": "2021-09-16T00:00:00+08:00"
 }
 ```
+(The timestamp is in RFC3339 format)
 
 Example response
 ```json
@@ -67,7 +68,7 @@ Example response
 {
     "data": {
         "name": "test_timer",
-        "triggerAt": "2021-09-16T00:00:00+08:00", // RFC3339 format
+        "triggerAt": "2021-09-16T00:00:00+08:00",
         "createdAt": "2021-09-15T00:00:00+08:00"
     },
     "err": null,
@@ -101,7 +102,7 @@ Example response
     "data": [
         {
             "name": "test_timer",
-            "triggerAt": "2021-09-16T00:00:00+08:00", // RFC3339 format
+            "triggerAt": "2021-09-16T00:00:00+08:00", 
             "createdAt": "2021-09-15T00:00:00+08:00"
         },
         ...
