@@ -9,6 +9,7 @@ all: tidy format
 # Includes
 include scripts/make_rules/common.mk # must always be the first
 include scripts/make_rules/golang.mk
+include scripts/make_rules/tools.mk
 
 .PHONY: tidy
 tidy: go.tidy

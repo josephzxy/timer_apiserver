@@ -2,6 +2,8 @@ GO := go
 
 GO_MAIN_FILE := $(PROJECT_ROOT)/cmd/apiserver.go
 GO_BIN := apiserver
+GO_MOD_FILE := $(PROJECT_ROOT)/go.mod
+GO_MODULE := $(word 2, $(subst $(SPACE), , $(shell cat $(GO_MOD_FILE) | head -n 1)))
 
 GOLANG_MK_PREFIX := "Golang:"
 
@@ -11,9 +13,10 @@ go.tidy:
 	@$(GO) mod tidy
 
 .PHONY: go.format
-go.format:
+go.format: tools.verify.goimports
 	@echo "=======> $(GOLANG_MK_PREFIX) formatting source code ..."
 	@gofmt -s -w .
+	@goimports -w -local $(GO_MODULE) .
 
 .PHONY: go.build
 go.build: go.build.$(GO_BIN).$(PLATFORM)

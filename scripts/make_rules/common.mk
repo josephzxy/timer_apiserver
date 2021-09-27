@@ -16,3 +16,6 @@ else
 	GOOS := $(word 1, $(subst _, , $(PLATFORM)))
 	GOARCH := $(word 2, $(subst _, , $(PLATFORM)))
 endif
+
+SPACE :=
+SPACE +=
