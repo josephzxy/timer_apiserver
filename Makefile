@@ -14,5 +14,8 @@ tidy: go.tidy
 .PHONY: format
 format: go.format
 
+.PHONY: build
+build: go.build
+
 .PHONY: clean
 clean: go.clean
