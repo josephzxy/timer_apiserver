@@ -1,6 +1,8 @@
 # Build all by default
 .DEFAULT_GOAL := all
 
+MAIN_PREFIX := "Main:"
+
 .PHONY: all
 all: tidy format
 
@@ -18,4 +20,7 @@ format: go.format
 build: go.build
 
 .PHONY: clean
-clean: go.clean
+clean:
+	@echo "=======> $(MAIN_PREFIX) cleaning"
+	@rm -rvf $(OUTPUT_DIR)
+	@$(MAKE) go.clean

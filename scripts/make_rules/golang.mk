@@ -32,4 +32,4 @@ go.build.%:
 .PHONY: go.clean
 go.clean:
 	@echo "=======> $(GOLANG_MK_PREFIX) cleaning ..."
-	@go clean -x
+	@go clean -x `go list ./...`
