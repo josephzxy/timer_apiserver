@@ -26,7 +26,12 @@ go.lint: tools.verify.golangci-lint
 .PHONY: go.test
 go.test:
 	@echo "=======> $(GOLANG_MK_PREFIX) running unit tests"
-	@$(GO) test -v -short -timeout=10m $(PROJECT_ROOT)/...
+	@mkdir -p $(OUTPUT_DIR)
+	@$(GO) test -v -short -race -timeout=10m \
+	-coverprofile=$(OUTPUT_DIR)/coverage.out \
+	$(PROJECT_ROOT)/...
+	@$(GO) tool cover -html=$(OUTPUT_DIR)/coverage.out -o $(OUTPUT_DIR)/coverage.html
+	@$(GO) tool cover -func=$(OUTPUT_DIR)/coverage.out
 
 .PHONY: go.build
 go.build: go.build.$(GO_BIN).$(PLATFORM)

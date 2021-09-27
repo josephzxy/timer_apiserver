@@ -1,3 +1,6 @@
 # vscode
 .vscode/
 *.session.sql
+
+# GNU make
+_output/
