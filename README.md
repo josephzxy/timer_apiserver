@@ -146,3 +146,4 @@ message ListPendingTimersResp {
     repeated TimerInfo items = 1;
 }
 ```
+A timer will be considered as "pending" if it is created, not deleted, and not triggerred yet.
