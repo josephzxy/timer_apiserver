@@ -5,3 +5,7 @@ tools.verify.%:
 .PHONY: tools.install.goimports
 tools.install.goimports:
 	@$(GO) install golang.org/x/tools/cmd/goimports@latest
+
+.PHONY: tools.install.golangci-lint
+tools.install.golangci-lint:
+	@$(GO) install github.com/golangci/golangci-lint/cmd/golangci-lint@latest

@@ -18,6 +18,11 @@ go.format: tools.verify.goimports
 	@gofmt -s -w .
 	@goimports -w -local $(GO_MODULE) .
 
+.PHONY: go.lint
+go.lint: tools.verify.golangci-lint
+	@echo "=======> $(GOLANG_MK_PREFIX) linting source code"
+	@golangci-lint run $(PROJECT_ROOT)/...
+
 .PHONY: go.build
 go.build: go.build.$(GO_BIN).$(PLATFORM)
 
