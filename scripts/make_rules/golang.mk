@@ -9,12 +9,12 @@ GOLANG_MK_PREFIX := "Golang:"
 
 .PHONY: go.tidy
 go.tidy:
-	@echo "=======> $(GOLANG_MK_PREFIX) tidying dependencies ..."
+	@echo "=======> $(GOLANG_MK_PREFIX) tidying dependencies"
 	@$(GO) mod tidy
 
 .PHONY: go.format
 go.format: tools.verify.goimports
-	@echo "=======> $(GOLANG_MK_PREFIX) formatting source code ..."
+	@echo "=======> $(GOLANG_MK_PREFIX) formatting source code"
 	@gofmt -s -w .
 	@goimports -w -local $(GO_MODULE) .
 
@@ -39,5 +39,5 @@ go.build.%:
 
 .PHONY: go.clean
 go.clean:
-	@echo "=======> $(GOLANG_MK_PREFIX) cleaning ..."
+	@echo "=======> $(GOLANG_MK_PREFIX) cleaning"
 	@go clean -x `go list ./...`
