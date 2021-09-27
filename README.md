@@ -48,5 +48,77 @@ CREATE TABLE IF NOT EXISTS `timer` (
 ```
 
 ### RESTful API
+Basic CRUD operations are supported.
+#### Create
+`POST /v1/timers`
+
+Example request body
+```json
+{
+    "name": "test_timer",
+    "triggerAt": "2021-09-16T00:00:00+08:00" // RFC3339 format
+}
+```
+
+Example response
+```json
+// success
+// HTTP status: 200
+{
+    "data": {
+        "name": "test_timer",
+        "triggerAt": "2021-09-16T00:00:00+08:00", // RFC3339 format
+        "createdAt": "2021-09-15T00:00:00+08:00"
+    },
+    "err": null,
+}
+```
+```json
+// failure
+// HTTP status: 400
+{
+    "data": null,
+    "err": {
+        "code": 100001,
+        "msg": "Request validation failed"
+    }
+}
+```
+
+#### Read
+`GET /v1/timers/{name}`
+
+Example response is similar to the one in [RESTful API-Create](#Create)
+
+#### Read all
+`GET /v1/timers`
+
+Example response
+```json
+// success
+// HTTP status: 200
+{
+    "data": [
+        {
+            "name": "test_timer",
+            "triggerAt": "2021-09-16T00:00:00+08:00", // RFC3339 format
+            "createdAt": "2021-09-15T00:00:00+08:00"
+        },
+        ...
+    ],
+    "err": null,
+}
+```
+Error response is similar to the one in [RESTful API-Create](#Create)
+
+#### Update
+`PUT /v1/timers/{name}`
+
+Example request body and response is similar to the one in [RESTful API-Create](#Create)
+
+#### Delete
+`DELETE /v1/timers/{name}`
+
+Example response is similar to the one in [RESTful API-Create](#Create)
 
 ### gRPC API
