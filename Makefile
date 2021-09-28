@@ -12,6 +12,7 @@ include scripts/make_rules/common.mk # must always be the first
 include scripts/make_rules/golang.mk
 include scripts/make_rules/tools.mk
 include scripts/make_rules/docker.mk
+include scripts/make_rules/swagger.mk
 
 # Usages
 define USAGE_OPTIONS
@@ -47,6 +48,10 @@ build: go.build
 ## docker: Build docker image
 .PHONY: docker
 docker: docker.build
+
+## swagger: Generate swagger doc for RESTful API and launch a local HTTP server to display
+.PHONY: swagger
+swagger: swagger.serve
 
 ## clean: Remove temporary files generated during building
 .PHONY: clean

@@ -9,3 +9,7 @@ tools.install.goimports:
 .PHONY: tools.install.golangci-lint
 tools.install.golangci-lint:
 	@$(GO) install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+
+.PHONY: tools.install.swagger
+tools.install.swagger:
+	$(GO) install github.com/go-swagger/go-swagger/cmd/swagger@latest

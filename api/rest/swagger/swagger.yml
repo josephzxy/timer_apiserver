@@ -1,0 +1,179 @@
+basePath: /v1
+consumes:
+- application/json
+definitions:
+  Timer:
+    properties:
+      createdAt:
+        format: date-time
+        type: string
+        x-go-name: CreatedAt
+      name:
+        type: string
+        x-go-name: Name
+      triggerAt:
+        format: date-time
+        type: string
+        x-go-name: TriggerAt
+    type: object
+    x-go-package: github.com/josephzxy/timer_apiserver/internal/resource/model/v1
+  TimerCore:
+    description: TimerCore contains fields that can be specified directly via APIs
+    properties:
+      name:
+        type: string
+        x-go-name: Name
+      triggerAt:
+        format: date-time
+        type: string
+        x-go-name: TriggerAt
+    type: object
+    x-go-package: github.com/josephzxy/timer_apiserver/internal/resource/model/v1
+  dataColField:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/Timer'
+        type: array
+        x-go-name: Data
+    type: object
+    x-go-package: github.com/josephzxy/timer_apiserver/api/rest/swagger/docs
+  dataObjField:
+    properties:
+      data:
+        $ref: '#/definitions/Timer'
+    type: object
+    x-go-package: github.com/josephzxy/timer_apiserver/api/rest/swagger/docs
+  errField:
+    properties:
+      err:
+        $ref: '#/definitions/errInfo'
+    type: object
+    x-go-package: github.com/josephzxy/timer_apiserver/api/rest/swagger/docs
+  errInfo:
+    properties:
+      code:
+        description: |-
+          in:body
+          Application error code. E.g. 100001
+        format: int64
+        type: integer
+        x-go-name: Code
+      msg:
+        description: Application error message. E.g. "Req validation failed"
+        type: string
+        x-go-name: Msg
+    type: object
+    x-go-package: github.com/josephzxy/timer_apiserver/api/rest/swagger/docs
+host: localhost
+info:
+  description: The RESTful API server for managing timers
+  title: Timer API Server
+  version: 1.0.0
+paths:
+  /timers:
+    get:
+      description: Get all timers
+      operationId: getTimersReq
+      responses:
+        "200":
+          $ref: '#/responses/getTimersResp'
+        default:
+          $ref: '#/responses/errResp'
+    post:
+      description: Create a timer
+      operationId: createTimerReq
+      parameters:
+      - in: body
+        name: Body
+        schema:
+          $ref: '#/definitions/TimerCore'
+      responses:
+        "200":
+          $ref: '#/responses/createTimerResp'
+        default:
+          $ref: '#/responses/errResp'
+      tags:
+      - timer
+  /timers/{name}:
+    delete:
+      description: Delete a timer
+      operationId: deleteTimerReq
+      parameters:
+      - description: The name of the timer
+        in: path
+        name: name
+        required: true
+        type: string
+        x-go-name: Name
+      responses:
+        "200":
+          $ref: '#/responses/deleteTimerResp'
+        default:
+          $ref: '#/responses/errResp'
+    get:
+      description: Get a timer
+      operationId: getTimerReq
+      parameters:
+      - description: The name of the timer
+        in: path
+        name: name
+        required: true
+        type: string
+        x-go-name: Name
+      responses:
+        "200":
+          $ref: '#/responses/getTimerResp'
+        default:
+          $ref: '#/responses/errResp'
+    put:
+      description: Update a timer
+      operationId: updateTimerReq
+      parameters:
+      - description: The name of the timer
+        in: path
+        name: name
+        required: true
+        type: string
+        x-go-name: Name
+      - in: body
+        name: Body
+        schema:
+          $ref: '#/definitions/TimerCore'
+      responses:
+        "200":
+          $ref: '#/responses/updateTimerResp'
+        default:
+          $ref: '#/responses/errResp'
+produces:
+- application/json
+responses:
+  createTimerResp:
+    description: ""
+    schema:
+      $ref: '#/definitions/dataObjField'
+  deleteTimerResp:
+    description: ""
+    schema:
+      $ref: '#/definitions/dataObjField'
+  errResp:
+    description: ""
+    schema:
+      $ref: '#/definitions/errField'
+  getTimerResp:
+    description: ""
+    schema:
+      $ref: '#/definitions/dataObjField'
+  getTimersResp:
+    description: ""
+    headers:
+      Body: {}
+    schema:
+      $ref: '#/definitions/dataColField'
+  updateTimerResp:
+    description: ""
+    schema:
+      $ref: '#/definitions/dataObjField'
+schemes:
+- http
+swagger: "2.0"
