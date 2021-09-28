@@ -7,8 +7,14 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Build with GNU make
-          command: make
+          name: Lint source code
+          command: make lint
+      - run:
+          name: Run unit tests
+          command: make test
+      - run:
+          name: Build binary from source code
+          command: make build
       - run:
           name: Upload coverage to Codecov
           command: bash <(curl -s https://codecov.io/bash)
