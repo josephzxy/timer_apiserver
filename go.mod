@@ -4,6 +4,7 @@ go 1.17
 
 require (
 	github.com/go-playground/validator/v10 v10.9.0
+	github.com/pkg/errors v0.9.1
 	go.uber.org/zap v1.19.1
 	gorm.io/gorm v1.21.15
 )
