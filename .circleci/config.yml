@@ -10,9 +10,6 @@ jobs:
           name: Build with GNU make
           command: make
       - run:
-          name: Prepare coverage report for Codecov
-          command: cp _output/coverage.out ./coverage.txt
-      - run:
           name: Upload coverage to Codecov
           command: bash <(curl -s https://codecov.io/bash)
 
