@@ -5,6 +5,44 @@ Resource `timer` will stored in `MySQL`
 **Major Tech stacks:**
 Golang, Gin, gRPC, MySQL, GORM
 
+- [timer_apiserver](#timer_apiserver)
+  - [Get Started](#get-started)
+    - [Build Local Executable](#build-local-executable)
+    - [Build Docker Image](#build-docker-image)
+  - [Initial Design](#initial-design)
+    - [Model](#model)
+    - [RESTful API](#restful-api)
+      - [Create](#create)
+      - [Read](#read)
+      - [Read all](#read-all)
+      - [Update](#update)
+      - [Delete](#delete)
+    - [gRPC API](#grpc-api)
+
+## Get Started
+### Build Local Executable
+For the host OS and ARCH.
+```bash
+# get into the project root directory
+make
+```
+For a certain platform, specify `PLATFORM`.
+```bash
+make PLATFORM=linux_amd64
+```
+
+### Build Docker Image
+The docker image OS is default to `linux`. 
+
+For host ARCH
+```bash
+make docker
+```
+For other ARCHs, specify `DKR_ARCH`.
+```bash
+make docker DKR_ARCH=amd64
+```
+
 ## Initial Design
 
 ### Model
