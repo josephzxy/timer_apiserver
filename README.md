@@ -7,6 +7,7 @@ Golang, Gin, gRPC, MySQL, GORM
 
 - [timer_apiserver](#timer_apiserver)
   - [Get Started](#get-started)
+    - [Prerequisites](#prerequisites)
     - [Build Local Executable](#build-local-executable)
     - [Build Docker Image](#build-docker-image)
     - [Deploy Locally with Docker Compose for Development](#deploy-locally-with-docker-compose-for-development)
@@ -16,6 +17,12 @@ Golang, Gin, gRPC, MySQL, GORM
     - [gRPC API](#grpc-api)
 
 ## Get Started
+
+### Prerequisites
+- Go1.17+
+- Docker
+- GNU make
+
 ### Build Local Executable
 For the host OS and ARCH.
 ```bash
