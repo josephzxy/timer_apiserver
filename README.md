@@ -10,6 +10,7 @@ Golang, Gin, gRPC, MySQL, GORM
     - [Build Local Executable](#build-local-executable)
     - [Build Docker Image](#build-docker-image)
     - [Deploy Locally with Docker Compose for Development](#deploy-locally-with-docker-compose-for-development)
+    - [Learn More about Usage of GNU make](#learn-more-about-usage-of-gnu-make)
   - [Initial Design](#initial-design)
     - [Model](#model)
     - [RESTful API](#restful-api)
@@ -48,6 +49,11 @@ make docker DKR_ARCH=amd64
 ```bash
 make docker.compose.up
 make docker.compose.down
+```
+
+### Learn More about Usage of GNU make
+```bash
+make help
 ```
 
 ## Initial Design
