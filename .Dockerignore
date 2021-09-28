@@ -1,0 +1,9 @@
+# vscode
+.vscode/
+*.session.sql
+
+# git
+.gitignore
+
+# output
+_output/

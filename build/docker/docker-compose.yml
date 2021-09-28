@@ -1,0 +1,33 @@
+version: "3.9"
+services:
+  db:
+    image: mariadb:10.6
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "--silent"]
+      interval: 3s
+      retries: 5
+      start_period: 30s
+    environment:
+      - MYSQL_DATABASE=test
+      - MYSQL_PWD=root
+      - MARIADB_ROOT_PASSWORD=root
+    networks:
+      - backnet
+    expose:
+      - 3306
+    ports:
+      - 33306:3306
+  backend:
+    build:
+      context: ../..
+      dockerfile: build/docker/Dockerfile
+    image: timer_apiserver
+    restart: always
+    networks:
+      - backnet
+    depends_on:
+      db:
+        condition: service_healthy
+networks:
+  backnet:

@@ -10,6 +10,7 @@ all: tidy format lint test build
 include scripts/make_rules/common.mk # must always be the first
 include scripts/make_rules/golang.mk
 include scripts/make_rules/tools.mk
+include scripts/make_rules/docker.mk
 
 .PHONY: tidy
 tidy: go.tidy
@@ -25,6 +26,9 @@ test: go.test
 
 .PHONY: build
 build: go.build
+
+.PHONY: docker
+docker: docker.build
 
 .PHONY: clean
 clean:
