@@ -7,6 +7,13 @@ GO_MODULE := $(word 2, $(subst $(SPACE), , $(shell cat $(GO_MOD_FILE) | head -n 
 
 GOLANG_MK_PREFIX := "Golang:"
 
+NO_TEST_PKGS := "\
+github.com/josephzxy/timer_apiserver/cmd|\
+github.com/josephzxy/timer_apiserver/api/rest/swagger/docs|\
+github.com/josephzxy/timer_apiserver/internal/pkg/log\
+"
+NO_TEST_PKGS := $(shell echo '$(NO_TEST_PKGS)' | tr -d '[:space:]')
+
 .PHONY: go.tidy
 go.tidy:
 	@echo "=======> $(GOLANG_MK_PREFIX) tidying dependencies"
@@ -27,9 +34,9 @@ go.lint: tools.verify.golangci-lint
 go.test:
 	@echo "=======> $(GOLANG_MK_PREFIX) running unit tests"
 	@mkdir -p $(OUTPUT_DIR)
-	@$(GO) test -v -short -race -timeout=10m \
+	@set -o pipefail; $(GO) test -v -short -race -timeout=10m \
 	-coverprofile=$(OUTPUT_DIR)/coverage.out \
-	$(PROJECT_ROOT)/...
+	`$(GO) list $(PROJECT_ROOT)/... | egrep -v $(NO_TEST_PKGS)`
 	@$(GO) tool cover -html=$(OUTPUT_DIR)/coverage.out -o $(OUTPUT_DIR)/coverage.html
 	@$(GO) tool cover -func=$(OUTPUT_DIR)/coverage.out
 
