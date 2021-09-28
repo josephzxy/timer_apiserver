@@ -6,7 +6,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func Init() {
+func init() {
 	l, err := zap.NewProduction()
 	if err != nil {
 		log.Fatalf("failed to get zap production logger: %s", err)
