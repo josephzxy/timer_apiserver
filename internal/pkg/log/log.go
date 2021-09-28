@@ -14,6 +14,6 @@ func init() {
 	zap.ReplaceGlobals(l)
 }
 
-func Flush() {
-	zap.L().Sync()
+func Flush() error {
+	return zap.L().Sync()
 }
