@@ -7,10 +7,20 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+const (
+	errTestOnly1 AppErrCode = iota + 9900
+	errTestOnly2
+	errTestOnly3
+	errTestOnly4
+	errTestOnly5
+	errTestOnly6
+)
+
 func Test_newSimpleRESTAgent(t *testing.T) {
 	type args struct {
 		httpStatus int
 		msg        string
+		code       AppErrCode
 	}
 	tests := []struct {
 		name string
@@ -18,17 +28,17 @@ func Test_newSimpleRESTAgent(t *testing.T) {
 	}{
 		{
 			"400",
-			args{400, "Bad request"},
+			args{400, "Bad request", ErrValidation},
 		},
 		{
 			"404",
-			args{404, "Not found"},
+			args{404, "Not found", ErrTimerNotFound},
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			a := newSimpleRESTAgent(tt.args.httpStatus, tt.args.msg)
+			a := newSimpleRESTAgent(tt.args.httpStatus, tt.args.msg, tt.args.code)
 			assert.IsType(t, &SimpleRESTAgent{}, a)
 			assert.Equal(t, tt.args.httpStatus, a.http)
 			assert.Equal(t, tt.args.msg, a.msg)
@@ -47,7 +57,7 @@ func Test_SimpleRESTAgent_HTTPStatus(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			a := &SimpleRESTAgent{tt.httpStatus, ""}
+			a := &SimpleRESTAgent{http: tt.httpStatus}
 			assert.Equal(t, tt.httpStatus, a.HTTPStatus())
 		})
 	}
@@ -70,20 +80,28 @@ func Test_SimpleRESTAgent_Msg(t *testing.T) {
 	}
 }
 
-const (
-	errTestOnly1 AppErrCode = iota + 9900
-	errTestOnly2
-	errTestOnly3
-	errTestOnly4
-	errTestOnly5
-	errTestOnly6
-)
+func Test_SimpleRESTAgent_Code(t *testing.T) {
+	tests := []struct {
+		name string
+		code AppErrCode
+	}{
+		{"ErrUnknown", ErrUnknown},
+		{"ErrValidation", ErrValidation},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			a := &SimpleRESTAgent{code: tt.code}
+			assert.Equal(t, tt.code, a.Code())
+		})
+	}
+}
 
 func Test_registerRESTAgent(t *testing.T) {
 	type args struct {
-		code       AppErrCode
 		httpStatus int
 		msg        string
+		code       AppErrCode
 	}
 
 	tests := []struct {
@@ -91,10 +109,10 @@ func Test_registerRESTAgent(t *testing.T) {
 		args args
 	}{
 		{"errTestOnly1", args{
-			errTestOnly1, 500, "foo",
+			500, "foo", errTestOnly1,
 		}},
 		{"errTestOnly2", args{
-			errTestOnly2, 400, "bar",
+			400, "bar", errTestOnly2,
 		}},
 	}
 
@@ -102,7 +120,7 @@ func Test_registerRESTAgent(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			err := registerRESTAgent(tt.args.code, tt.args.httpStatus, tt.args.msg)
 			assert.Nil(t, err)
-			assert.Equal(t, &SimpleRESTAgent{tt.args.httpStatus, tt.args.msg}, restAgents[tt.args.code])
+			assert.Equal(t, &SimpleRESTAgent{tt.args.httpStatus, tt.args.msg, tt.args.code}, restAgents[tt.args.code])
 		})
 	}
 }
@@ -159,7 +177,7 @@ func Test_registerRESTAgent_errorCodeAlreadyRegistered(t *testing.T) {
 			assert.NotNil(t, err)
 			agent, ok := restAgents[tt.args.code]
 			assert.True(t, ok)
-			assert.NotEqual(t, &SimpleRESTAgent{http: tt.args.httpStatus, msg: tt.args.msg}, agent)
+			assert.NotEqual(t, &SimpleRESTAgent{http: tt.args.httpStatus, msg: tt.args.msg, code: tt.args.code}, agent)
 		})
 	}
 }
