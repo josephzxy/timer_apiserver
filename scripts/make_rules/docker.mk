@@ -10,8 +10,8 @@ docker.build:
 
 .PHONY: docker.compose.up
 docker.compose.up: 
-	@docker compose -f $(DKR_COMPOSE_FILE) -p $(APP_NAME) up
+	GIT_COMMIT=$(GIT_COMMIT) docker compose -f $(DKR_COMPOSE_FILE) -p $(APP_NAME) up --build
 
 .PHONY: docker.compose.down
 docker.compose.down: 
-	@docker compose -f $(DKR_COMPOSE_FILE) -p $(APP_NAME) down
+	@GIT_COMMIT=$(GIT_COMMIT) docker compose -f $(DKR_COMPOSE_FILE) -p $(APP_NAME) down

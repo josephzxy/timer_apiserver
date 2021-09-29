@@ -23,8 +23,8 @@ func (a *App) Run() {
 	mysqlStoreRtr, err := mysql.NewStoreRouter(&mysql.Config{
 		User:            "root",
 		Pwd:             "root",
-		Host:            "localhost",
-		Port:            33306,
+		Host:            "db",
+		Port:            3306,
 		Database:        "test",
 		Charset:         "utf8mb4",
 		ParseTime:       true,
@@ -40,7 +40,7 @@ func (a *App) Run() {
 	srvRtr := service.NewRouter(mysqlStoreRtr)
 	restSrvrCfg := &restserver.Config{
 		InsecureServing: restserver.InsecureServingConfig{
-			Host: "localhost",
+			Host: "0.0.0.0",
 			Port: 8080,
 		},
 		Mode: "debug",
