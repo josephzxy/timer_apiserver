@@ -5,6 +5,8 @@ GO_BIN := apiserver
 GO_MOD_FILE := $(PROJECT_ROOT)/go.mod
 GO_MODULE := $(word 2, $(subst $(SPACE), , $(shell cat $(GO_MOD_FILE) | head -n 1)))
 
+GO_SUPPORTED_VERSIONS := 1.17
+
 GOLANG_MK_PREFIX := "Golang:"
 
 NO_TEST_PKGS := "\
@@ -41,8 +43,14 @@ go.test:
 	@$(GO) tool cover -html=$(OUTPUT_DIR)/coverage.out -o $(OUTPUT_DIR)/coverage.html
 	@$(GO) tool cover -func=$(OUTPUT_DIR)/coverage.out
 
+.PHONY: go.build.verify
+go.build.verify:
+ifeq ($(shell $(GO) version | egrep -q '\bgo($(GO_SUPPORTED_VERSIONS))\b' && echo 0 || echo 1), 1)
+	$(error Go version not supported. Expecting one of the following: $(GO_SUPPORTED_VERSIONS), got: $(shell $(GO) version))
+endif
+
 .PHONY: go.build
-go.build: go.build.$(GO_BIN).$(PLATFORM)
+go.build: go.build.verify go.build.$(GO_BIN).$(PLATFORM)
 
 .PHONY: go.build.%
 go.build.%:
