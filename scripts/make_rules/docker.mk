@@ -10,7 +10,8 @@ docker.build:
 
 .PHONY: docker.compose.up
 docker.compose.up: 
-	GIT_COMMIT=$(GIT_COMMIT) docker compose -f $(DKR_COMPOSE_FILE) -p $(APP_NAME) up --build
+	@GIT_COMMIT=$(GIT_COMMIT) docker compose -f $(DKR_COMPOSE_FILE) -p $(APP_NAME) up --build --detach --force-recreate
+	@$(MAKE) mysql.migrate.up
 
 .PHONY: docker.compose.down
 docker.compose.down: 
