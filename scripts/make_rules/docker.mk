@@ -16,3 +16,7 @@ docker.compose.up:
 .PHONY: docker.compose.down
 docker.compose.down: 
 	@GIT_COMMIT=$(GIT_COMMIT) docker compose -f $(DKR_COMPOSE_FILE) -p $(APP_NAME) down
+
+.PHONY: docker.compose.logs
+docker.compose.logs: 
+	@GIT_COMMIT=$(GIT_COMMIT) docker compose -f $(DKR_COMPOSE_FILE) -p $(APP_NAME) logs -f
