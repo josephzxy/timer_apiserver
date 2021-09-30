@@ -19,20 +19,24 @@ type RESTAgent interface {
 	HTTPStatus() int
 	// user-facing message for the response
 	Msg() string
+	// app error code
+	Code() AppErrCode
 }
 
 // SimpleRESTAgent is a simple internal implementation of RESTAgent interface
 type SimpleRESTAgent struct {
 	http int
 	msg  string
+	code AppErrCode
 }
 
-func newSimpleRESTAgent(httpStatus int, msg string) *SimpleRESTAgent {
-	return &SimpleRESTAgent{http: httpStatus, msg: msg}
+func newSimpleRESTAgent(httpStatus int, msg string, code AppErrCode) *SimpleRESTAgent {
+	return &SimpleRESTAgent{http: httpStatus, msg: msg, code: code}
 }
 
-func (s *SimpleRESTAgent) HTTPStatus() int { return s.http }
-func (s *SimpleRESTAgent) Msg() string     { return s.msg }
+func (s *SimpleRESTAgent) HTTPStatus() int  { return s.http }
+func (s *SimpleRESTAgent) Msg() string      { return s.msg }
+func (s *SimpleRESTAgent) Code() AppErrCode { return s.code }
 
 var (
 	restAgents = make(map[AppErrCode]RESTAgent)
@@ -64,7 +68,7 @@ func registerRESTAgent(code AppErrCode, httpStatus int, msg string) error {
 		zap.L().Error(msg)
 		return errors.New(msg)
 	}
-	restAgents[code] = newSimpleRESTAgent(httpStatus, msg)
+	restAgents[code] = newSimpleRESTAgent(httpStatus, msg, code)
 	return nil
 }
 
