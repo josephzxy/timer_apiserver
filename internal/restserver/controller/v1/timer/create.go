@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 
-	model "github.com/josephzxy/timer_apiserver/internal/resource/model/v1"
+	"github.com/josephzxy/timer_apiserver/internal/resource/v1/model"
 	resp "github.com/josephzxy/timer_apiserver/internal/restserver/response"
 )
 

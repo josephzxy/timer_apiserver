@@ -1,6 +1,6 @@
 package docs
 
-import v1 "github.com/josephzxy/timer_apiserver/internal/resource/model/v1"
+import "github.com/josephzxy/timer_apiserver/internal/resource/v1/model"
 
 // swagger:route POST /timers timer createTimerReq
 // Create a timer
@@ -34,12 +34,12 @@ import v1 "github.com/josephzxy/timer_apiserver/internal/resource/model/v1"
 
 //nolint:deadcode,unused
 type dataObjField struct {
-	Data v1.Timer `json:"data"`
+	Data model.Timer `json:"data"`
 }
 
 //nolint:deadcode,unused
 type dataColField struct {
-	Data []v1.Timer `json:"data"`
+	Data []model.Timer `json:"data"`
 }
 
 //nolint:deadcode,unused
@@ -61,7 +61,7 @@ type errInfo struct {
 // swagger:parameters createTimerReq
 type createTimerReq struct {
 	// in:body
-	Body v1.TimerCore
+	Body model.TimerCore
 }
 
 //nolint:deadcode,unused
@@ -104,7 +104,7 @@ type updateTimerReq struct {
 	// in:path
 	Name string `json:"name"`
 	// in:body
-	Body v1.TimerCore
+	Body model.TimerCore
 }
 
 //nolint:deadcode,unused

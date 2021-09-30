@@ -7,7 +7,7 @@ import (
 	"github.com/go-sql-driver/mysql"
 
 	pkgerr "github.com/josephzxy/timer_apiserver/internal/pkg/err"
-	model "github.com/josephzxy/timer_apiserver/internal/resource/model/v1"
+	"github.com/josephzxy/timer_apiserver/internal/resource/v1/model"
 )
 
 type MySQLTimerStore struct {
