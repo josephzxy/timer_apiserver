@@ -4,6 +4,8 @@ import (
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 
+	"github.com/go-sql-driver/mysql"
+
 	pkgerr "github.com/josephzxy/timer_apiserver/internal/pkg/err"
 	model "github.com/josephzxy/timer_apiserver/internal/resource/model/v1"
 )
@@ -17,16 +19,15 @@ func (s *MySQLTimerStore) Create(timer *model.Timer) error {
 	if err == nil {
 		return nil
 	}
+
 	zap.S().Errorw("failed to create timer", "err", err, "data", timer)
-
-	mysqlErr := GetMySQLErr(err)
-
-	var appErrCode pkgerr.AppErrCode
-	switch mysqlErr {
-	case DUPLICATE_ENTRY:
-		appErrCode = pkgerr.ErrTimerAlreadyExists
-	default:
-		appErrCode = pkgerr.ErrUnknown
+	me, ok := err.(*mysql.MySQLError)
+	if !ok {
+		return err
 	}
-	return pkgerr.New(appErrCode, err.Error())
+
+	if me.Number == 1062 {
+		return pkgerr.New(pkgerr.ErrTimerAlreadyExists, me.Error())
+	}
+	return err
 }
