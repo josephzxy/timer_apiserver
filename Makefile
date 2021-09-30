@@ -13,6 +13,7 @@ include scripts/make_rules/golang.mk
 include scripts/make_rules/tools.mk
 include scripts/make_rules/docker.mk
 include scripts/make_rules/swagger.mk
+include scripts/make_rules/mysql.mk
 
 # Usages
 define USAGE_OPTIONS

@@ -12,4 +12,8 @@ tools.install.golangci-lint:
 
 .PHONY: tools.install.swagger
 tools.install.swagger:
-	$(GO) install github.com/go-swagger/go-swagger/cmd/swagger@latest
+	@$(GO) install github.com/go-swagger/go-swagger/cmd/swagger@latest
+
+.PHONY: tools.install.go-migrate
+tools.install.go-migrate:
+	@$(GO) install -tags 'mysql' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
