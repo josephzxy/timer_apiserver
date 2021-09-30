@@ -11,7 +11,10 @@ Golang, Gin, gRPC, MySQL, GORM
     - [Build Local Executable](#build-local-executable)
     - [Build Docker Image](#build-docker-image)
     - [Deploy Locally with Docker Compose for Development](#deploy-locally-with-docker-compose-for-development)
-    - [Learn More about Usage of GNU make](#learn-more-about-usage-of-gnu-make)
+    - [MySQL Database Schema Migration](#mysql-database-schema-migration)
+      - [Quick Example](#quick-example)
+      - [Use Custom MySQL Config](#use-custom-mysql-config)
+    - [Show help message for make](#show-help-message-for-make)
   - [API Doc](#api-doc)
     - [RESTful API](#restful-api)
     - [gRPC API](#grpc-api)
@@ -52,7 +55,53 @@ make docker.compose.up
 make docker.compose.down
 ```
 
-### Learn More about Usage of GNU make
+### MySQL Database Schema Migration
+Some handy wrappings are provided in Make Phonies with prefix `mysql.migrate.*`.
+
+#### Quick Example
+Below is a quick example for creating and applying a migration. For more details, see [mysql.mk](./scripts/make_rules/mysql.mk)
+```bash
+# create migration for adding table foo
+$ make mysql.migrate.create.add_table_foo
+=======> MySQL: ensuring migrations directory exists
+=======> MySQL: creating new MySQL migration: foo
+/some/dir/timer_apiserver/database/migrations/20210930054712_foo.up.sql
+/some/dir/timer_apiserver/database/migrations/20210930054712_foo.down.sql
+
+# fill in desired SQL statements into .sql files newly generated above
+
+# apply up migrations
+$ make mysql.migrate.up
+=======> MySQL: applying all up migrations
+20210930054712/u add_table_foo (33.492584ms)
+
+# now table foo is created
+
+# to undo it, apply down migrations
+$ make mysql.migrate.down
+=======> MySQL: applying all down migrations
+Are you sure you want to apply all down migrations? [y/N]
+y
+Applying all down migrations
+20210930054712/d add_table_foo (21.437875ms)
+
+# now table foo is gone
+```
+#### Use Custom MySQL Config
+By default, dummy configs listed in [mysql.mk](./scripts/make_rules/mysql.mk) are used to connect to MySQL.
+```make
+MYSQL_USER ?= root
+MYSQL_PWD ?= root
+MYSQL_HOST ?= localhost
+MYSQL_PORT ?= 3306
+MYSQL_DB ?= test
+```
+To use custom config, specify environment variables when invoking Make
+```bash
+MYSQL_PORT=3307 make mysql.migrate.up
+```
+
+### Show help message for make
 ```bash
 make help
 ```
