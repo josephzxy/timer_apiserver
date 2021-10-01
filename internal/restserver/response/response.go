@@ -32,5 +32,9 @@ func WriteResponse(c *gin.Context, err error, data interface{}) {
 		)
 		return
 	}
-	c.JSON(http.StatusOK, DataRespBodyWrapper{data})
+	if data != nil {
+		c.JSON(http.StatusOK, DataRespBodyWrapper{data})
+		return
+	}
+	c.JSON(http.StatusOK, nil)
 }
