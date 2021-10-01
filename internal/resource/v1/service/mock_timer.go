@@ -47,3 +47,18 @@ func (mr *MockTimerServiceMockRecorder) Create(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockTimerService)(nil).Create), arg0)
 }
+
+// GetByName mocks base method.
+func (m *MockTimerService) GetByName(name string) (*model.Timer, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetByName", name)
+	ret0, _ := ret[0].(*model.Timer)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetByName indicates an expected call of GetByName.
+func (mr *MockTimerServiceMockRecorder) GetByName(name interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByName", reflect.TypeOf((*MockTimerService)(nil).GetByName), name)
+}

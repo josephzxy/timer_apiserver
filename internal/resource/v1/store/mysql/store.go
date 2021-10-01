@@ -8,6 +8,7 @@ import (
 	"gorm.io/gorm"
 
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/store"
+	"github.com/josephzxy/timer_apiserver/internal/resource/v1/store/mysql/timer"
 )
 
 type MySQLStoreRouter struct {
@@ -15,7 +16,7 @@ type MySQLStoreRouter struct {
 }
 
 func (r *MySQLStoreRouter) Timer() store.TimerStore {
-	return &MySQLTimerStore{r.db}
+	return &timer.TimerStore{DB: r.db}
 }
 
 func NewStoreRouter(cfg *Config) (*MySQLStoreRouter, error) {

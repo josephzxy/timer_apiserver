@@ -1,25 +1,20 @@
-package mysql
+package timer
 
 import (
+	"github.com/go-sql-driver/mysql"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
-
-	"github.com/go-sql-driver/mysql"
 
 	pkgerr "github.com/josephzxy/timer_apiserver/internal/pkg/err"
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/model"
 )
 
-type MySQLTimerStore struct {
-	db *gorm.DB
-}
-
 var dbCreateFunc = func(db *gorm.DB, value interface{}) error {
 	return db.Create(value).Error
 }
 
-func (s *MySQLTimerStore) Create(timer *model.Timer) error {
-	err := dbCreateFunc(s.db, timer)
+func (s *TimerStore) Create(timer *model.Timer) error {
+	err := dbCreateFunc(s.DB, timer)
 	if err == nil {
 		return nil
 	}

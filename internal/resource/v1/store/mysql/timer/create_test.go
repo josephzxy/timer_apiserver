@@ -1,4 +1,4 @@
-package mysql
+package timer
 
 import (
 	"errors"
@@ -12,14 +12,14 @@ import (
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/model"
 )
 
-func monkeyPatchDbCreateFunc(ret error) (restore func()) {
+func monkeyPatch_DbCreateFunc(ret error) (restore func()) {
 	old := dbCreateFunc
 	restore = func() { dbCreateFunc = old }
 	dbCreateFunc = func(db *gorm.DB, value interface{}) error { return ret }
 	return
 }
 
-func Test_MySQLTimerStore_Create(t *testing.T) {
+func Test_TimerStore_Create(t *testing.T) {
 	nonMysqlErr := errors.New("")
 	nonSupportedMysqlErr := &mysql.MySQLError{}
 
@@ -35,19 +35,19 @@ func Test_MySQLTimerStore_Create(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			defer monkeyPatchDbCreateFunc(tt.dbCreateErr)()
-			mts := &MySQLTimerStore{&gorm.DB{}}
-			got := mts.Create(&model.Timer{})
+			defer monkeyPatch_DbCreateFunc(tt.dbCreateErr)()
+			ts := &TimerStore{&gorm.DB{}}
+			got := ts.Create(&model.Timer{})
 			assert.Equal(t, tt.want, got)
 		})
 	}
 }
 
-func Test_MySQLTimerStore_Create_supportedMysqlErr(t *testing.T) {
+func Test_TimerStore_Create_supportedMysqlErr(t *testing.T) {
 	mysqlErr := &mysql.MySQLError{Number: 1062, Message: ""}
-	defer monkeyPatchDbCreateFunc(mysqlErr)()
+	defer monkeyPatch_DbCreateFunc(mysqlErr)()
 
-	mts := &MySQLTimerStore{&gorm.DB{}}
-	got := mts.Create(&model.Timer{})
+	ts := &TimerStore{&gorm.DB{}}
+	got := ts.Create(&model.Timer{})
 	assert.Equal(t, pkgerr.ErrTimerAlreadyExists, got.(*pkgerr.WithCode).Code())
 }
