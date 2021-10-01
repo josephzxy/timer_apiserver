@@ -8,15 +8,20 @@ import (
 	resp "github.com/josephzxy/timer_apiserver/internal/restserver/response"
 )
 
+var validateTimerFunc = model.ValidateTimer
+var bindJsonFunc = func(c *gin.Context, obj interface{}) error {
+	return c.ShouldBindJSON(obj)
+}
+
 func (tc *TimerController) Create(c *gin.Context) {
 	var timer model.Timer
-	if err := c.ShouldBindJSON(&timer); err != nil {
+	if err := bindJsonFunc(c, &timer); err != nil {
 		zap.S().Errorw("failed to bind data to model", "err", err)
 		resp.WriteResponse(c, err, nil)
 		return
 	}
 
-	if err := timer.Validate(); err != nil {
+	if err := validateTimerFunc(&timer); err != nil {
 		zap.S().Errorw("data validation failed", "err", err)
 		resp.WriteResponse(c, err, nil)
 		return
