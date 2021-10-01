@@ -43,6 +43,7 @@ func (s *RESTServer) installRoutes() {
 		{
 			tc := timer.NewController(s.serviceRouter)
 			timers.POST("", tc.Create)
+			timers.GET(":name", tc.Get)
 		}
 	}
 }
