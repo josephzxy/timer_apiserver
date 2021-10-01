@@ -1,4 +1,4 @@
-package mysql
+package timer
 
 import (
 	"go.uber.org/zap"
@@ -10,16 +10,16 @@ import (
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/model"
 )
 
-type MySQLTimerStore struct {
-	db *gorm.DB
+type TimerStore struct {
+	DB *gorm.DB
 }
 
 var dbCreateFunc = func(db *gorm.DB, value interface{}) error {
 	return db.Create(value).Error
 }
 
-func (s *MySQLTimerStore) Create(timer *model.Timer) error {
-	err := dbCreateFunc(s.db, timer)
+func (s *TimerStore) Create(timer *model.Timer) error {
+	err := dbCreateFunc(s.DB, timer)
 	if err == nil {
 		return nil
 	}
