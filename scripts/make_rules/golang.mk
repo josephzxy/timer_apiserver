@@ -67,7 +67,7 @@ go.build.%:
 go.clean:
 	@echo "=======> $(GOLANG_MK_PREFIX) cleaning"
 	@go clean -x `go list $(PROJECT_ROOT)/...`
-
+	@$(MAKE) go.mock.clean
 
 # Packages for which mock files should be generated
 # Supports internal packages only
@@ -88,3 +88,8 @@ go.mock.%: tools.verify.mockgen
 	$(eval SRC_FILES := $(filter %.go, $(filter-out $(ABS_PATH)/mock_%.go, $(wildcard $(ABS_PATH)/*))))
 	$(eval SRC_FILE_NAMES := $(foreach file, $(SRC_FILES), $(notdir $(file))))
 	$(foreach name, $(SRC_FILE_NAMES), $(shell mockgen -self_package=$(PKG) -destination $(ABS_PATH)/mock_$(name) -package $(PKG_NAME) -source=$(ABS_PATH)/$(name)))
+
+.PHONY: go.mock.clean
+go.mock.clean:
+	@echo "=======> $(GOLANG_MK_PREFIX) removing mock files"
+	@rm -v `find . -type f -name "mock*"`
