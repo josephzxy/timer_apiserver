@@ -2,8 +2,9 @@ package timer
 
 import (
 	"github.com/gin-gonic/gin"
-	resp "github.com/josephzxy/timer_apiserver/internal/restserver/response"
 	"go.uber.org/zap"
+
+	resp "github.com/josephzxy/timer_apiserver/internal/restserver/response"
 )
 
 func (tc *TimerController) Get(c *gin.Context) {
