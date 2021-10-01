@@ -110,8 +110,6 @@ type updateTimerReq struct {
 //nolint:deadcode,unused
 // swagger:response updateTimerResp
 type updateTimerResp struct {
-	// in:body
-	Body dataObjField
 }
 
 //nolint:deadcode,unused
@@ -125,8 +123,6 @@ type deleteTimerReq struct {
 //nolint:deadcode,unused
 // swagger:response deleteTimerResp
 type deleteTimerResp struct {
-	// in:body
-	Body dataObjField
 }
 
 //nolint:deadcode,unused
