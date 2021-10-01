@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   build: 
     docker:
-      - image: golang:1.17.1-bullseye
+      - image: golangci/golangci-lint
     steps:
       - checkout
       - run:
