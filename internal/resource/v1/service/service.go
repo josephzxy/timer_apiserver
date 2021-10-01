@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/josephzxy/timer_apiserver/internal/resource/store"
+	"github.com/josephzxy/timer_apiserver/internal/resource/v1/store"
 )
 
 type ServiceRouter interface {

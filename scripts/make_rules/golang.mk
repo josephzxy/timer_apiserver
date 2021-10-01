@@ -12,7 +12,7 @@ GOLANG_MK_PREFIX := "Golang:"
 NO_TEST_PKGS := "\
 github.com/josephzxy/timer_apiserver/cmd|\
 github.com/josephzxy/timer_apiserver/api/rest/swagger/docs|\
-github.com/josephzxy/timer_apiserver/internal/resource/model/v1|\
+github.com/josephzxy/timer_apiserver/internal/resource/v1/model/v1|\
 github.com/josephzxy/timer_apiserver/internal/pkg/log\
 "
 NO_TEST_PKGS := $(shell echo '$(NO_TEST_PKGS)' | tr -d '[:space:]')
@@ -34,7 +34,7 @@ go.lint: tools.verify.golangci-lint
 	@golangci-lint run $(PROJECT_ROOT)/...
 
 .PHONY: go.test
-go.test:
+go.test: go.mock
 	@echo "=======> $(GOLANG_MK_PREFIX) running unit tests"
 	@mkdir -p $(OUTPUT_DIR)
 	@set -o pipefail; $(GO) test -v -short -race -timeout=10m \
@@ -67,3 +67,28 @@ go.build.%:
 go.clean:
 	@echo "=======> $(GOLANG_MK_PREFIX) cleaning"
 	@go clean -x `go list $(PROJECT_ROOT)/...`
+	@$(MAKE) go.mock.clean
+
+# Packages for which mock files should be generated
+# Supports internal packages only
+# internal.resource.v1.service => github.com/josephzxy/timer_apiserver/internal/resource/v1/service
+MOCK_PKGS := internal.resource.v1.service
+
+.PHONY: go.mock
+go.mock: tools.verify.mockgen $(foreach pkg, $(MOCK_PKGS), $(addprefix go.mock., $(pkg)))
+
+.PHONY: go.mock.%
+go.mock.%: tools.verify.mockgen
+	$(eval RELATIVE_PATH := $(subst .,/, $*))
+	$(eval PKG := $(GO_MODULE)/$(RELATIVE_PATH))
+	@echo "=======> $(GOLANG_MK_PREFIX) generating mock files for pacakge $(PKG)"
+	$(eval PKG_NAME := $(lastword $(subst /, , $(PKG))))
+	$(eval ABS_PATH := $(PROJECT_ROOT)/$(RELATIVE_PATH))
+	$(eval SRC_FILES := $(filter %.go, $(filter-out $(ABS_PATH)/mock_%.go, $(wildcard $(ABS_PATH)/*))))
+	$(eval SRC_FILE_NAMES := $(foreach file, $(SRC_FILES), $(notdir $(file))))
+	$(foreach name, $(SRC_FILE_NAMES), $(shell mockgen -self_package=$(PKG) -destination $(ABS_PATH)/mock_$(name) -package $(PKG_NAME) -source=$(ABS_PATH)/$(name)))
+
+.PHONY: go.mock.clean
+go.mock.clean:
+	@echo "=======> $(GOLANG_MK_PREFIX) removing mock files"
+	@rm -v `find . -type f -name "mock*"`

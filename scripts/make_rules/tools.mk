@@ -17,3 +17,7 @@ tools.install.swagger:
 .PHONY: tools.install.go-migrate
 tools.install.go-migrate:
 	@$(GO) install -tags 'mysql' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+
+.PHONY: tools.install.mockgen
+tools.install.mockgen:
+	@$(GO) install github.com/golang/mock/mockgen@latest

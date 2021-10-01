@@ -7,7 +7,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 
-	"github.com/josephzxy/timer_apiserver/internal/resource/store"
+	"github.com/josephzxy/timer_apiserver/internal/resource/v1/store"
 )
 
 type MySQLStoreRouter struct {

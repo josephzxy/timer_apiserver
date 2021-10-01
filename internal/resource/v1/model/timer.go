@@ -1,4 +1,4 @@
-package v1
+package model
 
 import (
 	"time"
@@ -21,6 +21,6 @@ func (t *Timer) TableName() string {
 	return "timer"
 }
 
-func (t *Timer) Validate() error {
+func ValidateTimer(t *Timer) error {
 	return validator.New().Struct(t)
 }

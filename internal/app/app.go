@@ -6,8 +6,8 @@ import (
 
 	"go.uber.org/zap"
 
-	"github.com/josephzxy/timer_apiserver/internal/resource/service"
-	"github.com/josephzxy/timer_apiserver/internal/resource/store/mysql"
+	"github.com/josephzxy/timer_apiserver/internal/resource/v1/service"
+	"github.com/josephzxy/timer_apiserver/internal/resource/v1/store/mysql"
 	"github.com/josephzxy/timer_apiserver/internal/restserver"
 )
 

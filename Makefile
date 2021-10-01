@@ -5,7 +5,7 @@ MAIN_PREFIX := "Main:"
 
 ## all: Run the default build procedure(tidy format lint test build)
 .PHONY: all
-all: tidy format lint test build
+all: tidy format test lint build
 
 # Includes
 include scripts/make_rules/common.mk # must always be the first

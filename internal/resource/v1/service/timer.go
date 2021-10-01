@@ -1,8 +1,8 @@
 package service
 
 import (
-	model "github.com/josephzxy/timer_apiserver/internal/resource/model/v1"
-	"github.com/josephzxy/timer_apiserver/internal/resource/store"
+	"github.com/josephzxy/timer_apiserver/internal/resource/v1/model"
+	"github.com/josephzxy/timer_apiserver/internal/resource/v1/store"
 )
 
 type TimerService interface {
