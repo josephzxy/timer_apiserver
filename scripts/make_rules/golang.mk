@@ -73,7 +73,8 @@ go.clean:
 # Supports internal packages only
 # internal.resource.v1.service => github.com/josephzxy/timer_apiserver/internal/resource/v1/service
 MOCK_PKGS := internal.resource.v1.service\
-internal.resource.v1.store
+internal.resource.v1.store\
+internal.resource.v1.model
 
 .PHONY: go.mock
 go.mock: tools.verify.mockgen $(foreach pkg, $(MOCK_PKGS), $(addprefix go.mock., $(pkg)))
