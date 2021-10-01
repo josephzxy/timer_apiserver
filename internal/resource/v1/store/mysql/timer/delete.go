@@ -10,14 +10,18 @@ var dbDeleteByNameFunc = func(db *gorm.DB, name string) error {
 	return db.Where("name = ?", name).Delete(&model.Timer{}).Error
 }
 
+var tsGetByNameFunc = func(ts *TimerStore, name string) (*model.Timer, error) {
+	return ts.GetByName(name)
+}
+
 func (s *TimerStore) DeleteByName(name string) error {
-	_, err := s.GetByName(name)
+	_, err := tsGetByNameFunc(s, name)
 	if err != nil {
 		return err
 	}
 
 	delErr := dbDeleteByNameFunc(s.DB, name)
-	if err != nil {
+	if delErr != nil {
 		return delErr
 	}
 	return nil

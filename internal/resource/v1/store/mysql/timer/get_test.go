@@ -18,7 +18,7 @@ func monkeyPatch_dbGetByNameFunc(ret error) (restore func()) {
 	return
 }
 
-func Test_TimerStore_GetName(t *testing.T) {
+func Test_TimerStore_GetByName(t *testing.T) {
 	defer monkeyPatch_dbGetByNameFunc(nil)()
 	ts := &TimerStore{&gorm.DB{}}
 	timer, err := ts.GetByName("")
