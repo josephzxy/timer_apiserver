@@ -36,14 +36,14 @@ func newTestGinCtxWithReq(method, url string, body map[string]interface{}) *gin.
 	return c
 }
 
-func monkeyPatchTimerValidateFunc(err error) (restore func()) {
+func monkeyPatch_TimerValidateFunc(err error) (restore func()) {
 	old := validateTimerFunc
 	restore = func() { validateTimerFunc = old }
 	validateTimerFunc = func(*model.Timer) error { return err }
 	return
 }
 
-func monkeyPatchBindJsonFunc(err error) (restore func()) {
+func monkeyPatch_BindJsonFunc(err error) (restore func()) {
 	old := bindJsonFunc
 	restore = func() { bindJsonFunc = old }
 	bindJsonFunc = func(c *gin.Context, obj interface{}) error { return err }
@@ -114,8 +114,8 @@ func Test_TimerController_Create(t *testing.T) {
 			mockServiceRouter := service.NewMockServiceRouter(ctrl)
 			mockServiceRouter.EXPECT().Timer().AnyTimes().Return(mockTimerService)
 
-			defer monkeyPatchTimerValidateFunc(tt.validateTimerErr)()
-			defer monkeyPatchBindJsonFunc(tt.bindJsonErr)()
+			defer monkeyPatch_TimerValidateFunc(tt.validateTimerErr)()
+			defer monkeyPatch_BindJsonFunc(tt.bindJsonErr)()
 
 			tc := &TimerController{serviceRouter: mockServiceRouter}
 			tc.Create(tt.c)
