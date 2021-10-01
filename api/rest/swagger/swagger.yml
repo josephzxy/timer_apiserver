@@ -30,7 +30,6 @@ definitions:
     type: object
     x-go-package: github.com/josephzxy/timer_apiserver/internal/resource/v1/model
   dataColField:
-    description: nolint:deadcode,unused
     properties:
       data:
         items:
@@ -40,21 +39,18 @@ definitions:
     type: object
     x-go-package: github.com/josephzxy/timer_apiserver/api/rest/swagger/docs
   dataObjField:
-    description: nolint:deadcode,unused
     properties:
       data:
         $ref: '#/definitions/Timer'
     type: object
     x-go-package: github.com/josephzxy/timer_apiserver/api/rest/swagger/docs
   errField:
-    description: nolint:deadcode,unused
     properties:
       err:
         $ref: '#/definitions/errInfo'
     type: object
     x-go-package: github.com/josephzxy/timer_apiserver/api/rest/swagger/docs
   errInfo:
-    description: nolint:deadcode,unused
     properties:
       code:
         description: |-
@@ -153,31 +149,27 @@ produces:
 - application/json
 responses:
   createTimerResp:
-    description: nolint:deadcode,unused
+    description: ""
     schema:
       $ref: '#/definitions/dataObjField'
   deleteTimerResp:
-    description: nolint:deadcode,unused
-    schema:
-      $ref: '#/definitions/dataObjField'
+    description: ""
   errResp:
-    description: nolint:deadcode,unused
+    description: ""
     schema:
       $ref: '#/definitions/errField'
   getTimerResp:
-    description: nolint:deadcode,unused
+    description: ""
     schema:
       $ref: '#/definitions/dataObjField'
   getTimersResp:
-    description: nolint:deadcode,unused
+    description: ""
     headers:
       Body: {}
     schema:
       $ref: '#/definitions/dataColField'
   updateTimerResp:
-    description: nolint:deadcode,unused
-    schema:
-      $ref: '#/definitions/dataObjField'
+    description: ""
 schemes:
 - http
 swagger: "2.0"
