@@ -49,12 +49,11 @@ func (mr *MockTimerServiceMockRecorder) Create(arg0 interface{}) *gomock.Call {
 }
 
 // DeleteByName mocks base method.
-func (m *MockTimerService) DeleteByName(name string) (*model.Timer, error) {
+func (m *MockTimerService) DeleteByName(name string) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteByName", name)
-	ret0, _ := ret[0].(*model.Timer)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
+	ret0, _ := ret[0].(error)
+	return ret0
 }
 
 // DeleteByName indicates an expected call of DeleteByName.
