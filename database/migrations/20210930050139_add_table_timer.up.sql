@@ -3,10 +3,10 @@ CREATE TABLE IF NOT EXISTS `timer` (
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `deleted_at` DATETIME DEFAULT NULL,
+    `alive` BOOLEAN DEFAULT TRUE,
     `name` VARCHAR(255) NOT NULL,
     `trigger_at` DATETIME NOT NULL,
     PRIMARY KEY (`id`),
-    KEY `idx_timer_deleted_at` (`deleted_at`),
-    KEY `idx_timer_trigger_at` (`trigger_at`),
-    CONSTRAINT `uniq_timer_name` UNIQUE (`name`)
+    KEY `idx_trigger_at` (`trigger_at`),
+    CONSTRAINT `uniq_name_alive` UNIQUE (`name`, `alive`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;

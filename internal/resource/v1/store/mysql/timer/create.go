@@ -14,6 +14,7 @@ var dbCreateFunc = func(db *gorm.DB, value interface{}) error {
 }
 
 func (s *TimerStore) Create(timer *model.Timer) error {
+	timer.Alive = true
 	err := dbCreateFunc(s.DB, timer)
 	if err == nil {
 		return nil
