@@ -4,17 +4,20 @@ import (
 	"time"
 
 	"github.com/go-playground/validator/v10"
+	"gorm.io/gorm"
 )
 
 // TimerCore contains fields that can be specified directly via APIs
 type TimerCore struct {
-	Name      string    `json:"name" gorm:"unique" validate:"required"`
-	TriggerAt time.Time `json:"triggerAt" gorm:"index" validate:"required,gte=time.Now().Add(time.Minute)"`
+	Name      string    `json:"name" gorm:"index:uniq_name_alive,unique,priority:1" validate:"required"`
+	TriggerAt time.Time `json:"triggerAt" gorm:"index:idx_trigger_at" validate:"required,gte=time.Now().Add(time.Minute)"`
 }
 
 type Timer struct {
 	Model
 	TimerCore
+	Alive     bool           `json:"-" gorm:"index:uniq_name_alive,unique,priority:2"`
+	DeletedAt gorm.DeletedAt `json:"-"`
 }
 
 func (t *Timer) TableName() string {
