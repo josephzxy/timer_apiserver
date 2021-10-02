@@ -9,6 +9,7 @@ type TimerService interface {
 	Create(*model.Timer) error
 	GetByName(name string) (*model.Timer, error)
 	DeleteByName(name string) error
+	UpdateByName(name string, want *model.TimerCore) error
 }
 
 type timerService struct {
@@ -25,4 +26,8 @@ func (s *timerService) GetByName(name string) (*model.Timer, error) {
 
 func (s *timerService) DeleteByName(name string) error {
 	return s.storeRouter.Timer().DeleteByName(name)
+}
+
+func (s *timerService) UpdateByName(name string, want *model.TimerCore) error {
+	return s.storeRouter.Timer().UpdateByName(name, want)
 }

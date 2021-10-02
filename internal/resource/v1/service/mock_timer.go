@@ -76,3 +76,17 @@ func (mr *MockTimerServiceMockRecorder) GetByName(name interface{}) *gomock.Call
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByName", reflect.TypeOf((*MockTimerService)(nil).GetByName), name)
 }
+
+// UpdateByName mocks base method.
+func (m *MockTimerService) UpdateByName(name string, want *model.TimerCore) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateByName", name, want)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateByName indicates an expected call of UpdateByName.
+func (mr *MockTimerServiceMockRecorder) UpdateByName(name, want interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateByName", reflect.TypeOf((*MockTimerService)(nil).UpdateByName), name, want)
+}
