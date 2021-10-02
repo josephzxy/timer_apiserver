@@ -62,6 +62,21 @@ func (mr *MockTimerServiceMockRecorder) DeleteByName(name interface{}) *gomock.C
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteByName", reflect.TypeOf((*MockTimerService)(nil).DeleteByName), name)
 }
 
+// GetAll mocks base method.
+func (m *MockTimerService) GetAll() ([]model.Timer, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetAll")
+	ret0, _ := ret[0].([]model.Timer)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetAll indicates an expected call of GetAll.
+func (mr *MockTimerServiceMockRecorder) GetAll() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAll", reflect.TypeOf((*MockTimerService)(nil).GetAll))
+}
+
 // GetByName mocks base method.
 func (m *MockTimerService) GetByName(name string) (*model.Timer, error) {
 	m.ctrl.T.Helper()
