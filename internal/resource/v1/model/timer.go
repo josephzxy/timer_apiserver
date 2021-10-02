@@ -13,6 +13,10 @@ type TimerCore struct {
 	TriggerAt time.Time `json:"triggerAt" gorm:"index:idx_trigger_at" validate:"required,gte=time.Now().Add(time.Minute)"`
 }
 
+func ValidateTimerCore(tc *TimerCore) error {
+	return validator.New().Struct(tc)
+}
+
 type Timer struct {
 	Model
 	TimerCore
