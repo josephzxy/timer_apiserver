@@ -45,6 +45,7 @@ func (s *RESTServer) installRoutes() {
 			timers.POST("", tc.Create)
 			timers.GET(":name", tc.Get)
 			timers.DELETE(":name", tc.Delete)
+			timers.PUT(":name", tc.Update)
 		}
 	}
 }
