@@ -18,24 +18,27 @@ func monkeyPatch_dbDeleteByNameFunc(ret error) (restore func()) {
 }
 
 func Test_TimerStore_DeleteByName(t *testing.T) {
-	defer monkeyPatch_dbDeleteByNameFunc(nil)()
+	tests := []struct {
+		name  string
+		dbErr error
+	}{
+		{"success", nil},
+		{"other error", errors.New("")},
+		{"record not found", gorm.ErrRecordNotFound},
+	}
 
-	ts := &TimerStore{&gorm.DB{}}
-	err := ts.DeleteByName("")
-	assert.Nil(t, err)
-}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			defer monkeyPatch_dbDeleteByNameFunc(tt.dbErr)()
+			ts := &TimerStore{&gorm.DB{}}
+			err := ts.DeleteByName("")
 
-func Test_TimerStore_DeleteByName_recordNotFound(t *testing.T) {
-	defer monkeyPatch_dbDeleteByNameFunc(gorm.ErrRecordNotFound)()
-	ts := &TimerStore{&gorm.DB{}}
-	err := ts.DeleteByName("")
-	assert.Equal(t, err.(*pkgerr.WithCode).Code(), pkgerr.ErrTimerNotFound)
-}
-
-func Test_TimerStore_DeleteByName_otherErr(t *testing.T) {
-	dbErr := errors.New("")
-	defer monkeyPatch_dbDeleteByNameFunc(dbErr)()
-	ts := &TimerStore{&gorm.DB{}}
-	err := ts.DeleteByName("")
-	assert.Equal(t, err, dbErr)
+			switch tt.name {
+			case "record not found":
+				assert.Equal(t, err.(*pkgerr.WithCode).Code(), pkgerr.ErrTimerNotFound)
+			default:
+				assert.Equal(t, err, tt.dbErr)
+			}
+		})
+	}
 }

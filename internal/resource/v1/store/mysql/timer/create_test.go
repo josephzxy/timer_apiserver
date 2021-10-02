@@ -12,7 +12,7 @@ import (
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/model"
 )
 
-func monkeyPatch_DbCreateFunc(ret error) (restore func()) {
+func monkeyPatch_dbCreateFunc(ret error) (restore func()) {
 	old := dbCreateFunc
 	restore = func() { dbCreateFunc = old }
 	dbCreateFunc = func(db *gorm.DB, value interface{}) error { return ret }
@@ -20,34 +20,28 @@ func monkeyPatch_DbCreateFunc(ret error) (restore func()) {
 }
 
 func Test_TimerStore_Create(t *testing.T) {
-	nonMysqlErr := errors.New("")
-	nonSupportedMysqlErr := &mysql.MySQLError{}
-
 	tests := []struct {
-		name        string
-		dbCreateErr error
-		want        error
+		name  string
+		dbErr error
 	}{
-		{"normal", nil, nil},
-		{"non mysql error", nonMysqlErr, nonMysqlErr},
-		{"non supported mysql error", nonSupportedMysqlErr, nonSupportedMysqlErr},
+		{"success", nil},
+		{"other error", errors.New("")},
+		{"unknown mysql error", &mysql.MySQLError{}},
+		{"record already exists", &mysql.MySQLError{Number: 1062, Message: ""}},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			defer monkeyPatch_DbCreateFunc(tt.dbCreateErr)()
+			defer monkeyPatch_dbCreateFunc(tt.dbErr)()
 			ts := &TimerStore{&gorm.DB{}}
-			got := ts.Create(&model.Timer{})
-			assert.Equal(t, tt.want, got)
+			err := ts.Create(&model.Timer{})
+
+			switch tt.name {
+			case "record already exists":
+				assert.Equal(t, pkgerr.ErrTimerAlreadyExists, err.(*pkgerr.WithCode).Code())
+			default:
+				assert.Equal(t, tt.dbErr, err)
+			}
 		})
 	}
-}
-
-func Test_TimerStore_Create_supportedMysqlErr(t *testing.T) {
-	mysqlErr := &mysql.MySQLError{Number: 1062, Message: ""}
-	defer monkeyPatch_DbCreateFunc(mysqlErr)()
-
-	ts := &TimerStore{&gorm.DB{}}
-	got := ts.Create(&model.Timer{})
-	assert.Equal(t, pkgerr.ErrTimerAlreadyExists, got.(*pkgerr.WithCode).Code())
 }

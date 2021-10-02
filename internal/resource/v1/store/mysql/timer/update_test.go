@@ -20,37 +20,15 @@ func monkeyPatch_dbUpdateByNameFunc(ret error) (restore func()) {
 }
 
 func Test_TimerStore_UpdateByName(t *testing.T) {
-	defer monkeyPatch_dbUpdateByNameFunc(nil)()
-	ts := &TimerStore{&gorm.DB{}}
-	err := ts.UpdateByName("", nil)
-	assert.Nil(t, err)
-}
-
-func Test_TimerStore_UpdateByName_recordNotFound(t *testing.T) {
-	defer monkeyPatch_dbUpdateByNameFunc(gorm.ErrRecordNotFound)()
-	ts := &TimerStore{&gorm.DB{}}
-	err := ts.UpdateByName("", nil)
-	assert.Equal(t, err.(*pkgerr.WithCode).Code(), pkgerr.ErrTimerNotFound)
-}
-
-func Test_TimerStore_UpdateByName_timerAlreadyExists(t *testing.T) {
-	defer monkeyPatch_dbUpdateByNameFunc(&mysql.MySQLError{Number: 1062})()
-	ts := &TimerStore{&gorm.DB{}}
-	err := ts.UpdateByName("", nil)
-	assert.Equal(t, err.(*pkgerr.WithCode).Code(), pkgerr.ErrTimerAlreadyExists)
-}
-
-func Test_TimerStore_UpdateByName_otherErr(t *testing.T) {
-
-	unknownErr := errors.New("")
-	unknownMysqlErr := &mysql.MySQLError{}
-
 	tests := []struct {
 		name  string
 		dbErr error
 	}{
-		{"unknown error", unknownErr},
-		{"unknown mysql error", unknownMysqlErr},
+		{"success", nil},
+		{"record not found", gorm.ErrRecordNotFound},
+		{"record already exists", &mysql.MySQLError{Number: 1062}},
+		{"unknown mysql error", &mysql.MySQLError{}},
+		{"other error", errors.New("")},
 	}
 
 	for _, tt := range tests {
@@ -58,7 +36,15 @@ func Test_TimerStore_UpdateByName_otherErr(t *testing.T) {
 			defer monkeyPatch_dbUpdateByNameFunc(tt.dbErr)()
 			ts := &TimerStore{&gorm.DB{}}
 			err := ts.UpdateByName("", nil)
-			assert.Equal(t, tt.dbErr, err)
+
+			switch tt.name {
+			case "record not found":
+				assert.Equal(t, err.(*pkgerr.WithCode).Code(), pkgerr.ErrTimerNotFound)
+			case "record already exists":
+				assert.Equal(t, err.(*pkgerr.WithCode).Code(), pkgerr.ErrTimerAlreadyExists)
+			default:
+				assert.Equal(t, err, tt.dbErr)
+			}
 		})
 	}
 }
