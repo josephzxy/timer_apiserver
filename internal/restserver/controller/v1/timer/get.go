@@ -17,3 +17,13 @@ func (tc *TimerController) Get(c *gin.Context) {
 	}
 	resp.WriteResponse(c, nil, timer)
 }
+
+func (tc *TimerController) GetAll(c *gin.Context) {
+	timers, err := tc.serviceRouter.Timer().GetAll()
+	if err != nil {
+		zap.S().Errorw("failed to get timers", "err", err)
+		resp.WriteResponse(c, err, nil)
+		return
+	}
+	resp.WriteResponse(c, nil, timers)
+}

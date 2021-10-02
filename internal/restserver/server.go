@@ -44,6 +44,7 @@ func (s *RESTServer) installRoutes() {
 			tc := timer.NewController(s.serviceRouter)
 			timers.POST("", tc.Create)
 			timers.GET(":name", tc.Get)
+			timers.GET("", tc.GetAll)
 			timers.DELETE(":name", tc.Delete)
 			timers.PUT(":name", tc.Update)
 		}
