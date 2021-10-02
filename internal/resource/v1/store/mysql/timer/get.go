@@ -25,3 +25,16 @@ func (s *TimerStore) GetByName(name string) (*model.Timer, error) {
 	}
 	return nil, err
 }
+
+var dbGetAllFunc = func(db *gorm.DB, timers *[]model.Timer) error {
+	return db.Find(timers).Error
+}
+
+func (s *TimerStore) GetAll() ([]model.Timer, error) {
+	var timers []model.Timer
+	err := dbGetAllFunc(s.DB, &timers)
+	if err == nil {
+		return timers, nil
+	}
+	return nil, err
+}
