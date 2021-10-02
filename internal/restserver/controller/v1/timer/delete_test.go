@@ -13,29 +13,32 @@ import (
 func Test_TimerController_Delete(t *testing.T) {
 	ctrl := gomock.NewController(t)
 
-	mockTimerService := service.NewMockTimerService(ctrl)
-	mockTimerService.EXPECT().DeleteByName(gomock.Any()).AnyTimes().Return(nil)
+	tests := []struct {
+		name string
+		err  error
+	}{
+		{"success", nil},
+		{"failure", errors.New("")},
+	}
 
-	mockServiceRouter := service.NewMockServiceRouter(ctrl)
-	mockServiceRouter.EXPECT().Timer().AnyTimes().Return(mockTimerService)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			mockTimerService := service.NewMockTimerService(ctrl)
+			mockTimerService.EXPECT().DeleteByName(gomock.Any()).AnyTimes().Return(tt.err)
 
-	tc := &TimerController{serviceRouter: mockServiceRouter}
-	c := newTestGinCtxWithReq("DELETE", "/v1/timers/name", nil)
-	tc.Delete(c)
-	assert.Equal(t, 200, c.Writer.Status())
-}
+			mockServiceRouter := service.NewMockServiceRouter(ctrl)
+			mockServiceRouter.EXPECT().Timer().AnyTimes().Return(mockTimerService)
 
-func Test_TimerController_Delete_err(t *testing.T) {
-	ctrl := gomock.NewController(t)
+			tc := &TimerController{serviceRouter: mockServiceRouter}
+			c := newTestGinCtxWithReq("DELETE", "/v1/timers/name", nil)
+			tc.Delete(c)
 
-	mockTimerService := service.NewMockTimerService(ctrl)
-	mockTimerService.EXPECT().DeleteByName(gomock.Any()).AnyTimes().Return(errors.New(""))
-
-	mockServiceRouter := service.NewMockServiceRouter(ctrl)
-	mockServiceRouter.EXPECT().Timer().AnyTimes().Return(mockTimerService)
-
-	tc := &TimerController{serviceRouter: mockServiceRouter}
-	c := newTestGinCtxWithReq("DELETE", "/v1/timers/name", nil)
-	tc.Delete(c)
-	assert.NotEqual(t, 200, c.Writer.Status())
+			switch tt.name {
+			case "success":
+				assert.Equal(t, 200, c.Writer.Status())
+			case "failure":
+				assert.NotEqual(t, 200, c.Writer.Status())
+			}
+		})
+	}
 }

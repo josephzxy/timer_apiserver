@@ -26,30 +26,35 @@ func monkeyPatch_dbGetAllFunc(ret error) (restore func()) {
 }
 
 func Test_TimerStore_GetByName(t *testing.T) {
-	defer monkeyPatch_dbGetByNameFunc(nil)()
-	ts := &TimerStore{&gorm.DB{}}
-	timer, err := ts.GetByName("")
-	assert.NotNil(t, timer)
-	assert.Nil(t, err)
-}
 
-func Test_TimerStore_GetByName_recordNotFound(t *testing.T) {
-	defer monkeyPatch_dbGetByNameFunc(gorm.ErrRecordNotFound)()
-	ts := &TimerStore{&gorm.DB{}}
-	timer, err := ts.GetByName("")
-	assert.Nil(t, timer)
-	assert.NotNil(t, err)
-	assert.Equal(t, pkgerr.ErrTimerNotFound, err.(*pkgerr.WithCode).Code())
-}
+	tests := []struct {
+		name  string
+		dbErr error
+	}{
+		{"success", nil},
+		{"record not found", gorm.ErrRecordNotFound},
+		{"other error", errors.New("")},
+	}
 
-func Test_TimerStore_GetByName_otherErr(t *testing.T) {
-	defer monkeyPatch_dbGetByNameFunc(errors.New(""))()
-	ts := &TimerStore{&gorm.DB{}}
-	timer, err := ts.GetByName("")
-	assert.Nil(t, timer)
-	assert.NotNil(t, err)
-	_, ok := err.(*pkgerr.WithCode)
-	assert.False(t, ok)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			defer monkeyPatch_dbGetByNameFunc(tt.dbErr)()
+			ts := &TimerStore{&gorm.DB{}}
+			timer, err := ts.GetByName("")
+
+			switch tt.name {
+			case "success":
+				assert.NotNil(t, timer)
+				assert.Equal(t, err, tt.dbErr)
+			case "record not found":
+				assert.Nil(t, timer)
+				assert.Equal(t, pkgerr.ErrTimerNotFound, err.(*pkgerr.WithCode).Code())
+			default:
+				assert.Nil(t, timer)
+				assert.Equal(t, err, tt.dbErr)
+			}
+		})
+	}
 }
 
 func Test_TimerStore_GetAll(t *testing.T) {
