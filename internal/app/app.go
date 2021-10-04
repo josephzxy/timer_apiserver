@@ -7,7 +7,7 @@ import (
 	"go.uber.org/zap"
 
 	"github.com/pkg/errors"
-	"github.com/spf13/pflag"
+	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
 	"github.com/josephzxy/timer_apiserver/internal/app/cliflags"
@@ -21,6 +21,7 @@ type App struct {
 	basename string
 	cfg      *config.Config
 	cliflags *cliflags.CliFlags
+	cmd      *cobra.Command
 }
 
 func NewApp(basename string) *App {
@@ -29,12 +30,21 @@ func NewApp(basename string) *App {
 		cfg:      config.NewEmptyConfig(),
 		cliflags: cliflags.NewCliFlags(),
 	}
-
-	a.installCliFlags()
-	if err := a.loadConfig(); err != nil {
-		zap.S().Fatalw("failed to load config for app", "err", err)
-	}
+	a.buildCmd()
 	return a
+}
+
+func (a *App) buildCmd() {
+	a.cmd = &cobra.Command{
+		Use:           a.basename,
+		SilenceUsage:  true,
+		SilenceErrors: true,
+	}
+	a.cmd.RunE = a.runCmd
+
+	for _, fs := range a.cliflags.GetAllFlagSets() {
+		a.cmd.Flags().AddFlagSet(fs)
+	}
 }
 
 // ensureViperValueType ensures viper to store non-string config values with proper types
@@ -51,8 +61,8 @@ func (a *App) ensureViperValueType() {
 	viper.SetTypeByDefaultValue(true)
 }
 
-func (a *App) loadConfigFromCliFlags() error {
-	if err := viper.BindPFlags(pflag.CommandLine); err != nil {
+func (a *App) bindConfigFromCliFlags() error {
+	if err := viper.BindPFlags(a.cmd.Flags()); err != nil {
 		msg := "failed to read config from cli flags"
 		zap.S().Errorw(msg, "err", err)
 		return errors.WithMessage(err, msg)
@@ -60,13 +70,13 @@ func (a *App) loadConfigFromCliFlags() error {
 	return nil
 }
 
-func (a *App) loadConfigFromEnv() {
+func (a *App) bindConfigFromEnv() {
 	viper.AutomaticEnv()
 	viper.SetEnvPrefix(strings.ToUpper(a.basename))
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_", "-", "_"))
 }
 
-func (a *App) loadConfigFromFile() error {
+func (a *App) bindConfigFromFile() error {
 	cfgFile := config.CfgFile()
 	if cfgFile == "" {
 		return fmt.Errorf("config file path must not be empty")
@@ -81,15 +91,19 @@ func (a *App) loadConfigFromFile() error {
 	return nil
 }
 
-func (a *App) loadConfig() error {
+func (a *App) bindConfig() error {
 	a.ensureViperValueType()
-	if err := a.loadConfigFromCliFlags(); err != nil {
+	if err := a.bindConfigFromCliFlags(); err != nil {
 		return err
 	}
-	a.loadConfigFromEnv()
-	if err := a.loadConfigFromFile(); err != nil {
+	a.bindConfigFromEnv()
+	if err := a.bindConfigFromFile(); err != nil {
 		return err
 	}
+	return nil
+}
+
+func (a *App) loadConfig() error {
 	if err := viper.Unmarshal(a.cfg); err != nil {
 		msg := "failed to unmarshal config"
 		zap.S().Errorw(msg, "err", err)
@@ -98,16 +112,26 @@ func (a *App) loadConfig() error {
 	return nil
 }
 
-func (a *App) installCliFlags() {
-	for _, fs := range a.cliflags.GetAllFlagSets() {
-		pflag.CommandLine.AddFlagSet(fs)
+func (a *App) Run() {
+	if err := a.cmd.Execute(); err != nil {
+		zap.S().Fatal(err)
 	}
-	pflag.Parse()
 }
 
-func (a *App) Run() {
-	fmt.Println("Running...")
+func (a *App) runCmd(cmd *cobra.Command, args []string) error {
+	if err := a.bindConfig(); err != nil {
+		return err
+	}
+	if err := a.loadConfig(); err != nil {
+		return err
+	}
+	if err := a.run(); err != nil {
+		return err
+	}
+	return nil
+}
 
+func (a *App) run() error {
 	mysqlStoreRouter, err := mysql.NewStoreRouter(&mysql.Config{
 		User:            a.cfg.MySQL.User,
 		Pwd:             a.cfg.MySQL.Pwd,
@@ -122,12 +146,13 @@ func (a *App) Run() {
 		MaxConnLifetime: a.cfg.MySQL.MaxConnLifetime,
 		LogLevel:        a.cfg.MySQL.LogLevel, // silent
 	})
-
 	if err != nil {
-		zap.S().Fatalw("failed to get mysql store router", "err", err)
+		msg := "failed to get mysql store router"
+		zap.S().Errorw(msg, "err", err)
+		return errors.WithMessage(err, msg)
 	}
-	serviceRouter := service.NewRouter(mysqlStoreRouter)
 
+	serviceRouter := service.NewRouter(mysqlStoreRouter)
 	restServer := restserver.New(
 		&restserver.Config{
 			InsecureServing: restserver.InsecureServingConfig{
@@ -138,8 +163,10 @@ func (a *App) Run() {
 		},
 		serviceRouter,
 	)
-
 	if err := restServer.Start(); err != nil {
-		zap.S().Fatalw("error occured during running rest server", "err", err)
+		msg := "error occured during running rest server"
+		zap.S().Errorw(msg, "err", err)
+		return errors.WithMessage(err, msg)
 	}
+	return nil
 }
