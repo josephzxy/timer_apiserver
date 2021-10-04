@@ -4,3 +4,6 @@
 
 # GNU make
 _output/
+
+# config
+config/config.yml

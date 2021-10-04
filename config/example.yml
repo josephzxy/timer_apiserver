@@ -1,0 +1,19 @@
+mysql:
+  user: root  
+  pwd: root
+  host: db
+  port: 3306
+  database: test
+  charset: utf8mb4
+  parse-time: true
+  loc: Local
+  max-idel-conns: 100
+  max-open-conns: 100
+  max-conn-lifetime: 10s
+  log-level: 1 # silent
+
+restserver:
+  insecure-serving: 
+    host: 0.0.0.0
+    port: 8080
+  mode: debug

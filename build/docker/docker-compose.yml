@@ -28,6 +28,8 @@ services:
       - backnet
     ports:
       - 8080:8080
+    volumes:
+      - ../../config:/app/config:ro
     depends_on:
       db:
         condition: service_healthy
