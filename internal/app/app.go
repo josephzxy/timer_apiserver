@@ -7,8 +7,10 @@ import (
 	"go.uber.org/zap"
 
 	"github.com/pkg/errors"
+	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 
+	"github.com/josephzxy/timer_apiserver/internal/app/cliflags"
 	"github.com/josephzxy/timer_apiserver/internal/app/config"
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/service"
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/store/mysql"
@@ -18,13 +20,17 @@ import (
 type App struct {
 	basename string
 	cfg      *config.Config
+	cliflags *cliflags.CliFlags
 }
 
 func NewApp(basename string) *App {
 	a := &App{
 		basename: basename,
 		cfg:      config.NewEmptyConfig(),
+		cliflags: cliflags.NewCliFlags(),
 	}
+
+	a.installCliFlags()
 	if err := a.loadConfig(); err != nil {
 		zap.S().Fatalw("failed to load config for app", "err", err)
 	}
@@ -43,6 +49,15 @@ func (a *App) ensureViperValueType() {
 	viper.SetDefault("restserver.insecure-serving.port", a.cfg.RESTServer.InsecureServing.Port)
 
 	viper.SetTypeByDefaultValue(true)
+}
+
+func (a *App) loadConfigFromCliFlags() error {
+	if err := viper.BindPFlags(pflag.CommandLine); err != nil {
+		msg := "failed to read config from cli flags"
+		zap.S().Errorw(msg, "err", err)
+		return errors.WithMessage(err, msg)
+	}
+	return nil
 }
 
 func (a *App) loadConfigFromEnv() {
@@ -68,6 +83,9 @@ func (a *App) loadConfigFromFile() error {
 
 func (a *App) loadConfig() error {
 	a.ensureViperValueType()
+	if err := a.loadConfigFromCliFlags(); err != nil {
+		return err
+	}
 	a.loadConfigFromEnv()
 	if err := a.loadConfigFromFile(); err != nil {
 		return err
@@ -78,6 +96,13 @@ func (a *App) loadConfig() error {
 		return errors.WithMessage(err, msg)
 	}
 	return nil
+}
+
+func (a *App) installCliFlags() {
+	for _, fs := range a.cliflags.GetAllFlagSets() {
+		pflag.CommandLine.AddFlagSet(fs)
+	}
+	pflag.Parse()
 }
 
 func (a *App) Run() {
