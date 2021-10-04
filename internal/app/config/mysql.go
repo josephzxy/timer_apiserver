@@ -16,3 +16,7 @@ type MySQLConfig struct {
 	MaxConnLifetime time.Duration `json:"max-conn-lifetime" mapstructure:"max-conn-lifetime"`
 	LogLevel        int           `json:"log-level" mapstructure:"log-level"`
 }
+
+func newEmptyMySQLConfig() *MySQLConfig {
+	return &MySQLConfig{}
+}

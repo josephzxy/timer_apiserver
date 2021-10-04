@@ -10,6 +10,12 @@ type RESTServerConfig struct {
 	Mode            string                 `json:"mode" mapstructure:"mode"`
 }
 
+func newEmptyRESTServerConfig() *RESTServerConfig {
+	return &RESTServerConfig{
+		InsecureServing: newEmptyInsecureServingConfig(),
+	}
+}
+
 type InsecureServingConfig struct {
 	Host string `json:"host" mapstructure:"host"`
 	Port int    `json:"port" mapstructure:"port"`
@@ -17,4 +23,8 @@ type InsecureServingConfig struct {
 
 func (c *InsecureServingConfig) Addr() string {
 	return net.JoinHostPort(c.Host, strconv.Itoa(c.Port))
+}
+
+func newEmptyInsecureServingConfig() *InsecureServingConfig {
+	return &InsecureServingConfig{}
 }
