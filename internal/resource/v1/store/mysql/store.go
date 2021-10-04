@@ -6,6 +6,7 @@ import (
 	"go.uber.org/zap"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/store"
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/store/mysql/timer"
@@ -31,7 +32,9 @@ func NewStoreRouter(cfg *Config) (*MySQLStoreRouter, error) {
 		cfg.ParseTime,
 		cfg.Loc,
 	)
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.LogLevel(cfg.LogLevel)),
+	})
 	if err != nil {
 		zap.S().Errorw("failed to create mysql connection", "err", err)
 		return nil, err
