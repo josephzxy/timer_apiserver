@@ -3,16 +3,16 @@ package config
 import "time"
 
 type MySQLConfig struct {
-	User            string        `mapstructure:"user"`
-	Pwd             string        `mapstructure:"pwd"`
-	Host            string        `mapstructure:"host"`
-	Port            int           `mapstructure:"port"`
-	Database        string        `mapstructure:"database"`
-	Charset         string        `mapstructure:"charset"`
-	ParseTime       bool          `mapstructure:"parse-time"`
-	Loc             string        `mapstructure:"loc"`
-	MaxIdleConns    int           `mapstructure:"max-idle-conns"`
-	MaxOpenConns    int           `mapstructure:"max-open-conns"`
-	MaxConnLifetime time.Duration `mapstructure:"max-conn-lifetime"`
-	LogLevel        int           `mapstructure:"log-level"`
+	User            string        `json:"user" mapstructure:"user"`
+	Pwd             string        `json:"pwd" mapstructure:"pwd"`
+	Host            string        `json:"host" mapstructure:"host"`
+	Port            int           `json:"port" mapstructure:"port"`
+	Database        string        `json:"database" mapstructure:"database"`
+	Charset         string        `json:"charset" mapstructure:"charset"`
+	ParseTime       bool          `json:"parse-time" mapstructure:"parse-time"`
+	Loc             string        `json:"loc" mapstructure:"loc"`
+	MaxIdleConns    int           `json:"max-idel-conns" mapstructure:"max-idle-conns"`
+	MaxOpenConns    int           `json:"max-open-conns" mapstructure:"max-open-conns"`
+	MaxConnLifetime time.Duration `json:"max-conn-lifetime" mapstructure:"max-conn-lifetime"`
+	LogLevel        int           `json:"log-level" mapstructure:"log-level"`
 }

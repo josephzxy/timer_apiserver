@@ -6,13 +6,13 @@ import (
 )
 
 type RESTServerConfig struct {
-	InsecureServing *InsecureServingConfig `mapstructure:"insecure-serving"`
-	Mode            string                 `mapstructure:"mode"`
+	InsecureServing *InsecureServingConfig `json:"insecure-serving" mapstructure:"insecure-serving"`
+	Mode            string                 `json:"mode" mapstructure:"mode"`
 }
 
 type InsecureServingConfig struct {
-	Host string `mapstructure:"host"`
-	Port int    `mapstructure:"port"`
+	Host string `json:"host" mapstructure:"host"`
+	Port int    `json:"port" mapstructure:"port"`
 }
 
 func (c *InsecureServingConfig) Addr() string {
