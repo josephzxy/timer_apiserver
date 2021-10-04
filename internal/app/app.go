@@ -2,6 +2,7 @@ package app
 
 import (
 	"fmt"
+	"strings"
 
 	"go.uber.org/zap"
 
@@ -15,12 +16,14 @@ import (
 )
 
 type App struct {
-	cfg *config.Config
+	basename string
+	cfg      *config.Config
 }
 
-func NewApp() *App {
+func NewApp(basename string) *App {
 	a := &App{
-		cfg: config.NewEmptyConfig(),
+		basename: basename,
+		cfg:      config.NewEmptyConfig(),
 	}
 	if err := a.loadConfig(); err != nil {
 		zap.S().Fatalw("failed to load config for app", "err", err)
@@ -28,7 +31,27 @@ func NewApp() *App {
 	return a
 }
 
-func (a *App) loadConfig() error {
+// ensureViperValueType ensures viper to store non-string config values with proper types
+func (a *App) ensureViperValueType() {
+	viper.SetDefault("mysql.port", a.cfg.MySQL.Port)
+	viper.SetDefault("mysql.parse-time", a.cfg.MySQL.ParseTime)
+	viper.SetDefault("mysql.max-idle-conns", a.cfg.MySQL.MaxIdleConns)
+	viper.SetDefault("mysql.max-open-conns", a.cfg.MySQL.MaxOpenConns)
+	viper.SetDefault("mysql.max-conn-lifetime", a.cfg.MySQL.MaxConnLifetime)
+	viper.SetDefault("mysql.log-level", a.cfg.MySQL.LogLevel)
+
+	viper.SetDefault("restserver.insecure-serving.port", a.cfg.RESTServer.InsecureServing.Port)
+
+	viper.SetTypeByDefaultValue(true)
+}
+
+func (a *App) loadConfigFromEnv() {
+	viper.AutomaticEnv()
+	viper.SetEnvPrefix(strings.ToUpper(a.basename))
+	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_", "-", "_"))
+}
+
+func (a *App) loadConfigFromFile() error {
 	cfgFile := config.CfgFile()
 	if cfgFile == "" {
 		return fmt.Errorf("config file path must not be empty")
@@ -40,7 +63,15 @@ func (a *App) loadConfig() error {
 		zap.S().Errorw(msg, "err", err)
 		return errors.WithMessage(err, msg)
 	}
+	return nil
+}
 
+func (a *App) loadConfig() error {
+	a.ensureViperValueType()
+	a.loadConfigFromEnv()
+	if err := a.loadConfigFromFile(); err != nil {
+		return err
+	}
 	if err := viper.Unmarshal(a.cfg); err != nil {
 		msg := "failed to unmarshal config"
 		zap.S().Errorw(msg, "err", err)

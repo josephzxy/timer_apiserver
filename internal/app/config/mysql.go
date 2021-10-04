@@ -11,7 +11,7 @@ type MySQLConfig struct {
 	Charset         string        `json:"charset" mapstructure:"charset"`
 	ParseTime       bool          `json:"parse-time" mapstructure:"parse-time"`
 	Loc             string        `json:"loc" mapstructure:"loc"`
-	MaxIdleConns    int           `json:"max-idel-conns" mapstructure:"max-idle-conns"`
+	MaxIdleConns    int           `json:"max-idle-conns" mapstructure:"max-idle-conns"`
 	MaxOpenConns    int           `json:"max-open-conns" mapstructure:"max-open-conns"`
 	MaxConnLifetime time.Duration `json:"max-conn-lifetime" mapstructure:"max-conn-lifetime"`
 	LogLevel        int           `json:"log-level" mapstructure:"log-level"`
