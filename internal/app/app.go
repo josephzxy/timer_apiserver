@@ -209,7 +209,7 @@ func (a *App) run() error {
 		})
 
 		go func() {
-			eg.Wait()
+			_ = eg.Wait()
 			waitDone <- struct{}{}
 		}()
 
