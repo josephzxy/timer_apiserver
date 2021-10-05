@@ -44,7 +44,6 @@ var dbGetAllPendingFunc = func(db *gorm.DB, timers *[]model.Timer) error {
 	return db.Where("alive = ? AND trigger_at > NOW()", true).Find(timers).Error
 }
 
-// TODO: test required
 func (s *TimerStore) GetAllPending() ([]model.Timer, error) {
 	var timers []model.Timer
 	err := dbGetAllPendingFunc(s.DB, &timers)
