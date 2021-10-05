@@ -61,6 +61,7 @@ func (a *App) ensureViperValueType() {
 	viper.SetDefault("mysql.log-level", a.cfg.MySQL.LogLevel)
 
 	viper.SetDefault("restserver.insecure-serving.port", a.cfg.RESTServer.InsecureServing.Port)
+	viper.SetDefault("grpcserver.insecure-serving.port", a.cfg.GRPCServer.InsecureServing.Port)
 
 	viper.SetTypeByDefaultValue(true)
 }
