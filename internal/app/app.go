@@ -1,10 +1,12 @@
 package app
 
 import (
+	"context"
 	"fmt"
 	"strings"
 
 	"go.uber.org/zap"
+	"golang.org/x/sync/errgroup"
 
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
@@ -12,6 +14,7 @@ import (
 
 	"github.com/josephzxy/timer_apiserver/internal/app/cliflags"
 	"github.com/josephzxy/timer_apiserver/internal/app/config"
+	"github.com/josephzxy/timer_apiserver/internal/app/gracefulshutdown"
 	"github.com/josephzxy/timer_apiserver/internal/grpcserver"
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/service"
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/store/mysql"
@@ -186,6 +189,37 @@ func (a *App) run() error {
 			zap.S().Fatalw(msg, "err", err)
 		}
 	}()
+
+	gracefulshutdown.Enable(func() error {
+		waitDone := make(chan struct{}, 1)
+		var shutdownErr error
+		eg, ctx := errgroup.WithContext(context.Background())
+
+		eg.Go(func() error {
+			if err := restServer.Stop(); err != nil {
+				shutdownErr = err
+				return err
+			}
+			return nil
+		})
+
+		eg.Go(func() error {
+			grpcServer.Stop()
+			return nil
+		})
+
+		go func() {
+			eg.Wait()
+			waitDone <- struct{}{}
+		}()
+
+		select {
+		case <-ctx.Done():
+			return shutdownErr
+		case <-waitDone:
+			return nil
+		}
+	})
 
 	select {}
 }

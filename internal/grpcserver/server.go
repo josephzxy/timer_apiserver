@@ -69,5 +69,6 @@ func (s *GRPCServer) Start() error {
 }
 
 func (s *GRPCServer) Stop() {
+	zap.L().Info("gracefully shutting down grpc server")
 	s.insecureServer.GracefulStop()
 }

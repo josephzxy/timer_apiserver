@@ -2,11 +2,11 @@ package restserver
 
 import (
 	"context"
-	"errors"
 	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/pkg/errors"
 	"go.uber.org/zap"
 	"golang.org/x/sync/errgroup"
 
@@ -80,12 +80,15 @@ func (s *RESTServer) Start() error {
 	return eg.Wait()
 }
 
-func (s *RESTServer) Stop() {
-	zap.L().Info("server stopping")
+func (s *RESTServer) Stop() error {
+	zap.L().Info("gracefully shutting down rest server")
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 	if err := s.insecureServer.Shutdown(ctx); err != nil {
-		zap.S().Warnw("failed to shutdown insecure serving rest server", "err", err)
+		msg := "failed to shutdown insecure serving rest server"
+		zap.S().Warnw(msg, "err", err)
+		return errors.WithMessage(err, msg)
 	}
+	return nil
 }
