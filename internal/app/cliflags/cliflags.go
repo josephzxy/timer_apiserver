@@ -5,12 +5,14 @@ import "github.com/spf13/pflag"
 type CliFlags struct {
 	mysql      *MySQLCliFlags
 	restserver *RESTServerCliFlags
+	grpcserver *GRPCServerCliFlags
 }
 
 func NewCliFlags() *CliFlags {
 	return &CliFlags{
 		mysql:      newMySQLCliFlags(),
 		restserver: newRESTServerCliFlags(),
+		grpcserver: newGRPCServerCliFlags(),
 	}
 }
 
@@ -18,5 +20,6 @@ func (f *CliFlags) GetAllFlagSets() []*pflag.FlagSet {
 	return []*pflag.FlagSet{
 		f.mysql.getFlagSet(),
 		f.restserver.getFlagSet(),
+		f.grpcserver.getFlagSet(),
 	}
 }

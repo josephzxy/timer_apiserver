@@ -3,7 +3,7 @@ package cliflags
 import "github.com/spf13/pflag"
 
 type RESTServerCliFlags struct {
-	InsecureServing *InsecureServingCliFlags
+	InsecureServing *RESTInsecureServingCliFlags
 	Mode            string
 
 	flagSet *pflag.FlagSet
@@ -11,7 +11,7 @@ type RESTServerCliFlags struct {
 
 func newRESTServerCliFlags() *RESTServerCliFlags {
 	return &RESTServerCliFlags{
-		InsecureServing: &InsecureServingCliFlags{},
+		InsecureServing: &RESTInsecureServingCliFlags{},
 	}
 }
 
@@ -29,7 +29,7 @@ func (f *RESTServerCliFlags) getFlagSet() *pflag.FlagSet {
 	return f.flagSet
 }
 
-type InsecureServingCliFlags struct {
+type RESTInsecureServingCliFlags struct {
 	Host string
 	Port int
 }
