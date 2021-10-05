@@ -77,6 +77,21 @@ func (mr *MockTimerServiceMockRecorder) GetAll() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAll", reflect.TypeOf((*MockTimerService)(nil).GetAll))
 }
 
+// GetAllPending mocks base method.
+func (m *MockTimerService) GetAllPending() ([]model.Timer, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetAllPending")
+	ret0, _ := ret[0].([]model.Timer)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetAllPending indicates an expected call of GetAllPending.
+func (mr *MockTimerServiceMockRecorder) GetAllPending() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllPending", reflect.TypeOf((*MockTimerService)(nil).GetAllPending))
+}
+
 // GetByName mocks base method.
 func (m *MockTimerService) GetByName(name string) (*model.Timer, error) {
 	m.ctrl.T.Helper()
