@@ -15,5 +15,10 @@ mysql:
 restserver:
   insecure-serving: 
     host: 0.0.0.0
-    port: 8080
+    port: 8081
   mode: debug
+
+grpcserver:
+  insecure-serving: 
+    host: 0.0.0.0
+    port: 8082
