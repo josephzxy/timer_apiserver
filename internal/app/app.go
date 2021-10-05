@@ -61,6 +61,7 @@ func (a *App) ensureViperValueType() {
 	viper.SetDefault("mysql.log-level", a.cfg.MySQL.LogLevel)
 
 	viper.SetDefault("restserver.insecure-serving.port", a.cfg.RESTServer.InsecureServing.Port)
+	viper.SetDefault("grpcserver.insecure-serving.port", a.cfg.GRPCServer.InsecureServing.Port)
 
 	viper.SetTypeByDefaultValue(true)
 }
@@ -177,8 +178,8 @@ func (a *App) run() error {
 	grpcServer := grpcserver.New(
 		&grpcserver.Config{
 			InsecureServing: &grpcserver.InsecureServingConfig{
-				Host: "0.0.0.0",
-				Port: 8082,
+				Host: a.cfg.GRPCServer.InsecureServing.Host,
+				Port: a.cfg.GRPCServer.InsecureServing.Port,
 			},
 		},
 		serviceRouter,
