@@ -14,6 +14,7 @@ include scripts/make_rules/tools.mk
 include scripts/make_rules/docker.mk
 include scripts/make_rules/swagger.mk
 include scripts/make_rules/mysql.mk
+include scripts/make_rules/grpc.mk
 
 # Usages
 define USAGE_OPTIONS
@@ -45,6 +46,13 @@ test: go.test
 ## build: Build binary from source code
 .PHONY: build
 build: go.build
+
+## gen: Generate necessary files(e.g. gRPC stub, gomock files)
+.PHONY: gen
+gen: 
+	@echo "=======> $(MAIN_PREFIX) generating files"
+	@$(MAKE) go.mock
+	@$(MAKE) grpc.protoc
 
 ## docker: Build docker image
 .PHONY: docker

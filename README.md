@@ -22,9 +22,10 @@ Golang, Gin, gRPC, MySQL, GORM
 ## Get Started
 
 ### Prerequisites
-- Go1.17+
-- Docker
-- GNU make
+- [Go1.17+](https://golang.org/dl/)
+- [Docker](https://www.docker.com/get-started)
+- [GNU make](https://www.gnu.org/software/make/)
+- [protoc](https://grpc.io/docs/protoc-installation/#install-using-a-package-manager)
 
 ### Build Local Executable
 For the host OS and ARCH.
@@ -117,27 +118,5 @@ make swagger.serve
 Or check out [swagger.yml](api/rest/swagger/swagger.yml) directly.
 
 ### gRPC API
-The service definition file is like below.
-
-```proto3
-syntax = "proto3";
-
-package proto;
-
-service Resource {
-    rpc ListPendingTimers(ListPendingTimersReq) returns (ListPendingTimersResp) {}
-}
-
-message TimerInfo {
-    string name = 1;
-    string trigger_at = 2;
-}
-
-message ListPendingTimersReq {
-}
-
-message ListPendingTimersResp {
-    repeated TimerInfo items = 1;
-}
-```
+Please check out [timer.proto](api/grpc/timer.proto).
 A timer will be considered as "pending" if it is created, not deleted, and not triggerred yet.

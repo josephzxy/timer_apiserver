@@ -9,6 +9,8 @@ type TimerService interface {
 	Create(*model.Timer) error
 	GetByName(name string) (*model.Timer, error)
 	GetAll() ([]model.Timer, error)
+	// A timer will be considered as "pending" if it is created, not deleted, and not triggerred yet.
+	GetAllPending() ([]model.Timer, error)
 	DeleteByName(name string) error
 	UpdateByName(name string, want *model.TimerCore) error
 }
@@ -35,4 +37,8 @@ func (s *timerService) UpdateByName(name string, want *model.TimerCore) error {
 
 func (s *timerService) GetAll() ([]model.Timer, error) {
 	return s.storeRouter.Timer().GetAll()
+}
+
+func (s *timerService) GetAllPending() ([]model.Timer, error) {
+	return s.storeRouter.Timer().GetAllPending()
 }
