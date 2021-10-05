@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package timer;
+option go_package = "github.com/josephzxy/timer_apiserver/api/grpc";
+
+service Timer {
+    rpc GetAllPendingTimers(GetAllPendingTimersReq) returns (GetAllPendingTimersResp) {}
+}
+
+message TimerInfo {
+    string name = 1;
+    string trigger_at = 2;
+}
+
+message GetAllPendingTimersReq {
+}
+
+message GetAllPendingTimersResp {
+    repeated TimerInfo items = 1;
+}
