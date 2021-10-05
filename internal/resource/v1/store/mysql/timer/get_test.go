@@ -28,7 +28,10 @@ func monkeyPatch_dbGetAllFunc(ret error) (restore func()) {
 func monkeyPatch_dbGetAllPendingFunc(ret error) (restore func()) {
 	old := dbGetAllPendingFunc
 	restore = func() { dbGetAllPendingFunc = old }
-	dbGetAllPendingFunc = func(db *gorm.DB, timers *[]model.Timer) error { return ret }
+	dbGetAllPendingFunc = func(db *gorm.DB, timers *[]model.Timer) error {
+		*timers = make([]model.Timer, 1)
+		return ret
+	}
 	return
 }
 
@@ -96,8 +99,16 @@ func Test_TimerStore_GetAllPending(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			defer monkeyPatch_dbGetAllPendingFunc(tt.dbErr)()
 			ts := &TimerStore{&gorm.DB{}}
-			_, err := ts.GetAllPending()
-			assert.Equal(t, err, tt.dbErr)
+			data, err := ts.GetAllPending()
+
+			switch tt.name {
+			case "success":
+				assert.Equal(t, err, tt.dbErr)
+				assert.NotNil(t, data)
+			case "failure":
+				assert.Equal(t, err, tt.dbErr)
+				assert.Nil(t, data)
+			}
 		})
 	}
 }
