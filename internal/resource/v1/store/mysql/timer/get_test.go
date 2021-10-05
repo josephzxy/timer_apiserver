@@ -14,14 +14,24 @@ import (
 func monkeyPatch_dbGetByNameFunc(ret error) (restore func()) {
 	old := dbGetByNameFunc
 	restore = func() { dbGetByNameFunc = old }
-	dbGetByNameFunc = func(db *gorm.DB, name string, timer *model.Timer) error { return ret }
+	dbGetByNameFunc = func(db *gorm.DB, name string, timer *model.Timer) error {
+		if ret == nil {
+			*timer = model.Timer{}
+		}
+		return ret
+	}
 	return
 }
 
 func monkeyPatch_dbGetAllFunc(ret error) (restore func()) {
 	old := dbGetAllFunc
 	restore = func() { dbGetAllFunc = old }
-	dbGetAllFunc = func(db *gorm.DB, timers *[]model.Timer) error { return ret }
+	dbGetAllFunc = func(db *gorm.DB, timers *[]model.Timer) error {
+		if ret == nil {
+			*timers = make([]model.Timer, 1)
+		}
+		return ret
+	}
 	return
 }
 
@@ -29,7 +39,9 @@ func monkeyPatch_dbGetAllPendingFunc(ret error) (restore func()) {
 	old := dbGetAllPendingFunc
 	restore = func() { dbGetAllPendingFunc = old }
 	dbGetAllPendingFunc = func(db *gorm.DB, timers *[]model.Timer) error {
-		*timers = make([]model.Timer, 1)
+		if ret == nil {
+			*timers = make([]model.Timer, 1)
+		}
 		return ret
 	}
 	return
@@ -80,8 +92,15 @@ func Test_TimerStore_GetAll(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			defer monkeyPatch_dbGetAllFunc(tt.dbErr)()
 			ts := &TimerStore{&gorm.DB{}}
-			_, err := ts.GetAll()
-			assert.Equal(t, err, tt.dbErr)
+			data, err := ts.GetAll()
+			switch tt.name {
+			case "success":
+				assert.Equal(t, err, tt.dbErr)
+				assert.NotNil(t, data)
+			case "failure":
+				assert.Equal(t, err, tt.dbErr)
+				assert.Nil(t, data)
+			}
 		})
 	}
 }
