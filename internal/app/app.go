@@ -177,8 +177,8 @@ func (a *App) run() error {
 	grpcServer := grpcserver.New(
 		&grpcserver.Config{
 			InsecureServing: &grpcserver.InsecureServingConfig{
-				Host: "0.0.0.0",
-				Port: 8082,
+				Host: a.cfg.GRPCServer.InsecureServing.Host,
+				Port: a.cfg.GRPCServer.InsecureServing.Port,
 			},
 		},
 		serviceRouter,
