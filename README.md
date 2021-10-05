@@ -22,9 +22,10 @@ Golang, Gin, gRPC, MySQL, GORM
 ## Get Started
 
 ### Prerequisites
-- Go1.17+
-- Docker
-- GNU make
+- [Go1.17+](https://golang.org/dl/)
+- [Docker](https://www.docker.com/get-started)
+- [GNU make](https://www.gnu.org/software/make/)
+- [protoc](https://grpc.io/docs/protoc-installation/#install-using-a-package-manager)
 
 ### Build Local Executable
 For the host OS and ARCH.
