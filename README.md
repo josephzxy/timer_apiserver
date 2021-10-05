@@ -117,27 +117,5 @@ make swagger.serve
 Or check out [swagger.yml](api/rest/swagger/swagger.yml) directly.
 
 ### gRPC API
-The service definition file is like below.
-
-```proto3
-syntax = "proto3";
-
-package proto;
-
-service Resource {
-    rpc ListPendingTimers(ListPendingTimersReq) returns (ListPendingTimersResp) {}
-}
-
-message TimerInfo {
-    string name = 1;
-    string trigger_at = 2;
-}
-
-message ListPendingTimersReq {
-}
-
-message ListPendingTimersResp {
-    repeated TimerInfo items = 1;
-}
-```
+Please check out [timer.proto](api/grpc/timer.proto).
 A timer will be considered as "pending" if it is created, not deleted, and not triggerred yet.
