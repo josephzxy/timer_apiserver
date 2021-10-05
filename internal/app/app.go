@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"go.uber.org/zap"
+	"golang.org/x/sync/errgroup"
 
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
@@ -12,6 +13,7 @@ import (
 
 	"github.com/josephzxy/timer_apiserver/internal/app/cliflags"
 	"github.com/josephzxy/timer_apiserver/internal/app/config"
+	"github.com/josephzxy/timer_apiserver/internal/grpcserver"
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/service"
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/store/mysql"
 	"github.com/josephzxy/timer_apiserver/internal/restserver"
@@ -163,10 +165,34 @@ func (a *App) run() error {
 		},
 		serviceRouter,
 	)
-	if err := restServer.Start(); err != nil {
-		msg := "error occured during running rest server"
-		zap.S().Errorw(msg, "err", err)
-		return errors.WithMessage(err, msg)
-	}
-	return nil
+
+	var eg errgroup.Group
+
+	eg.Go(func() error {
+		if err := restServer.Start(); err != nil {
+			msg := "error occured during running rest server"
+			zap.S().Errorw(msg, "err", err)
+			return errors.WithMessage(err, msg)
+		}
+		return nil
+	})
+
+	grpcServer := grpcserver.New(
+		&grpcserver.Config{
+			InsecureServing: &grpcserver.InsecureServingConfig{
+				Host: "0.0.0.0",
+				Port: 8082,
+			},
+		},
+		serviceRouter,
+	)
+	eg.Go(func() error {
+		if err := grpcServer.Start(); err != nil {
+			msg := "error occured during running grpc server"
+			zap.S().Errorw(msg, "err", err)
+			return errors.WithMessage(err, msg)
+		}
+		return nil
+	})
+	return eg.Wait()
 }
