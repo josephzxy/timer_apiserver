@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"go.uber.org/zap"
-	"golang.org/x/sync/errgroup"
 
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
@@ -165,17 +164,12 @@ func (a *App) run() error {
 		},
 		serviceRouter,
 	)
-
-	var eg errgroup.Group
-
-	eg.Go(func() error {
+	go func() {
 		if err := restServer.Start(); err != nil {
 			msg := "error occured during running rest server"
-			zap.S().Errorw(msg, "err", err)
-			return errors.WithMessage(err, msg)
+			zap.S().Fatalw(msg, "err", err)
 		}
-		return nil
-	})
+	}()
 
 	grpcServer := grpcserver.New(
 		&grpcserver.Config{
@@ -186,13 +180,12 @@ func (a *App) run() error {
 		},
 		serviceRouter,
 	)
-	eg.Go(func() error {
+	go func() {
 		if err := grpcServer.Start(); err != nil {
 			msg := "error occured during running grpc server"
-			zap.S().Errorw(msg, "err", err)
-			return errors.WithMessage(err, msg)
+			zap.S().Fatalw(msg, "err", err)
 		}
-		return nil
-	})
-	return eg.Wait()
+	}()
+
+	select {}
 }

@@ -51,25 +51,33 @@ func (s *RESTServer) installRoutes() {
 	}
 }
 
-func (s *RESTServer) Start() error {
+func (s *RESTServer) startInsecureServing() error {
 	s.insecureServer = &http.Server{
 		Addr:    s.cfg.InsecureServing.Addr(),
 		Handler: s,
 	}
+	return s.insecureServer.ListenAndServe()
+}
 
-	var eg errgroup.Group
-
+func (s *RESTServer) Start() error {
+	eg, ctx := errgroup.WithContext(context.Background())
 	eg.Go(func() error {
-		if err := s.insecureServer.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
-			go s.Stop()
-			return err
+		failed := make(chan struct{}, 1)
+		go func() {
+			if err := s.startInsecureServing(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+				zap.S().Errorw("error occured during rest server insecure serving", "err", err)
+				failed <- struct{}{}
+			}
+		}()
+
+		select {
+		case <-ctx.Done():
+			return nil
+		case <-failed:
+			return errors.New("rest server insecure serving failed")
 		}
-		return nil
 	})
-	if err := eg.Wait(); err != nil {
-		return err
-	}
-	return nil
+	return eg.Wait()
 }
 
 func (s *RESTServer) Stop() {
