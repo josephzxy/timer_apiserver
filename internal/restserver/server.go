@@ -60,24 +60,30 @@ func (s *RESTServer) startInsecureServing() error {
 }
 
 func (s *RESTServer) Start() error {
+	waitDone := make(chan struct{}, 1)
+	var servingErr error
 	eg, ctx := errgroup.WithContext(context.Background())
-	eg.Go(func() error {
-		failed := make(chan struct{}, 1)
-		go func() {
-			if err := s.startInsecureServing(); err != nil && !errors.Is(err, http.ErrServerClosed) {
-				zap.S().Errorw("error occured during rest server insecure serving", "err", err)
-				failed <- struct{}{}
-			}
-		}()
 
-		select {
-		case <-ctx.Done():
-			return nil
-		case <-failed:
-			return errors.New("rest server insecure serving failed")
+	eg.Go(func() error {
+		if err := s.startInsecureServing(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			zap.S().Errorw("error occured during rest server insecure serving", "err", err)
+			servingErr = err
+			return err
 		}
+		return nil
 	})
-	return eg.Wait()
+
+	go func() {
+		_ = eg.Wait()
+		waitDone <- struct{}{}
+	}()
+
+	select {
+	case <-ctx.Done():
+		return errors.WithMessage(servingErr, "rest server insecure serving failed")
+	case <-waitDone:
+		return nil
+	}
 }
 
 func (s *RESTServer) Stop() error {
