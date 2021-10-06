@@ -18,7 +18,7 @@ func ValidateTimerCore(tc *TimerCore) error {
 }
 
 type Timer struct {
-	Model
+	model
 	TimerCore
 	Alive     bool           `json:"-" gorm:"index:uniq_name_alive,unique,priority:2"`
 	DeletedAt gorm.DeletedAt `json:"-"`
