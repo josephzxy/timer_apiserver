@@ -24,7 +24,7 @@ import (
 type App struct {
 	basename string
 	cfg      *config.Config
-	cliflags *cliflags.CliFlags
+	cliflags cliflags.CliFlags
 	cmd      *cobra.Command
 }
 

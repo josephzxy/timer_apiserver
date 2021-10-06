@@ -2,20 +2,20 @@ package cliflags
 
 import "github.com/spf13/pflag"
 
-type GRPCServerCliFlags struct {
+type grpcServerCliFlags struct {
 	InsecureServing *GRPCInsecureServingCliFlags
 	Mode            string
 
 	flagSet *pflag.FlagSet
 }
 
-func newGRPCServerCliFlags() *GRPCServerCliFlags {
-	return &GRPCServerCliFlags{
+func newGrpcServerCliFlags() *grpcServerCliFlags {
+	return &grpcServerCliFlags{
 		InsecureServing: &GRPCInsecureServingCliFlags{},
 	}
 }
 
-func (f *GRPCServerCliFlags) getFlagSet() *pflag.FlagSet {
+func (f *grpcServerCliFlags) getFlagSet() *pflag.FlagSet {
 	if f.flagSet != nil {
 		return f.flagSet
 	}
