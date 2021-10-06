@@ -16,15 +16,20 @@ import (
 	resp "github.com/josephzxy/timer_apiserver/internal/restserver/response"
 )
 
-type RESTServer struct {
+type RESTServer interface {
+	Start() error
+	Stop() error
+}
+
+type restServer struct {
 	cfg           Config
 	serviceRouter service.ServiceRouter
 	*gin.Engine
 	insecureServer *http.Server
 }
 
-func New(cfg *Config, serviceRouter service.ServiceRouter) *RESTServer {
-	s := &RESTServer{
+func New(cfg *Config, serviceRouter service.ServiceRouter) RESTServer {
+	s := &restServer{
 		cfg:           *cfg,
 		serviceRouter: serviceRouter,
 		Engine:        gin.New(),
@@ -33,13 +38,13 @@ func New(cfg *Config, serviceRouter service.ServiceRouter) *RESTServer {
 	return s
 }
 
-func (s *RESTServer) init() {
+func (s *restServer) init() {
 	gin.SetMode(s.cfg.Mode)
 	s.installMiddlewares()
 	s.installRoutes()
 }
 
-func (s *RESTServer) installMiddlewares() {
+func (s *restServer) installMiddlewares() {
 	for _, name := range s.cfg.Middlewares {
 		mw, ok := middleware.Get(name)
 		if !ok {
@@ -49,7 +54,7 @@ func (s *RESTServer) installMiddlewares() {
 	}
 }
 
-func (s *RESTServer) installRoutes() {
+func (s *restServer) installRoutes() {
 	v1 := s.Group("/v1")
 	{
 		timers := v1.Group("/timers")
@@ -70,7 +75,7 @@ func (s *RESTServer) installRoutes() {
 	}
 }
 
-func (s *RESTServer) startInsecureServing() error {
+func (s *restServer) startInsecureServing() error {
 	s.insecureServer = &http.Server{
 		Addr:    s.cfg.InsecureServing.Addr(),
 		Handler: s,
@@ -78,7 +83,7 @@ func (s *RESTServer) startInsecureServing() error {
 	return s.insecureServer.ListenAndServe()
 }
 
-func (s *RESTServer) Start() error {
+func (s *restServer) Start() error {
 	waitDone := make(chan struct{}, 1)
 	var servingErr error
 	eg, ctx := errgroup.WithContext(context.Background())
@@ -105,7 +110,7 @@ func (s *RESTServer) Start() error {
 	}
 }
 
-func (s *RESTServer) Stop() error {
+func (s *restServer) Stop() error {
 	zap.L().Info("gracefully shutting down rest server")
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
