@@ -27,7 +27,8 @@ services:
     networks:
       - backnet
     ports:
-      - 8080:8080
+      - 8081:8081
+      - 8082:8082
     volumes:
       - ../../config:/app/config:ro
     depends_on:
