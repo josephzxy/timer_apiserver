@@ -50,7 +50,7 @@ func Test_TimerController_Update(t *testing.T) {
 			mockServiceRouter := service.NewMockServiceRouter(ctrl)
 			mockServiceRouter.EXPECT().Timer().AnyTimes().Return(mockTimerService)
 
-			tc := &TimerController{serviceRouter: mockServiceRouter}
+			tc := &timerController{serviceRouter: mockServiceRouter}
 			c := newTestGinCtxWithReq("PUT", "/v1/timers/test", nil)
 			tc.Update(c)
 

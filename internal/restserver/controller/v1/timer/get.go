@@ -7,7 +7,7 @@ import (
 	resp "github.com/josephzxy/timer_apiserver/internal/restserver/response"
 )
 
-func (tc *TimerController) Get(c *gin.Context) {
+func (tc *timerController) Get(c *gin.Context) {
 	name := c.Param("name")
 	timer, err := tc.serviceRouter.Timer().GetByName(name)
 	if err != nil {
@@ -18,7 +18,7 @@ func (tc *TimerController) Get(c *gin.Context) {
 	resp.WriteResponse(c, nil, timer)
 }
 
-func (tc *TimerController) GetAll(c *gin.Context) {
+func (tc *timerController) GetAll(c *gin.Context) {
 	timers, err := tc.serviceRouter.Timer().GetAll()
 	if err != nil {
 		zap.S().Errorw("failed to get timers", "err", err)

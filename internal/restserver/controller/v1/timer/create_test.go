@@ -61,7 +61,7 @@ func Test_TimerController_Create(t *testing.T) {
 			defer monkeyPatch_validateTimerFunc(tt.validateErr)()
 			defer monkeyPatch_bindJsonFunc(tt.bindJsonErr)()
 
-			tc := &TimerController{serviceRouter: mockServiceRouter}
+			tc := &timerController{serviceRouter: mockServiceRouter}
 			tc.Create(tt.c)
 			assert.Equal(t, tt.c.Writer.Status(), tt.http)
 		})
