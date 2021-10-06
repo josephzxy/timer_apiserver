@@ -9,6 +9,7 @@ type Config struct {
 	InsecureServing InsecureServingConfig
 	Mode            string
 	Middlewares     []string
+	UseHealthz      bool
 }
 
 type InsecureServingConfig struct {
