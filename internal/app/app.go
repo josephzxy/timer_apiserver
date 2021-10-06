@@ -1,11 +1,9 @@
 package app
 
 import (
-	"context"
 	"strings"
 
 	"go.uber.org/zap"
-	"golang.org/x/sync/errgroup"
 
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
@@ -197,33 +195,6 @@ func (a *app) run() error {
 		serviceRouter,
 	)
 
-	waitDone := make(chan struct{}, 1)
-	var servingErr error
-	eg, ctx := errgroup.WithContext(context.Background())
-
-	eg.Go(func() error {
-		if err := restServer.Start(); err != nil {
-			zap.S().Errorw("rest server failed during running", "err", err)
-			servingErr = err
-			return err
-		}
-		return nil
-	})
-
-	eg.Go(func() error {
-		if err := grpcServer.Start(); err != nil {
-			zap.S().Errorw("grpc server failed during running", "err", err)
-			servingErr = err
-			return err
-		}
-		return nil
-	})
-
-	go func() {
-		_ = eg.Wait()
-		waitDone <- struct{}{}
-	}()
-
 	gracefulshutdown.Enable(func() error {
 		return util.BatchGoOrErr(
 			restServer.Stop,
@@ -234,10 +205,8 @@ func (a *app) run() error {
 		)
 	})
 
-	select {
-	case <-ctx.Done():
-		return servingErr
-	case <-waitDone:
-		return nil
-	}
+	return util.BatchGoOrErr(
+		restServer.Start,
+		grpcServer.Start,
+	)
 }
