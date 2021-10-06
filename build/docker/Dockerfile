@@ -10,4 +10,6 @@ RUN make build PLATFORM=${OS}_${ARCH} && \
 FROM alpine:latest
 COPY --from=build /app/apiserver /app/apiserver
 WORKDIR /app
-ENTRYPOINT ["/app/apiserver"]
+RUN mkdir -p /app/log && \
+    mkdir -p /app/config
+ENTRYPOINT ["/bin/sh", "-c", "/app/apiserver 1>>/app/log/stdout.log 2>>/app/log/stderr.log"]
