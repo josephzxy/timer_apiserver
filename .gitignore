@@ -7,3 +7,6 @@ _output/
 
 # config
 config/config.yml
+
+# log
+log/
