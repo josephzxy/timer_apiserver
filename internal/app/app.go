@@ -16,6 +16,7 @@ import (
 	"github.com/josephzxy/timer_apiserver/internal/app/gracefulshutdown"
 	"github.com/josephzxy/timer_apiserver/internal/grpcserver"
 	"github.com/josephzxy/timer_apiserver/internal/pkg/log"
+	"github.com/josephzxy/timer_apiserver/internal/pkg/util"
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/service"
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/store/mysql"
 	"github.com/josephzxy/timer_apiserver/internal/restserver"
@@ -224,34 +225,13 @@ func (a *app) run() error {
 	}()
 
 	gracefulshutdown.Enable(func() error {
-		waitDone := make(chan struct{}, 1)
-		var shutdownErr error
-		eg, ctx := errgroup.WithContext(context.Background())
-
-		eg.Go(func() error {
-			if err := restServer.Stop(); err != nil {
-				shutdownErr = err
-				return err
-			}
-			return nil
-		})
-
-		eg.Go(func() error {
-			grpcServer.Stop()
-			return nil
-		})
-
-		go func() {
-			_ = eg.Wait()
-			waitDone <- struct{}{}
-		}()
-
-		select {
-		case <-ctx.Done():
-			return shutdownErr
-		case <-waitDone:
-			return nil
-		}
+		return util.BatchGoOrErr(
+			restServer.Stop,
+			func() error {
+				grpcServer.Stop()
+				return nil
+			},
+		)
 	})
 
 	select {
