@@ -2,7 +2,6 @@ package app
 
 import (
 	"context"
-	"fmt"
 	"strings"
 
 	"go.uber.org/zap"
@@ -93,12 +92,7 @@ func (a *app) bindConfigFromEnv() {
 }
 
 func (a *app) bindConfigFromFile() error {
-	cfgFile := config.CfgFile()
-	if cfgFile == "" {
-		return fmt.Errorf("config file path must not be empty")
-	}
-	viper.SetConfigFile(cfgFile)
-
+	viper.SetConfigFile(a.cfg.Config)
 	if err := viper.ReadInConfig(); err != nil {
 		msg := "failed to read config file"
 		zap.S().Errorw(msg, "err", err)
@@ -107,24 +101,36 @@ func (a *app) bindConfigFromFile() error {
 	return nil
 }
 
-func (a *app) bindConfig() error {
-	a.ensureViperValueType()
-	if err := a.bindConfigFromCliFlags(); err != nil {
-		return err
-	}
-	a.bindConfigFromEnv()
-	if err := a.bindConfigFromFile(); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (a *app) loadConfig() error {
+func (a *app) unmarshalConfig() error {
 	if err := viper.Unmarshal(a.cfg); err != nil {
 		msg := "failed to unmarshal config"
 		zap.S().Errorw(msg, "err", err)
 		return errors.WithMessage(err, msg)
 	}
+	return nil
+}
+
+func (a *app) loadConfig() error {
+	a.ensureViperValueType()
+	if err := a.bindConfigFromCliFlags(); err != nil {
+		return err
+	}
+	a.bindConfigFromEnv()
+	if err := a.unmarshalConfig(); err != nil {
+		return err
+	}
+
+	if a.cfg.Config != "" {
+		zap.L().Info("config file path set, will read from config file")
+		if err := a.bindConfigFromFile(); err != nil {
+			return err
+		}
+		if err := a.unmarshalConfig(); err != nil {
+			return err
+		}
+		return nil
+	}
+	zap.L().Info("config file path not set, will skip reading from config file")
 	return nil
 }
 
@@ -135,9 +141,6 @@ func (a *app) Run() {
 }
 
 func (a *app) runCmd(cmd *cobra.Command, args []string) error {
-	if err := a.bindConfig(); err != nil {
-		return err
-	}
 	if err := a.loadConfig(); err != nil {
 		return err
 	}
