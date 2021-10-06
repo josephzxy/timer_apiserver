@@ -12,8 +12,8 @@ mysql:
   max-conn-lifetime: 10s
   log-level: 1 # silent
 
-restserver:
-  insecure-serving: 
+rest:
+  insecure: 
     host: 0.0.0.0
     port: 8081
   mode: debug
@@ -23,7 +23,7 @@ restserver:
     - requestid
   use-healthz: true
 
-grpcserver:
-  insecure-serving: 
+grpc:
+  insecure: 
     host: 0.0.0.0
     port: 8082
