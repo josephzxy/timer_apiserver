@@ -18,15 +18,15 @@ func enable(handler func() error) {
 	go func() {
 		<-lis
 		go func() {
-			zap.L().Info("starting graceful shutdown")
+			zap.L().Info("graceful shutdown started")
 			if err := handler(); err != nil {
-				zap.S().Fatalw("error occurred during graceful shutdown, server exiting", "err", err)
+				zap.S().Fatalw("graceful shutdown failed, server exiting", "err", err)
 			}
-			zap.L().Info("server exiting after graceful shutdown")
+			zap.L().Info("graceful shutdown done, server exiting")
 			os.Exit(0)
 		}()
 		<-lis
-		zap.L().Fatal("forced shutdown by 2 shutdown OS signals")
+		zap.L().Fatal("server exits by force by 2 shutdown OS signals")
 	}()
 }
 
@@ -41,6 +41,6 @@ func Enable(handler func() error) {
 		did = true
 	})
 	if !did {
-		zap.L().Warn("attempt to enable graceful shutdown more than once, which will be ineffective")
+		zap.L().Warn("graceful shutdown was attempted to be enabled more than once, which will be ineffective")
 	}
 }

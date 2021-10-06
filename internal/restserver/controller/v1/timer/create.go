@@ -24,13 +24,12 @@ func (tc *timerController) Create(c *gin.Context) {
 	}
 
 	if err := validateTimerFunc(&timer); err != nil {
-		zap.S().Errorw("data validation failed", "err", err)
+		zap.S().Errorw("data validation failed", "err", err, "data", timer)
 		resp.WriteResponse(c, pkgerr.New(pkgerr.ErrValidation, err.Error()), nil)
 		return
 	}
 
 	if err := tc.serviceRouter.Timer().Create(&timer); err != nil {
-		zap.S().Errorw("failed to create timer", "err", err)
 		resp.WriteResponse(c, err, nil)
 		return
 	}

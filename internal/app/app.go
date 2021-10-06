@@ -78,7 +78,7 @@ func (a *app) ensureViperValueType() {
 
 func (a *app) bindConfigFromCliFlags() error {
 	if err := viper.BindPFlags(a.cmd.Flags()); err != nil {
-		msg := "failed to read config from cli flags"
+		msg := "failed to bind configs with cli flags"
 		zap.S().Errorw(msg, "err", err)
 		return errors.WithMessage(err, msg)
 	}
@@ -94,7 +94,7 @@ func (a *app) bindConfigFromEnv() {
 func (a *app) bindConfigFromFile() error {
 	viper.SetConfigFile(a.cfg.Config)
 	if err := viper.ReadInConfig(); err != nil {
-		msg := "failed to read config file"
+		msg := "failed to bind configs with config file"
 		zap.S().Errorw(msg, "err", err)
 		return errors.WithMessage(err, msg)
 	}
@@ -103,7 +103,7 @@ func (a *app) bindConfigFromFile() error {
 
 func (a *app) unmarshalConfig() error {
 	if err := viper.Unmarshal(a.cfg); err != nil {
-		msg := "failed to unmarshal config"
+		msg := "failed to unmarshal from viper to app config"
 		zap.S().Errorw(msg, "err", err)
 		return errors.WithMessage(err, msg)
 	}
@@ -186,7 +186,7 @@ func (a *app) run() error {
 	)
 	go func() {
 		if err := restServer.Start(); err != nil {
-			msg := "error occured during running rest server"
+			msg := "rest server failed during running"
 			zap.S().Fatalw(msg, "err", err)
 		}
 	}()
@@ -202,7 +202,7 @@ func (a *app) run() error {
 	)
 	go func() {
 		if err := grpcServer.Start(); err != nil {
-			msg := "error occured during running grpc server"
+			msg := "grpc server failed during running"
 			zap.S().Fatalw(msg, "err", err)
 		}
 	}()

@@ -19,8 +19,8 @@ func (s *timerStore) Create(timer *model.Timer) error {
 	if err == nil {
 		return nil
 	}
-
 	zap.S().Errorw("failed to create timer", "err", err, "data", timer)
+
 	me, ok := err.(*mysql.MySQLError)
 	if !ok {
 		return err

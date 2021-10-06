@@ -3,6 +3,7 @@ package timer
 import (
 	"errors"
 
+	"go.uber.org/zap"
 	"gorm.io/gorm"
 
 	pkgerr "github.com/josephzxy/timer_apiserver/internal/pkg/err"
@@ -19,6 +20,7 @@ func (s *timerStore) GetByName(name string) (*model.Timer, error) {
 	if err == nil {
 		return &timer, nil
 	}
+	zap.S().Errorw("failed to get timer by name", "err", err, "name", name)
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, pkgerr.New(pkgerr.ErrTimerNotFound, "")
@@ -36,6 +38,7 @@ func (s *timerStore) GetAll() ([]model.Timer, error) {
 	if err == nil {
 		return timers, nil
 	}
+	zap.S().Errorw("failed to get all timers", "err", err)
 	return nil, err
 }
 
@@ -50,5 +53,6 @@ func (s *timerStore) GetAllPending() ([]model.Timer, error) {
 	if err == nil {
 		return timers, nil
 	}
+	zap.S().Errorw("failed to get all pending timers", "err", err)
 	return nil, err
 }

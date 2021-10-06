@@ -43,13 +43,13 @@ func (s *grpcServer) init() {
 }
 
 func (s *grpcServer) startInsecureServing() error {
-	host := s.cfg.InsecureServing.Addr()
-	lis, err := net.Listen("tcp", host)
+	addr := s.cfg.InsecureServing.Addr()
+	lis, err := net.Listen("tcp", addr)
 	if err != nil {
 		return err
 	}
 
-	zap.S().Infow("grpc server insecure serving is serving", "host", host)
+	zap.S().Infow("grpc server insecure serving starts", "addr", addr)
 	return s.insecureServer.Serve(lis)
 }
 
@@ -60,7 +60,7 @@ func (s *grpcServer) Start() error {
 
 	eg.Go(func() error {
 		if err := s.startInsecureServing(); err != nil && !errors.Is(err, grpc.ErrServerStopped) {
-			zap.S().Errorw("error occured during grpc server insecure serving", "err", err)
+			zap.S().Errorw("grpc server insecure serving failed", "err", err)
 			servingErr = err
 			return err
 		}
@@ -81,6 +81,6 @@ func (s *grpcServer) Start() error {
 }
 
 func (s *grpcServer) Stop() {
-	zap.L().Info("gracefully shutting down grpc server")
+	zap.L().Info("grpc server starts shutting down gracefully")
 	s.insecureServer.GracefulStop()
 }
