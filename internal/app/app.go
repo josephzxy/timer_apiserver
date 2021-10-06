@@ -15,6 +15,7 @@ import (
 	"github.com/josephzxy/timer_apiserver/internal/app/config"
 	"github.com/josephzxy/timer_apiserver/internal/app/gracefulshutdown"
 	"github.com/josephzxy/timer_apiserver/internal/grpcserver"
+	"github.com/josephzxy/timer_apiserver/internal/pkg/log"
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/service"
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/store/mysql"
 	"github.com/josephzxy/timer_apiserver/internal/restserver"
@@ -135,8 +136,9 @@ func (a *app) loadConfig() error {
 }
 
 func (a *app) Run() {
+	defer log.Flush()
 	if err := a.cmd.Execute(); err != nil {
-		zap.S().Fatal(err)
+		zap.S().Panicw("app failed during running", "err", err)
 	}
 }
 
@@ -184,13 +186,6 @@ func (a *app) run() error {
 		},
 		serviceRouter,
 	)
-	go func() {
-		if err := restServer.Start(); err != nil {
-			msg := "rest server failed during running"
-			zap.S().Fatalw(msg, "err", err)
-		}
-	}()
-
 	grpcServer := grpcserver.New(
 		&grpcserver.Config{
 			InsecureServing: &grpcserver.InsecureServingConfig{
@@ -200,11 +195,32 @@ func (a *app) run() error {
 		},
 		serviceRouter,
 	)
-	go func() {
-		if err := grpcServer.Start(); err != nil {
-			msg := "grpc server failed during running"
-			zap.S().Fatalw(msg, "err", err)
+
+	waitDone := make(chan struct{}, 1)
+	var servingErr error
+	eg, ctx := errgroup.WithContext(context.Background())
+
+	eg.Go(func() error {
+		if err := restServer.Start(); err != nil {
+			zap.S().Errorw("rest server failed during running", "err", err)
+			servingErr = err
+			return err
 		}
+		return nil
+	})
+
+	eg.Go(func() error {
+		if err := grpcServer.Start(); err != nil {
+			zap.S().Errorw("grpc server failed during running", "err", err)
+			servingErr = err
+			return err
+		}
+		return nil
+	})
+
+	go func() {
+		_ = eg.Wait()
+		waitDone <- struct{}{}
 	}()
 
 	gracefulshutdown.Enable(func() error {
@@ -238,5 +254,10 @@ func (a *app) run() error {
 		}
 	})
 
-	select {}
+	select {
+	case <-ctx.Done():
+		return servingErr
+	case <-waitDone:
+		return nil
+	}
 }
