@@ -6,15 +6,15 @@ import (
 )
 
 type RESTServerConfig struct {
-	InsecureServing *RESTInsecureServingConfig `json:"insecure-serving" mapstructure:"insecure-serving"`
-	Mode            string                     `json:"mode" mapstructure:"mode"`
-	Middlewares     []string                   `json:"middlewares" mapstructure:"middlewares"`
-	UseHealthz      bool                       `json:"use-healthz" mapstructure:"use-healthz"`
+	Insecure    *RESTInsecureServingConfig `json:"insecure" mapstructure:"insecure"`
+	Mode        string                     `json:"mode" mapstructure:"mode"`
+	Middlewares []string                   `json:"middlewares" mapstructure:"middlewares"`
+	UseHealthz  bool                       `json:"use-healthz" mapstructure:"use-healthz"`
 }
 
 func newEmptyRESTServerConfig() *RESTServerConfig {
 	return &RESTServerConfig{
-		InsecureServing: newEmptyRESTInsecureServingConfig(),
+		Insecure: newEmptyRESTInsecureServingConfig(),
 	}
 }
 

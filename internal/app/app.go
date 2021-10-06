@@ -67,9 +67,9 @@ func (a *app) ensureViperValueType() {
 	viper.SetDefault("mysql.max-conn-lifetime", a.cfg.MySQL.MaxConnLifetime)
 	viper.SetDefault("mysql.log-level", a.cfg.MySQL.LogLevel)
 
-	viper.SetDefault("restserver.insecure-serving.port", a.cfg.RESTServer.InsecureServing.Port)
-	viper.SetDefault("restserver.middlewares", a.cfg.RESTServer.Middlewares)
-	viper.SetDefault("restserver.use-healthz", a.cfg.RESTServer.UseHealthz)
+	viper.SetDefault("restserver.insecure-serving.port", a.cfg.REST.Insecure.Port)
+	viper.SetDefault("restserver.middlewares", a.cfg.REST.Middlewares)
+	viper.SetDefault("restserver.use-healthz", a.cfg.REST.UseHealthz)
 
 	viper.SetDefault("grpcserver.insecure-serving.port", a.cfg.GRPCServer.InsecureServing.Port)
 
@@ -175,12 +175,12 @@ func (a *app) run() error {
 	restServer := restserver.New(
 		&restserver.Config{
 			InsecureServing: restserver.InsecureServingConfig{
-				Host: a.cfg.RESTServer.InsecureServing.Host,
-				Port: a.cfg.RESTServer.InsecureServing.Port,
+				Host: a.cfg.REST.Insecure.Host,
+				Port: a.cfg.REST.Insecure.Port,
 			},
-			Mode:        a.cfg.RESTServer.Mode,
-			Middlewares: a.cfg.RESTServer.Middlewares,
-			UseHealthz:  a.cfg.RESTServer.UseHealthz,
+			Mode:        a.cfg.REST.Mode,
+			Middlewares: a.cfg.REST.Middlewares,
+			UseHealthz:  a.cfg.REST.UseHealthz,
 		},
 		serviceRouter,
 	)

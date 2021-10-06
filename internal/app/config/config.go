@@ -2,7 +2,7 @@ package config
 
 type Config struct {
 	MySQL      *MySQLConfig      `json:"mysql" mapstructure:"mysql"`
-	RESTServer *RESTServerConfig `json:"restserver" mapstructure:"restserver"`
+	REST       *RESTServerConfig `json:"rest" mapstructure:"rest"`
 	GRPCServer *GRPCServerConfig `json:"grpcserver" mapstructure:"grpcserver"`
 
 	Config string `json:"config" mapstructure:"config"`
@@ -11,7 +11,7 @@ type Config struct {
 func NewEmptyConfig() *Config {
 	return &Config{
 		MySQL:      newEmptyMySQLConfig(),
-		RESTServer: newEmptyRESTServerConfig(),
+		REST:       newEmptyRESTServerConfig(),
 		GRPCServer: newEmptyGRPCServerConfig(),
 	}
 }
