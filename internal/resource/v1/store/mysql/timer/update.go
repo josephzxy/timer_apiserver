@@ -32,7 +32,7 @@ func (s *timerStore) UpdateByName(name string, want *model.TimerCore) error {
 	if err == nil {
 		return nil
 	}
-	zap.S().Errorw("failed to update timer", "err", err)
+	zap.S().Errorw("failed to update timer", "err", err, "data", want)
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return pkgerr.New(pkgerr.ErrTimerNotFound, "")

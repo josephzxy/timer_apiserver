@@ -20,14 +20,13 @@ func (tc *timerController) Update(c *gin.Context) {
 	}
 
 	if err := validateTimerCoreFunc(&want); err != nil {
-		zap.S().Errorw("failed to validate data", "err", err)
+		zap.S().Errorw("failed to validate data", "err", err, "data", want)
 		resp.WriteResponse(c, pkgerr.New(pkgerr.ErrValidation, err.Error()), nil)
 		return
 	}
 
 	name := c.Param("name")
 	if err := tc.serviceRouter.Timer().UpdateByName(name, &want); err != nil {
-		zap.S().Errorw("failed to update timer", "err", err)
 		resp.WriteResponse(c, err, nil)
 		return
 	}

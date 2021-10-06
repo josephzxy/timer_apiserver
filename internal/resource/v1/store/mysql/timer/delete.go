@@ -31,7 +31,7 @@ func (s *timerStore) DeleteByName(name string) error {
 	if err == nil {
 		return nil
 	}
-	zap.S().Errorw("failed to delete timer", "err", err)
+	zap.S().Errorw("failed to delete timer", "err", err, "name", name)
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return pkgerr.New(pkgerr.ErrTimerNotFound, "")

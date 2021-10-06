@@ -76,10 +76,12 @@ func (s *restServer) installRoutes() {
 }
 
 func (s *restServer) startInsecureServing() error {
+	addr := s.cfg.InsecureServing.Addr()
 	s.insecureServer = &http.Server{
-		Addr:    s.cfg.InsecureServing.Addr(),
+		Addr:    addr,
 		Handler: s,
 	}
+	zap.S().Infow("rest server insecure serving starts", "addr", addr)
 	return s.insecureServer.ListenAndServe()
 }
 
@@ -90,7 +92,7 @@ func (s *restServer) Start() error {
 
 	eg.Go(func() error {
 		if err := s.startInsecureServing(); err != nil && !errors.Is(err, http.ErrServerClosed) {
-			zap.S().Errorw("error occured during rest server insecure serving", "err", err)
+			zap.S().Errorw("rest server insecure serving failed", "err", err)
 			servingErr = err
 			return err
 		}
@@ -111,12 +113,12 @@ func (s *restServer) Start() error {
 }
 
 func (s *restServer) Stop() error {
-	zap.L().Info("gracefully shutting down rest server")
+	zap.L().Info("rest server starts shutting down gracefully")
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 	if err := s.insecureServer.Shutdown(ctx); err != nil {
-		msg := "failed to shutdown insecure serving rest server"
+		msg := "rest server failed to shut down gracefully"
 		zap.S().Warnw(msg, "err", err)
 		return errors.WithMessage(err, msg)
 	}
