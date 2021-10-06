@@ -1,11 +1,9 @@
 package grpcserver
 
 import (
-	"context"
 	"net"
 
 	"go.uber.org/zap"
-	"golang.org/x/sync/errgroup"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
@@ -13,6 +11,7 @@ import (
 
 	pb "github.com/josephzxy/timer_apiserver/api/grpc"
 	"github.com/josephzxy/timer_apiserver/internal/grpcserver/service/v1/timer"
+	"github.com/josephzxy/timer_apiserver/internal/pkg/util"
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/service"
 )
 
@@ -50,34 +49,16 @@ func (s *grpcServer) startInsecureServing() error {
 	}
 
 	zap.S().Infow("grpc server insecure serving starts", "addr", addr)
-	return s.insecureServer.Serve(lis)
+	if err := s.insecureServer.Serve(lis); err != nil && !errors.Is(err, grpc.ErrServerStopped) {
+		return err
+	}
+	return nil
 }
 
 func (s *grpcServer) Start() error {
-	waitDone := make(chan struct{}, 1)
-	var servingErr error
-	eg, ctx := errgroup.WithContext(context.Background())
-
-	eg.Go(func() error {
-		if err := s.startInsecureServing(); err != nil && !errors.Is(err, grpc.ErrServerStopped) {
-			zap.S().Errorw("grpc server insecure serving failed", "err", err)
-			servingErr = err
-			return err
-		}
-		return nil
-	})
-
-	go func() {
-		_ = eg.Wait()
-		waitDone <- struct{}{}
-	}()
-
-	select {
-	case <-ctx.Done():
-		return errors.WithMessage(servingErr, "grpc server insecure serving failed")
-	case <-waitDone:
-		return nil
-	}
+	return util.BatchGoOrErr(
+		s.startInsecureServing,
+	)
 }
 
 func (s *grpcServer) Stop() {
