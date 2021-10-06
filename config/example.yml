@@ -17,6 +17,10 @@ restserver:
     host: 0.0.0.0
     port: 8081
   mode: debug
+  middlewares:
+    - recovery
+    - logger
+    - requestid
 
 grpcserver:
   insecure-serving: 
