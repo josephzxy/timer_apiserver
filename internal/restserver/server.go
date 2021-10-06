@@ -13,6 +13,7 @@ import (
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/service"
 	"github.com/josephzxy/timer_apiserver/internal/restserver/controller/v1/timer"
 	"github.com/josephzxy/timer_apiserver/internal/restserver/middleware"
+	resp "github.com/josephzxy/timer_apiserver/internal/restserver/response"
 )
 
 type RESTServer struct {
@@ -60,6 +61,12 @@ func (s *RESTServer) installRoutes() {
 			timers.DELETE(":name", tc.Delete)
 			timers.PUT(":name", tc.Update)
 		}
+	}
+
+	if s.cfg.UseHealthz {
+		s.GET("/healthz", func(c *gin.Context) {
+			resp.WriteResponse(c, nil, map[string]string{"status": "ok"})
+		})
 	}
 }
 
