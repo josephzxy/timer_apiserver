@@ -7,7 +7,6 @@ import (
 
 	"go.uber.org/zap"
 
-	_ "github.com/josephzxy/timer_apiserver/internal/pkg/log"
 	"github.com/josephzxy/timer_apiserver/internal/pkg/util"
 )
 
