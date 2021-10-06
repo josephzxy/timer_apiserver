@@ -21,15 +21,23 @@ import (
 	"github.com/josephzxy/timer_apiserver/internal/restserver"
 )
 
-type App struct {
+type App interface {
+	Run()
+}
+
+func New(basename string) App {
+	return newApp(basename)
+}
+
+type app struct {
 	basename string
 	cfg      *config.Config
-	cliflags *cliflags.CliFlags
+	cliflags cliflags.CliFlags
 	cmd      *cobra.Command
 }
 
-func NewApp(basename string) *App {
-	a := &App{
+func newApp(basename string) *app {
+	a := &app{
 		basename: basename,
 		cfg:      config.NewEmptyConfig(),
 		cliflags: cliflags.NewCliFlags(),
@@ -38,7 +46,7 @@ func NewApp(basename string) *App {
 	return a
 }
 
-func (a *App) buildCmd() {
+func (a *app) buildCmd() {
 	a.cmd = &cobra.Command{
 		Use:           a.basename,
 		SilenceUsage:  true,
@@ -52,7 +60,7 @@ func (a *App) buildCmd() {
 }
 
 // ensureViperValueType ensures viper to store non-string config values with proper types
-func (a *App) ensureViperValueType() {
+func (a *app) ensureViperValueType() {
 	viper.SetDefault("mysql.port", a.cfg.MySQL.Port)
 	viper.SetDefault("mysql.parse-time", a.cfg.MySQL.ParseTime)
 	viper.SetDefault("mysql.max-idle-conns", a.cfg.MySQL.MaxIdleConns)
@@ -69,7 +77,7 @@ func (a *App) ensureViperValueType() {
 	viper.SetTypeByDefaultValue(true)
 }
 
-func (a *App) bindConfigFromCliFlags() error {
+func (a *app) bindConfigFromCliFlags() error {
 	if err := viper.BindPFlags(a.cmd.Flags()); err != nil {
 		msg := "failed to read config from cli flags"
 		zap.S().Errorw(msg, "err", err)
@@ -78,13 +86,13 @@ func (a *App) bindConfigFromCliFlags() error {
 	return nil
 }
 
-func (a *App) bindConfigFromEnv() {
+func (a *app) bindConfigFromEnv() {
 	viper.AutomaticEnv()
 	viper.SetEnvPrefix(strings.ToUpper(a.basename))
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_", "-", "_"))
 }
 
-func (a *App) bindConfigFromFile() error {
+func (a *app) bindConfigFromFile() error {
 	cfgFile := config.CfgFile()
 	if cfgFile == "" {
 		return fmt.Errorf("config file path must not be empty")
@@ -99,7 +107,7 @@ func (a *App) bindConfigFromFile() error {
 	return nil
 }
 
-func (a *App) bindConfig() error {
+func (a *app) bindConfig() error {
 	a.ensureViperValueType()
 	if err := a.bindConfigFromCliFlags(); err != nil {
 		return err
@@ -111,7 +119,7 @@ func (a *App) bindConfig() error {
 	return nil
 }
 
-func (a *App) loadConfig() error {
+func (a *app) loadConfig() error {
 	if err := viper.Unmarshal(a.cfg); err != nil {
 		msg := "failed to unmarshal config"
 		zap.S().Errorw(msg, "err", err)
@@ -120,13 +128,13 @@ func (a *App) loadConfig() error {
 	return nil
 }
 
-func (a *App) Run() {
+func (a *app) Run() {
 	if err := a.cmd.Execute(); err != nil {
 		zap.S().Fatal(err)
 	}
 }
 
-func (a *App) runCmd(cmd *cobra.Command, args []string) error {
+func (a *app) runCmd(cmd *cobra.Command, args []string) error {
 	if err := a.bindConfig(); err != nil {
 		return err
 	}
@@ -139,7 +147,7 @@ func (a *App) runCmd(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-func (a *App) run() error {
+func (a *app) run() error {
 	mysqlStoreRouter, err := mysql.NewStoreRouter(&mysql.Config{
 		User:            a.cfg.MySQL.User,
 		Pwd:             a.cfg.MySQL.Pwd,

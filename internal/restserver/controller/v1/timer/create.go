@@ -15,7 +15,7 @@ var bindJsonFunc = func(c *gin.Context, obj interface{}) error {
 	return c.ShouldBindJSON(obj)
 }
 
-func (tc *TimerController) Create(c *gin.Context) {
+func (tc *timerController) Create(c *gin.Context) {
 	var timer model.Timer
 	if err := bindJsonFunc(c, &timer); err != nil {
 		zap.S().Errorw("failed to bind data to model", "err", err)

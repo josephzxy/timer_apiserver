@@ -2,7 +2,7 @@ package cliflags
 
 import "github.com/spf13/pflag"
 
-type RESTServerCliFlags struct {
+type restServerCliFlags struct {
 	InsecureServing *RESTInsecureServingCliFlags
 	Mode            string
 	Middlewares     []string
@@ -11,13 +11,13 @@ type RESTServerCliFlags struct {
 	flagSet *pflag.FlagSet
 }
 
-func newRESTServerCliFlags() *RESTServerCliFlags {
-	return &RESTServerCliFlags{
+func newRestServerCliFlags() *restServerCliFlags {
+	return &restServerCliFlags{
 		InsecureServing: &RESTInsecureServingCliFlags{},
 	}
 }
 
-func (f *RESTServerCliFlags) getFlagSet() *pflag.FlagSet {
+func (f *restServerCliFlags) getFlagSet() *pflag.FlagSet {
 	if f.flagSet != nil {
 		return f.flagSet
 	}

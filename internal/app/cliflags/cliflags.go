@@ -2,21 +2,25 @@ package cliflags
 
 import "github.com/spf13/pflag"
 
-type CliFlags struct {
-	mysql      *MySQLCliFlags
-	restserver *RESTServerCliFlags
-	grpcserver *GRPCServerCliFlags
+type CliFlags interface {
+	GetAllFlagSets() []*pflag.FlagSet
 }
 
-func NewCliFlags() *CliFlags {
-	return &CliFlags{
-		mysql:      newMySQLCliFlags(),
-		restserver: newRESTServerCliFlags(),
-		grpcserver: newGRPCServerCliFlags(),
+type cliFlags struct {
+	mysql      *mysqlCliFlags
+	restserver *restServerCliFlags
+	grpcserver *grpcServerCliFlags
+}
+
+func NewCliFlags() CliFlags {
+	return &cliFlags{
+		mysql:      newMysqlCliFlags(),
+		restserver: newRestServerCliFlags(),
+		grpcserver: newGrpcServerCliFlags(),
 	}
 }
 
-func (f *CliFlags) GetAllFlagSets() []*pflag.FlagSet {
+func (f *cliFlags) GetAllFlagSets() []*pflag.FlagSet {
 	return []*pflag.FlagSet{
 		f.mysql.getFlagSet(),
 		f.restserver.getFlagSet(),

@@ -30,7 +30,7 @@ func Test_TimerController_Get(t *testing.T) {
 			mockServiceRouter := service.NewMockServiceRouter(ctrl)
 			mockServiceRouter.EXPECT().Timer().AnyTimes().Return(mockTimerService)
 
-			tc := &TimerController{serviceRouter: mockServiceRouter}
+			tc := &timerController{serviceRouter: mockServiceRouter}
 			c := newTestGinCtxWithReq("GET", "/v1/timers/name", nil)
 			tc.Get(c)
 			switch tt.name {
@@ -61,7 +61,7 @@ func Test_TimerController_GetAll(t *testing.T) {
 			mockServiceRouter := service.NewMockServiceRouter(ctrl)
 			mockServiceRouter.EXPECT().Timer().AnyTimes().Return(mockTimerService)
 
-			tc := &TimerController{serviceRouter: mockServiceRouter}
+			tc := &timerController{serviceRouter: mockServiceRouter}
 			c := newTestGinCtxWithReq("GET", "/v1/timers", nil)
 			tc.GetAll(c)
 

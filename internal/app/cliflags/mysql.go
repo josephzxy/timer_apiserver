@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/pflag"
 )
 
-type MySQLCliFlags struct {
+type mysqlCliFlags struct {
 	User            string
 	Pwd             string
 	Host            string
@@ -23,11 +23,11 @@ type MySQLCliFlags struct {
 	flagSet *pflag.FlagSet
 }
 
-func newMySQLCliFlags() *MySQLCliFlags {
-	return &MySQLCliFlags{}
+func newMysqlCliFlags() *mysqlCliFlags {
+	return &mysqlCliFlags{}
 }
 
-func (f *MySQLCliFlags) getFlagSet() *pflag.FlagSet {
+func (f *mysqlCliFlags) getFlagSet() *pflag.FlagSet {
 	if f.flagSet != nil {
 		return f.flagSet
 	}

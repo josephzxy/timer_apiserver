@@ -61,7 +61,7 @@ func Test_TimerStore_GetByName(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			defer monkeyPatch_dbGetByNameFunc(tt.dbErr)()
-			ts := &TimerStore{&gorm.DB{}}
+			ts := &timerStore{&gorm.DB{}}
 			timer, err := ts.GetByName("")
 
 			switch tt.name {
@@ -91,7 +91,7 @@ func Test_TimerStore_GetAll(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			defer monkeyPatch_dbGetAllFunc(tt.dbErr)()
-			ts := &TimerStore{&gorm.DB{}}
+			ts := &timerStore{&gorm.DB{}}
 			data, err := ts.GetAll()
 			switch tt.name {
 			case "success":
@@ -117,7 +117,7 @@ func Test_TimerStore_GetAllPending(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			defer monkeyPatch_dbGetAllPendingFunc(tt.dbErr)()
-			ts := &TimerStore{&gorm.DB{}}
+			ts := &timerStore{&gorm.DB{}}
 			data, err := ts.GetAllPending()
 
 			switch tt.name {

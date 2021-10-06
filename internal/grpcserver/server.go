@@ -16,14 +16,19 @@ import (
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/service"
 )
 
-type GRPCServer struct {
+type GRPCServer interface {
+	Start() error
+	Stop()
+}
+
+type grpcServer struct {
 	cfg            Config
 	serviceRouter  service.ServiceRouter
 	insecureServer *grpc.Server
 }
 
-func New(cfg *Config, serviceRouter service.ServiceRouter) *GRPCServer {
-	s := &GRPCServer{
+func New(cfg *Config, serviceRouter service.ServiceRouter) GRPCServer {
+	s := &grpcServer{
 		cfg:           *cfg,
 		serviceRouter: serviceRouter,
 	}
@@ -31,13 +36,13 @@ func New(cfg *Config, serviceRouter service.ServiceRouter) *GRPCServer {
 	return s
 }
 
-func (s *GRPCServer) init() {
+func (s *grpcServer) init() {
 	s.insecureServer = grpc.NewServer(s.cfg.InsecureServing.Options...)
 	pb.RegisterTimerServer(s.insecureServer, timer.NewTimerServer(s.serviceRouter))
 	reflection.Register(s.insecureServer)
 }
 
-func (s *GRPCServer) startInsecureServing() error {
+func (s *grpcServer) startInsecureServing() error {
 	host := s.cfg.InsecureServing.Addr()
 	lis, err := net.Listen("tcp", host)
 	if err != nil {
@@ -48,7 +53,7 @@ func (s *GRPCServer) startInsecureServing() error {
 	return s.insecureServer.Serve(lis)
 }
 
-func (s *GRPCServer) Start() error {
+func (s *grpcServer) Start() error {
 	waitDone := make(chan struct{}, 1)
 	var servingErr error
 	eg, ctx := errgroup.WithContext(context.Background())
@@ -75,7 +80,7 @@ func (s *GRPCServer) Start() error {
 	}
 }
 
-func (s *GRPCServer) Stop() {
+func (s *grpcServer) Stop() {
 	zap.L().Info("gracefully shutting down grpc server")
 	s.insecureServer.GracefulStop()
 }

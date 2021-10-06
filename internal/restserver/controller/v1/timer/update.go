@@ -11,7 +11,7 @@ import (
 
 var validateTimerCoreFunc = model.ValidateTimerCore
 
-func (tc *TimerController) Update(c *gin.Context) {
+func (tc *timerController) Update(c *gin.Context) {
 	var want model.TimerCore
 	if err := bindJsonFunc(c, &want); err != nil {
 		zap.S().Errorw("failed to bind data to model", "err", err)

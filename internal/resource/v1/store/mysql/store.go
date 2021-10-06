@@ -12,15 +12,15 @@ import (
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/store/mysql/timer"
 )
 
-type MySQLStoreRouter struct {
+type mysqlStoreRouter struct {
 	db *gorm.DB
 }
 
-func (r *MySQLStoreRouter) Timer() store.TimerStore {
-	return &timer.TimerStore{DB: r.db}
+func (r *mysqlStoreRouter) Timer() store.TimerStore {
+	return timer.NewTimerStore(r.db)
 }
 
-func NewStoreRouter(cfg *Config) (*MySQLStoreRouter, error) {
+func NewStoreRouter(cfg *Config) (store.StoreRouter, error) {
 	dsn := fmt.Sprintf(
 		`%s:%s@tcp(%s:%d)/%s?charset=%s&parseTime=%t&loc=%s`,
 		cfg.User,
@@ -50,5 +50,5 @@ func NewStoreRouter(cfg *Config) (*MySQLStoreRouter, error) {
 	sqlDB.SetMaxOpenConns(cfg.MaxOpenConns)
 	sqlDB.SetConnMaxLifetime(cfg.MaxConnLifetime)
 
-	return &MySQLStoreRouter{db}, nil
+	return &mysqlStoreRouter{db}, nil
 }

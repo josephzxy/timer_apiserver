@@ -7,7 +7,7 @@ import (
 	resp "github.com/josephzxy/timer_apiserver/internal/restserver/response"
 )
 
-func (tc *TimerController) Delete(c *gin.Context) {
+func (tc *timerController) Delete(c *gin.Context) {
 	name := c.Param("name")
 	err := tc.serviceRouter.Timer().DeleteByName(name)
 	if err != nil {

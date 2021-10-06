@@ -11,6 +11,6 @@ type timerServer struct {
 	serviceRouter service.ServiceRouter
 }
 
-func NewTimerServer(serviceRouter service.ServiceRouter) *timerServer {
+func NewTimerServer(serviceRouter service.ServiceRouter) pb.TimerServer {
 	return &timerServer{serviceRouter: serviceRouter}
 }
