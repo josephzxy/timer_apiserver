@@ -8,15 +8,15 @@ import (
 	pkgerr "github.com/josephzxy/timer_apiserver/internal/pkg/err"
 )
 
-type DataRespBodyWrapper struct {
+type dataRespBodyWrapper struct {
 	Data interface{} `json:"data"`
 }
 
-type ErrRespBodyWrapper struct {
-	Err ErrInfo `json:"err"`
+type errRespBodyWrapper struct {
+	Err errInfo `json:"err"`
 }
 
-type ErrInfo struct {
+type errInfo struct {
 	Code int    `json:"code"`
 	Msg  string `json:"msg"`
 }
@@ -26,14 +26,14 @@ func WriteResponse(c *gin.Context, err error, data interface{}) {
 		agent := pkgerr.GetRESTAgentByError(err)
 		c.JSON(
 			agent.HTTPStatus(),
-			ErrRespBodyWrapper{
-				ErrInfo{Code: int(agent.Code()), Msg: agent.Msg()},
+			errRespBodyWrapper{
+				errInfo{Code: int(agent.Code()), Msg: agent.Msg()},
 			},
 		)
 		return
 	}
 	if data != nil {
-		c.JSON(http.StatusOK, DataRespBodyWrapper{data})
+		c.JSON(http.StatusOK, dataRespBodyWrapper{data})
 		return
 	}
 	c.JSON(http.StatusOK, nil)
