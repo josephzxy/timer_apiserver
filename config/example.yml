@@ -21,6 +21,7 @@ restserver:
     - recovery
     - logger
     - requestid
+  use-healthz: true
 
 grpcserver:
   insecure-serving: 
