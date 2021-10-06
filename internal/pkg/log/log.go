@@ -19,5 +19,6 @@ func init() {
 }
 
 func Flush() error {
+	zap.L().Info("flushing log")
 	return zap.L().Sync()
 }

@@ -7,6 +7,8 @@ import (
 	"syscall"
 
 	"go.uber.org/zap"
+
+	"github.com/josephzxy/timer_apiserver/internal/pkg/log"
 )
 
 var posixShutdownSignals = []os.Signal{os.Interrupt, syscall.SIGTERM}
@@ -16,17 +18,19 @@ func enable(handler func() error) {
 	signal.Notify(lis, posixShutdownSignals...)
 
 	go func() {
+		defer log.Flush()
 		<-lis
 		go func() {
+			defer log.Flush()
 			zap.L().Info("graceful shutdown started")
 			if err := handler(); err != nil {
-				zap.S().Fatalw("graceful shutdown failed, server exiting", "err", err)
+				zap.S().Panicw("graceful shutdown failed, server exiting", "err", err)
 			}
 			zap.L().Info("graceful shutdown done, server exiting")
 			os.Exit(0)
 		}()
 		<-lis
-		zap.L().Fatal("server exits by force by 2 shutdown OS signals")
+		zap.L().Panic("server exits by force by 2 shutdown OS signals")
 	}()
 }
 
