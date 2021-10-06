@@ -8,6 +8,7 @@ import (
 type RESTServerConfig struct {
 	InsecureServing *RESTInsecureServingConfig `json:"insecure-serving" mapstructure:"insecure-serving"`
 	Mode            string                     `json:"mode" mapstructure:"mode"`
+	Middlewares     []string                   `json:"middlewares" mapstructure:"middlewares"`
 }
 
 func newEmptyRESTServerConfig() *RESTServerConfig {
