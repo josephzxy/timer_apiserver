@@ -32,6 +32,8 @@ services:
     volumes:
       - ../../config:/app/config:ro
       - ../../log:/app/log:wo
+    environment:
+      - APISERVER_CONFIG=/app/config/config.yml
     depends_on:
       db:
         condition: service_healthy
