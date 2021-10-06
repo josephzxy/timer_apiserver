@@ -8,8 +8,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
-	"golang.org/x/sync/errgroup"
 
+	"github.com/josephzxy/timer_apiserver/internal/pkg/util"
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/service"
 	"github.com/josephzxy/timer_apiserver/internal/restserver/controller/v1/timer"
 	"github.com/josephzxy/timer_apiserver/internal/restserver/middleware"
@@ -82,34 +82,16 @@ func (s *restServer) startInsecureServing() error {
 		Handler: s,
 	}
 	zap.S().Infow("rest server insecure serving starts", "addr", addr)
-	return s.insecureServer.ListenAndServe()
+	if err := s.insecureServer.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+		return err
+	}
+	return nil
 }
 
 func (s *restServer) Start() error {
-	waitDone := make(chan struct{}, 1)
-	var servingErr error
-	eg, ctx := errgroup.WithContext(context.Background())
-
-	eg.Go(func() error {
-		if err := s.startInsecureServing(); err != nil && !errors.Is(err, http.ErrServerClosed) {
-			zap.S().Errorw("rest server insecure serving failed", "err", err)
-			servingErr = err
-			return err
-		}
-		return nil
-	})
-
-	go func() {
-		_ = eg.Wait()
-		waitDone <- struct{}{}
-	}()
-
-	select {
-	case <-ctx.Done():
-		return errors.WithMessage(servingErr, "rest server insecure serving failed")
-	case <-waitDone:
-		return nil
-	}
+	return util.BatchGoOrErr(
+		s.startInsecureServing,
+	)
 }
 
 func (s *restServer) Stop() error {
