@@ -10,6 +10,7 @@ type cliFlags struct {
 	mysql      *mysqlCliFlags
 	restserver *restServerCliFlags
 	grpcserver *grpcServerCliFlags
+	global     *globalCliFlags
 }
 
 func NewCliFlags() CliFlags {
@@ -17,6 +18,7 @@ func NewCliFlags() CliFlags {
 		mysql:      newMysqlCliFlags(),
 		restserver: newRestServerCliFlags(),
 		grpcserver: newGrpcServerCliFlags(),
+		global:     newGlobalCliFlags(),
 	}
 }
 
@@ -25,5 +27,6 @@ func (f *cliFlags) GetAllFlagSets() []*pflag.FlagSet {
 		f.mysql.getFlagSet(),
 		f.restserver.getFlagSet(),
 		f.grpcserver.getFlagSet(),
+		f.global.getFlagSet(),
 	}
 }
