@@ -12,6 +12,7 @@ import (
 
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/service"
 	"github.com/josephzxy/timer_apiserver/internal/restserver/controller/v1/timer"
+	"github.com/josephzxy/timer_apiserver/internal/restserver/middleware"
 )
 
 type RESTServer struct {
@@ -33,7 +34,18 @@ func New(cfg *Config, serviceRouter service.ServiceRouter) *RESTServer {
 
 func (s *RESTServer) init() {
 	gin.SetMode(s.cfg.Mode)
+	s.installMiddlewares()
 	s.installRoutes()
+}
+
+func (s *RESTServer) installMiddlewares() {
+	for _, name := range s.cfg.Middlewares {
+		mw, ok := middleware.Get(name)
+		if !ok {
+			zap.S().Warnw("middleware not found", "name", name)
+		}
+		s.Use(mw)
+	}
 }
 
 func (s *RESTServer) installRoutes() {

@@ -8,6 +8,7 @@ import (
 type Config struct {
 	InsecureServing InsecureServingConfig
 	Mode            string
+	Middlewares     []string
 }
 
 type InsecureServingConfig struct {
