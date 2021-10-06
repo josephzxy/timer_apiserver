@@ -71,7 +71,7 @@ func (a *app) ensureViperValueType() {
 	viper.SetDefault("restserver.middlewares", a.cfg.REST.Middlewares)
 	viper.SetDefault("restserver.use-healthz", a.cfg.REST.UseHealthz)
 
-	viper.SetDefault("grpcserver.insecure-serving.port", a.cfg.GRPCServer.InsecureServing.Port)
+	viper.SetDefault("grpcserver.insecure-serving.port", a.cfg.GRPC.Insecure.Port)
 
 	viper.SetTypeByDefaultValue(true)
 }
@@ -194,8 +194,8 @@ func (a *app) run() error {
 	grpcServer := grpcserver.New(
 		&grpcserver.Config{
 			InsecureServing: &grpcserver.InsecureServingConfig{
-				Host: a.cfg.GRPCServer.InsecureServing.Host,
-				Port: a.cfg.GRPCServer.InsecureServing.Port,
+				Host: a.cfg.GRPC.Insecure.Host,
+				Port: a.cfg.GRPC.Insecure.Port,
 			},
 		},
 		serviceRouter,
