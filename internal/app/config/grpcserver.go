@@ -6,12 +6,12 @@ import (
 )
 
 type GRPCServerConfig struct {
-	InsecureServing *GRPCInsecureServingConfig `json:"insecure-serving" mapstructure:"insecure-serving"`
+	Insecure *GRPCInsecureServingConfig `json:"insecure" mapstructure:"insecure"`
 }
 
 func newEmptyGRPCServerConfig() *GRPCServerConfig {
 	return &GRPCServerConfig{
-		InsecureServing: newEmptyGRPCInsecureServingConfig(),
+		Insecure: newEmptyGRPCInsecureServingConfig(),
 	}
 }
 
