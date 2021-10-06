@@ -26,8 +26,8 @@ var dbDeleteByNameFunc = func(db *gorm.DB, name string) error {
 	})
 }
 
-func (s *TimerStore) DeleteByName(name string) error {
-	err := dbDeleteByNameFunc(s.DB, name)
+func (s *timerStore) DeleteByName(name string) error {
+	err := dbDeleteByNameFunc(s.db, name)
 	if err == nil {
 		return nil
 	}

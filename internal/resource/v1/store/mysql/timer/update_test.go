@@ -34,7 +34,7 @@ func Test_TimerStore_UpdateByName(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			defer monkeyPatch_dbUpdateByNameFunc(tt.dbErr)()
-			ts := &TimerStore{&gorm.DB{}}
+			ts := &timerStore{&gorm.DB{}}
 			err := ts.UpdateByName("", nil)
 
 			switch tt.name {

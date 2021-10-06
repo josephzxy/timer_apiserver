@@ -13,9 +13,9 @@ var dbGetByNameFunc = func(db *gorm.DB, name string, timer *model.Timer) error {
 	return db.Where("name = ?", name).First(timer).Error
 }
 
-func (s *TimerStore) GetByName(name string) (*model.Timer, error) {
+func (s *timerStore) GetByName(name string) (*model.Timer, error) {
 	var timer model.Timer
-	err := dbGetByNameFunc(s.DB, name, &timer)
+	err := dbGetByNameFunc(s.db, name, &timer)
 	if err == nil {
 		return &timer, nil
 	}
@@ -30,9 +30,9 @@ var dbGetAllFunc = func(db *gorm.DB, timers *[]model.Timer) error {
 	return db.Find(timers).Error
 }
 
-func (s *TimerStore) GetAll() ([]model.Timer, error) {
+func (s *timerStore) GetAll() ([]model.Timer, error) {
 	var timers []model.Timer
-	err := dbGetAllFunc(s.DB, &timers)
+	err := dbGetAllFunc(s.db, &timers)
 	if err == nil {
 		return timers, nil
 	}
@@ -44,9 +44,9 @@ var dbGetAllPendingFunc = func(db *gorm.DB, timers *[]model.Timer) error {
 	return db.Where("alive = ? AND trigger_at > NOW()", true).Find(timers).Error
 }
 
-func (s *TimerStore) GetAllPending() ([]model.Timer, error) {
+func (s *timerStore) GetAllPending() ([]model.Timer, error) {
 	var timers []model.Timer
-	err := dbGetAllPendingFunc(s.DB, &timers)
+	err := dbGetAllPendingFunc(s.db, &timers)
 	if err == nil {
 		return timers, nil
 	}

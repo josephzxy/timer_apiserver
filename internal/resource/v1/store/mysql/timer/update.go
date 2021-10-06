@@ -27,8 +27,8 @@ var dbUpdateByNameFunc = func(db *gorm.DB, name string, want *model.TimerCore) e
 	})
 }
 
-func (s *TimerStore) UpdateByName(name string, want *model.TimerCore) error {
-	err := dbUpdateByNameFunc(s.DB, name, want)
+func (s *timerStore) UpdateByName(name string, want *model.TimerCore) error {
+	err := dbUpdateByNameFunc(s.db, name, want)
 	if err == nil {
 		return nil
 	}

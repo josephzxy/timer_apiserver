@@ -33,7 +33,7 @@ func Test_TimerStore_Create(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			defer monkeyPatch_dbCreateFunc(tt.dbErr)()
-			ts := &TimerStore{&gorm.DB{}}
+			ts := &timerStore{&gorm.DB{}}
 			err := ts.Create(&model.Timer{})
 
 			switch tt.name {

@@ -30,7 +30,7 @@ func Test_TimerStore_DeleteByName(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			defer monkeyPatch_dbDeleteByNameFunc(tt.dbErr)()
-			ts := &TimerStore{&gorm.DB{}}
+			ts := &timerStore{&gorm.DB{}}
 			err := ts.DeleteByName("")
 
 			switch tt.name {
