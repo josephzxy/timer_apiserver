@@ -1,4 +1,6 @@
-# timer_apiserver
+# ⏳ Timer API Server
+[![codecov](https://codecov.io/gh/josephzxy/timer_apiserver/branch/develop/graph/badge.svg?token=AU3193CPC3)](https://codecov.io/gh/josephzxy/timer_apiserver)
+
 `timer_apiserver` is a demo Golang project that implements both external facing RESTful APIs and internal facing gRPC APIs for managing resource `timer`.
 Resource `timer` will stored in `MySQL`
 
