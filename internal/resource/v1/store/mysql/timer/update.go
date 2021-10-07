@@ -14,10 +14,12 @@ import (
 var dbUpdateByNameFunc = func(db *gorm.DB, name string, want *model.TimerCore) error {
 	return db.Transaction(func(tx *gorm.DB) error {
 		var timer model.Timer
+		// SELECT * FROM timer WHERE name = ? AND deleted_at IS NULL LIMIT 1;
 		if err := tx.Where("name = ?", name).First(&timer).Error; err != nil {
 			return err
 		}
 		// https://gorm.io/docs/update.html#Updates-multiple-columns
+		// UPDATE timer SET name = ? AND trigger_at = ? WHERE name = ?;
 		if err := tx.Model(&timer).Where("name = ?", name).Updates(
 			map[string]interface{}{"name": want.Name, "trigger_at": want.TriggerAt},
 		).Error; err != nil {

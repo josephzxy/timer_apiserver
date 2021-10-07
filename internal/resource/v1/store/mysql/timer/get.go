@@ -11,6 +11,7 @@ import (
 )
 
 var dbGetByNameFunc = func(db *gorm.DB, name string, timer *model.Timer) error {
+	// SELECT * FROM timer WHERE name = ? AND deleted_at IS NULL LIMIT 1;
 	return db.Where("name = ?", name).First(timer).Error
 }
 
@@ -30,6 +31,7 @@ func (s *timerStore) GetByName(name string) (*model.Timer, error) {
 }
 
 var dbGetAllFunc = func(db *gorm.DB, timers *[]model.Timer) error {
+	// SELECT * FROM timer WHERE deleted_at IS NULL;
 	return db.Find(timers).Error
 }
 
@@ -45,7 +47,7 @@ func (s *timerStore) GetAll() ([]model.Timer, error) {
 }
 
 var dbGetAllPendingFunc = func(db *gorm.DB, timers *[]model.Timer) error {
-	// SELECT * FROM timer WHERE alive = true AND trigger_at > NOW();
+	// SELECT * FrOM timer WHERE alive = true AND trigger_at > NOW() AND deleted_at IS NULL;
 	return db.Where("alive = ? AND trigger_at > NOW()", true).Find(timers).Error
 }
 

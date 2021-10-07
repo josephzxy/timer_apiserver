@@ -10,6 +10,8 @@ import (
 )
 
 var dbCreateFunc = func(db *gorm.DB, value interface{}) error {
+	// INSERT INTO timer (created_at, updated_at, alive, name, trigger_at)
+	// VALUES (NOW(), NOW(), true, ?, ?);
 	return db.Create(value).Error
 }
 
