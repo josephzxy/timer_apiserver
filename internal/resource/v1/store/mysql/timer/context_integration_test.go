@@ -71,3 +71,11 @@ func assertTimerExists(t *testing.T, db *gorm.DB, tc *model.TimerCore) {
 	assert.True(t, timer.Alive)
 	assert.False(t, timer.DeletedAt.Valid)
 }
+
+func assertTimerNotEmpty(t *testing.T, timer *model.Timer) {
+	assert.NotEqual(t, timer.ID, uint(0))
+	assert.NotEmpty(t, timer.CreatedAt)
+	assert.NotEmpty(t, timer.UpdatedAt)
+	assert.NotEmpty(t, timer.Name)
+	assert.NotEmpty(t, timer.TriggerAt)
+}
