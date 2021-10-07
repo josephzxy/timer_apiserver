@@ -14,7 +14,7 @@ var dbDeleteByNameFunc = func(db *gorm.DB, name string) error {
 	return db.Transaction(func(tx *gorm.DB) error {
 		var timer model.Timer
 		// SELECT * FROM timer WHERE name = ? AND deleted_at IS NULL LIMIT 1;
-		if err := tx.Where("name = ?", name).First(&timer).Error; err != nil {
+		if err := tx.Where("name = ?", name).Take(&timer).Error; err != nil {
 			return err
 		}
 		// UPDATE timer SET delete_at = NOW() WHERE name = ?;
