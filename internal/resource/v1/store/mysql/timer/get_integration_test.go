@@ -76,3 +76,50 @@ func Test_dbGetAllFunc(t *testing.T) {
 		})
 	}
 }
+
+func Test_dbGetAllPendingFunc(t *testing.T) {
+	tests := []struct {
+		name string
+	}{
+		{"record exists, not pending"},
+		{"record exists, pending"},
+		{"record not exist"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			tx := testDB.Begin()
+			defer tx.Rollback()
+			name := "test"
+			var fetchedTimers []model.Timer
+
+			switch tt.name {
+			case "record exists, not pending":
+				triggerAt, _ := time.Parse(time.RFC3339, "1970-01-01T07:59:10+08:00")
+				tc := &model.TimerCore{Name: name, TriggerAt: triggerAt}
+				plantTimerOrDie(tx, tc)
+				assertTimerExists(t, tx, tc)
+
+				err := dbGetAllPendingFunc(tx, &fetchedTimers)
+				assert.Nil(t, err)
+				assert.Equal(t, len(fetchedTimers), 0)
+
+			case "record exists, pending":
+				triggerAt := time.Now().Add(1 * time.Minute).Truncate(time.Second)
+				tc := &model.TimerCore{Name: name, TriggerAt: triggerAt}
+				plantTimerOrDie(tx, tc)
+				assertTimerExists(t, tx, tc)
+
+				err := dbGetAllPendingFunc(tx, &fetchedTimers)
+				assert.Nil(t, err)
+				assert.Equal(t, len(fetchedTimers), 1)
+
+			case "record not exist":
+				assertNoTimerExists(t, tx)
+				err := dbGetAllPendingFunc(tx, &fetchedTimers)
+				assert.Nil(t, err)
+				assert.Equal(t, len(fetchedTimers), 0)
+			}
+		})
+	}
+}
