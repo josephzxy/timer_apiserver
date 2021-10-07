@@ -1,3 +1,4 @@
+// Package app is the logical main body of the program.
 package app
 
 import (
@@ -20,14 +21,18 @@ import (
 	"github.com/josephzxy/timer_apiserver/internal/restserver"
 )
 
+// App defines the interface of an app.
 type App interface {
 	Run()
 }
 
+// New returns a value of an implementation of interface App.
 func New(basename string) App {
 	return newApp(basename)
 }
 
+// app is a concrete implementation of interface App.
+// It holds app-level fields like config, cliflags, and the cobra command.
 type app struct {
 	basename string
 	cfg      *config.Config
@@ -45,6 +50,7 @@ func newApp(basename string) *app {
 	return a
 }
 
+// buildCmd initializes the app-level cobra command.
 func (a *app) buildCmd() {
 	a.cmd = &cobra.Command{
 		Use:           a.basename,
@@ -58,7 +64,7 @@ func (a *app) buildCmd() {
 	}
 }
 
-// ensureViperValueType ensures viper to store non-string config values with proper types
+// ensureViperValueType ensures viper to store non-string config values with proper types.
 func (a *app) ensureViperValueType() {
 	viper.SetDefault("mysql.port", a.cfg.MySQL.Port)
 	viper.SetDefault("mysql.parse-time", a.cfg.MySQL.ParseTime)
@@ -76,6 +82,7 @@ func (a *app) ensureViperValueType() {
 	viper.SetTypeByDefaultValue(true)
 }
 
+// bindConfigFromCliFlags binds flags of the cobra command to viper.
 func (a *app) bindConfigFromCliFlags() error {
 	if err := viper.BindPFlags(a.cmd.Flags()); err != nil {
 		msg := "failed to bind configs with cli flags"
@@ -85,12 +92,14 @@ func (a *app) bindConfigFromCliFlags() error {
 	return nil
 }
 
+// bindConfigFromEnv binds env vars to viper.
 func (a *app) bindConfigFromEnv() {
 	viper.AutomaticEnv()
 	viper.SetEnvPrefix(strings.ToUpper(a.basename))
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_", "-", "_"))
 }
 
+// bindConfigFromFile binds a config file to viper
 func (a *app) bindConfigFromFile() error {
 	viper.SetConfigFile(a.cfg.Config)
 	if err := viper.ReadInConfig(); err != nil {
@@ -101,6 +110,7 @@ func (a *app) bindConfigFromFile() error {
 	return nil
 }
 
+// unmarshalConfig unmarshals configs from viper to the app-level config.
 func (a *app) unmarshalConfig() error {
 	if err := viper.Unmarshal(a.cfg); err != nil {
 		msg := "failed to unmarshal from viper to app config"
@@ -110,6 +120,8 @@ func (a *app) unmarshalConfig() error {
 	return nil
 }
 
+// loadConfig loads (binds and unmarshals) configs to the app-level config
+// from various sources like flags, env vars, and files.
 func (a *app) loadConfig() error {
 	a.ensureViperValueType()
 	if err := a.bindConfigFromCliFlags(); err != nil {
@@ -134,6 +146,7 @@ func (a *app) loadConfig() error {
 	return nil
 }
 
+// Run is the entry point for the app.
 func (a *app) Run() {
 	defer log.Flush()
 	if err := a.cmd.Execute(); err != nil {
@@ -141,6 +154,8 @@ func (a *app) Run() {
 	}
 }
 
+// runCmd is the entry point for the app-level cobra command.
+// Note that cli flags and env vars will NOT be read BEFORE calling runCmd
 func (a *app) runCmd(cmd *cobra.Command, args []string) error {
 	if err := a.loadConfig(); err != nil {
 		return err
@@ -151,6 +166,8 @@ func (a *app) runCmd(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
+// run is the entry point for the business logic part of the app where
+// database connections are created, server instances are launched, etc.
 func (a *app) run() error {
 	mysqlStoreRouter, err := mysql.NewStoreRouter(&mysql.Config{
 		User:            a.cfg.MySQL.User,
