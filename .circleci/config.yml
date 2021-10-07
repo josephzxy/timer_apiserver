@@ -4,6 +4,11 @@ jobs:
   build: 
     docker:
       - image: golangci/golangci-lint
+      - image: mariadb:10.6
+        environment:
+          MYSQL_DATABASE: test
+          MYSQL_PWD: root
+          MARIADB_ROOT_PASSWORD: root
     steps:
       - checkout
       - run:
@@ -11,7 +16,9 @@ jobs:
           command: make lint
       - run:
           name: Run unit tests
-          command: make test
+          command: |
+            make mysql.migrate.up
+            make test
       - run:
           name: Build binary from source code
           command: make build

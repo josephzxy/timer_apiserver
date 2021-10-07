@@ -12,7 +12,7 @@ import (
 
 var dbGetByNameFunc = func(db *gorm.DB, name string, timer *model.Timer) error {
 	// SELECT * FROM timer WHERE name = ? AND deleted_at IS NULL LIMIT 1;
-	return db.Where("name = ?", name).First(timer).Error
+	return db.Where("name = ?", name).Take(timer).Error
 }
 
 // GetByName gets a timer by the given name.

@@ -4,8 +4,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/go-playground/assert/v2"
 	"github.com/go-sql-driver/mysql"
+	"github.com/stretchr/testify/assert"
 	"gorm.io/gorm"
 
 	pkgerr "github.com/josephzxy/timer_apiserver/internal/pkg/err"
@@ -15,7 +15,7 @@ import (
 func monkeyPatch_dbCreateFunc(ret error) (restore func()) {
 	old := dbCreateFunc
 	restore = func() { dbCreateFunc = old }
-	dbCreateFunc = func(db *gorm.DB, value interface{}) error { return ret }
+	dbCreateFunc = func(db *gorm.DB, timer *model.Timer) error { return ret }
 	return
 }
 

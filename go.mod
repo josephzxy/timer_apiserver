@@ -5,7 +5,6 @@ go 1.17
 require (
 	github.com/gin-contrib/requestid v0.0.1
 	github.com/gin-gonic/gin v1.7.4
-	github.com/go-playground/assert/v2 v2.0.1
 	github.com/go-playground/validator/v10 v10.9.0
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/golang/mock v1.6.0

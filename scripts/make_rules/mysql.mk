@@ -8,6 +8,8 @@ MYSQL_DSN = "mysql://$(MYSQL_USER):$(MYSQL_PWD)@tcp($(MYSQL_HOST):$(MYSQL_PORT))
 MYSQL_MIGRATION_DIR = $(PROJECT_ROOT)/database/migrations
 MYSQL_MIGRATION_SRC = "file://$(MYSQL_MIGRATION_DIR)"
 
+MYSQL_CONTAINER_NAME := "timer_mariadb"
+
 MYSQL_MK_PREFIX := "MySQL:"
 
 .PHONY: mysql.migrate.mkdir
@@ -70,3 +72,22 @@ mysql.migrate.force.%: mysql.migrate.mkdir tools.verify.go-migrate
 mysql.migrate.version: mysql.migrate.mkdir tools.verify.go-migrate
 	@echo "=======> $(MYSQL_MK_PREFIX) printting current migration version"
 	@migrate -database $(MYSQL_DSN) -source $(MYSQL_MIGRATION_SRC) version
+
+## mysql.docker.start: Starts a MySQL docker container 
+.PHONY: mysql.docker.start
+mysql.docker.start:
+	@echo "=======> $(MYSQL_MK_PREFIX) starting mysql container"
+	@docker run -d --rm --name $(MYSQL_CONTAINER_NAME) -p $(MYSQL_PORT):3306 \
+	 -e MYSQL_DATABASE=$(MYSQL_DB) \
+	 -e MARIADB_ROOT_PASSWORD=$(MYSQL_PWD) \
+	 -e MYSQL_PWD=$(MYSQL_PWD) \
+	 mariadb
+	@echo "=======> $(MYSQL_MK_PREFIX) waiting 5 seconds for the container to fully start"
+	@sleep 5
+	@$(MAKE) mysql.migrate.up
+
+## mysql.docker.stop: Stops (and removes) the MySQL docker container launched earlier
+.PHONY: mysql.docker.stop
+mysql.docker.stop:
+	@echo "=======> $(MYSQL_MK_PREFIX) stopping mysql container"
+	@docker stop $(MYSQL_CONTAINER_NAME)
