@@ -12,7 +12,9 @@ var val *validator.Validate
 
 func init() {
 	val = validator.New()
-	val.RegisterValidation("notblank", validators.NotBlank)
+	if err := val.RegisterValidation("notblank", validators.NotBlank); err != nil {
+		panic("failed to register validation notblank")
+	}
 }
 
 // TimerCore contains fields that can be specified directly via APIs
