@@ -4,8 +4,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/go-playground/assert/v2"
 	"github.com/golang/mock/gomock"
+	"github.com/stretchr/testify/assert"
 
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/model"
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/service"
