@@ -4,8 +4,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/josephzxy/timer_apiserver/internal/resource/v1/model"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/josephzxy/timer_apiserver/internal/resource/v1/model"
 )
 
 func Test_dbGetByNameFunc(t *testing.T) {
