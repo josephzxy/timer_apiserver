@@ -72,6 +72,15 @@ func assertTimerExists(t *testing.T, db *gorm.DB, tc *model.TimerCore) {
 	assert.False(t, timer.DeletedAt.Valid)
 }
 
+// assertNoTimerExists asserts not a single timer record exists in the table.
+func assertNoTimerExists(t *testing.T, db *gorm.DB) {
+	sql := `SELECT * FROM timer WHERE deleted_at IS NULL`
+	var timers []model.Timer
+	result := queryRaw(db, sql, &timers)
+	assert.Equal(t, result.RowsAffected, int64(0))
+	assert.Equal(t, len(timers), 0)
+}
+
 func assertTimerNotEmpty(t *testing.T, timer *model.Timer) {
 	assert.NotEqual(t, timer.ID, uint(0))
 	assert.NotEmpty(t, timer.CreatedAt)
