@@ -27,6 +27,7 @@ var dbUpdateByNameFunc = func(db *gorm.DB, name string, want *model.TimerCore) e
 	})
 }
 
+// UpdateByName updates a timer by the given name with the given desired state.
 func (s *timerStore) UpdateByName(name string, want *model.TimerCore) error {
 	err := dbUpdateByNameFunc(s.db, name, want)
 	if err == nil {
