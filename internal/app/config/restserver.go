@@ -5,6 +5,7 @@ import (
 	"strconv"
 )
 
+// RESTServerConfig is the root struct for REST server related configs
 type RESTServerConfig struct {
 	Insecure    *RESTInsecureServingConfig `json:"insecure" mapstructure:"insecure"`
 	Mode        string                     `json:"mode" mapstructure:"mode"`
@@ -18,6 +19,8 @@ func newEmptyRESTServerConfig() *RESTServerConfig {
 	}
 }
 
+// RESTInsecureServingConfig holds the configs for the insecure serving
+// of REST server
 type RESTInsecureServingConfig struct {
 	Host string `json:"host" mapstructure:"host"`
 	Port int    `json:"port" mapstructure:"port"`
