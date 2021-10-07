@@ -5,6 +5,7 @@ package timer
 import (
 	"fmt"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"gorm.io/driver/mysql"
@@ -43,20 +44,18 @@ func execRaw(db *gorm.DB, sql string, args ...interface{}) *gorm.DB {
 	return db.Exec(sql, args...)
 }
 
+func plantTimerOrDie(db *gorm.DB, tc *model.TimerCore) {
+	if err := execRaw(db, "INSERT INTO timer (name, trigger_at) VALUES (?, ?)", tc.Name, tc.TriggerAt).Error; err != nil {
+		panic(fmt.Sprintf("failed to plant timer with name %s, trigger_at %s", tc.Name, tc.TriggerAt.Format(time.RFC3339)))
+	}
+}
+
 func assertTimerNotExistByName(t *testing.T, db *gorm.DB, name string) {
 	sql := `SELECT * FROM timer WHERE name = ? AND deleted_at IS NULL`
 	var timer model.Timer
 	result := queryRaw(db, sql, &timer, name)
 	assert.Equal(t, result.RowsAffected, int64(0))
 	assert.Equal(t, timer.ID, uint(0))
-}
-
-func assertTimerExistsByName(t *testing.T, db *gorm.DB, name string) {
-	sql := `SELECT * FROM timer WHERE name = ? AND deleted_at IS NULL`
-	var timer model.Timer
-	result := queryRaw(db, sql, &timer, name)
-	assert.Equal(t, result.RowsAffected, int64(1))
-	assert.NotEqual(t, timer.ID, uint(0))
 }
 
 func assertTimerExists(t *testing.T, db *gorm.DB, tc *model.TimerCore) {

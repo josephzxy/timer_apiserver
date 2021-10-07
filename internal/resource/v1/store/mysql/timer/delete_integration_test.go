@@ -22,11 +22,12 @@ func Test_dbDeleteByNameFunc(t *testing.T) {
 			tx := testDB.Begin()
 			defer tx.Rollback()
 			name, triggerAt := "test", time.Now().Truncate(time.Second)
+			tc := &model.TimerCore{Name: name, TriggerAt: triggerAt}
 
 			switch tt.name {
 			case "record exists":
-				execRaw(tx, "INSERT INTO timer (name, trigger_at) VALUES (?, ?)", name, triggerAt)
-				assertTimerExists(t, tx, &model.TimerCore{Name: name, TriggerAt: triggerAt})
+				plantTimerOrDie(tx, tc)
+				assertTimerExists(t, tx, tc)
 
 				err := dbDeleteByNameFunc(tx, name)
 				assert.Nil(t, err)
