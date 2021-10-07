@@ -1,7 +1,10 @@
+// Package cliflags manages all command line flags for the app
 package cliflags
 
 import "github.com/spf13/pflag"
 
+// Cliflags defines the behavior of the app-level
+// command line flags manager
 type CliFlags interface {
 	GetAllFlagSets() []*pflag.FlagSet
 }
@@ -13,6 +16,8 @@ type cliFlags struct {
 	global     *globalCliFlags
 }
 
+// NewCliFlags returns a value of an implementation
+// of interface CliFlags
 func NewCliFlags() CliFlags {
 	return &cliFlags{
 		mysql:      newMysqlCliFlags(),
@@ -22,6 +27,8 @@ func NewCliFlags() CliFlags {
 	}
 }
 
+// GetAllFlagSets returns all flag sets defined in
+// the implementation of interface CliFlags
 func (f *cliFlags) GetAllFlagSets() []*pflag.FlagSet {
 	return []*pflag.FlagSet{
 		f.mysql.getFlagSet(),
