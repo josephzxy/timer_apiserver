@@ -20,7 +20,7 @@ func ValidateTimerCore(tc *TimerCore) error {
 
 // Timer is the data model for RESTful resource timer.
 type Timer struct {
-	model
+	Model
 	TimerCore
 	Alive     bool           `json:"-" gorm:"index:uniq_name_alive,unique,priority:2"`
 	DeletedAt gorm.DeletedAt `json:"-"`
