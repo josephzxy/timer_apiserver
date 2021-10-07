@@ -96,7 +96,7 @@ func Test_dbGetAllPendingFunc(t *testing.T) {
 
 			switch tt.name {
 			case "record exists, not pending":
-				triggerAt, _ := time.Parse(time.RFC3339, "1970-01-01T07:59:10+08:00")
+				triggerAt := time.Now().AddDate(0, -1, 0).Truncate(time.Second)
 				tc := &model.TimerCore{Name: name, TriggerAt: triggerAt}
 				plantTimerOrDie(tx, tc)
 				assertTimerExists(t, tx, tc)
