@@ -65,7 +65,7 @@ func Test_dbGetAllFunc(t *testing.T) {
 
 				err := dbGetAllFunc(tx, &fetchedTimers)
 				assert.Nil(t, err)
-				assert.NotNil(t, fetchedTimers)
+				assert.NotEqual(t, len(fetchedTimers), 0)
 
 			case "record not exist":
 				assertNoTimerExists(t, tx)
