@@ -15,6 +15,7 @@ var bindJsonFunc = func(c *gin.Context, obj interface{}) error {
 	return c.ShouldBindJSON(obj)
 }
 
+// Create creates a timer by the data provided in the request body.
 func (tc *timerController) Create(c *gin.Context) {
 	var timer model.Timer
 	if err := bindJsonFunc(c, &timer); err != nil {

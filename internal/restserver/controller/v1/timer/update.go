@@ -11,6 +11,8 @@ import (
 
 var validateTimerCoreFunc = model.ValidateTimerCore
 
+// Update updates a timer by the name provided in the path parameters
+// to the desired state provided in the request body.
 func (tc *timerController) Update(c *gin.Context) {
 	var want model.TimerCore
 	if err := bindJsonFunc(c, &want); err != nil {
