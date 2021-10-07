@@ -41,3 +41,38 @@ func Test_dbGetByNameFunc(t *testing.T) {
 		})
 	}
 }
+
+func Test_dbGetAllFunc(t *testing.T) {
+	tests := []struct {
+		name string
+	}{
+		{"record exists"},
+		{"record not exist"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			tx := testDB.Begin()
+			defer tx.Rollback()
+			name, triggerAt := "test", time.Now().Truncate(time.Second)
+			tc := &model.TimerCore{Name: name, TriggerAt: triggerAt}
+			var fetchedTimers []model.Timer
+
+			switch tt.name {
+			case "record exists":
+				plantTimerOrDie(tx, tc)
+				assertTimerExists(t, tx, tc)
+
+				err := dbGetAllFunc(tx, &fetchedTimers)
+				assert.Nil(t, err)
+				assert.NotNil(t, fetchedTimers)
+
+			case "record not exist":
+				assertNoTimerExists(t, tx)
+				err := dbGetAllFunc(tx, &fetchedTimers)
+				assert.Nil(t, err)
+				assert.Equal(t, len(fetchedTimers), 0)
+			}
+		})
+	}
+}
