@@ -10,9 +10,12 @@ import (
 )
 
 var dbCreateFunc = func(db *gorm.DB, value interface{}) error {
+	// INSERT INTO timer (created_at, updated_at, alive, name, trigger_at)
+	// VALUES (NOW(), NOW(), true, ?, ?);
 	return db.Create(value).Error
 }
 
+// Create creates a new timer.
 func (s *timerStore) Create(timer *model.Timer) error {
 	timer.Alive = true
 	err := dbCreateFunc(s.db, timer)

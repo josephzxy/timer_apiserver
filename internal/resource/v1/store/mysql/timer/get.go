@@ -11,9 +11,11 @@ import (
 )
 
 var dbGetByNameFunc = func(db *gorm.DB, name string, timer *model.Timer) error {
+	// SELECT * FROM timer WHERE name = ? AND deleted_at IS NULL LIMIT 1;
 	return db.Where("name = ?", name).First(timer).Error
 }
 
+// GetByName gets a timer by the given name.
 func (s *timerStore) GetByName(name string) (*model.Timer, error) {
 	var timer model.Timer
 	err := dbGetByNameFunc(s.db, name, &timer)
@@ -29,9 +31,11 @@ func (s *timerStore) GetByName(name string) (*model.Timer, error) {
 }
 
 var dbGetAllFunc = func(db *gorm.DB, timers *[]model.Timer) error {
+	// SELECT * FROM timer WHERE deleted_at IS NULL;
 	return db.Find(timers).Error
 }
 
+// GetAll gets all timers(deleted timers excluded).
 func (s *timerStore) GetAll() ([]model.Timer, error) {
 	var timers []model.Timer
 	err := dbGetAllFunc(s.db, &timers)
@@ -43,10 +47,12 @@ func (s *timerStore) GetAll() ([]model.Timer, error) {
 }
 
 var dbGetAllPendingFunc = func(db *gorm.DB, timers *[]model.Timer) error {
-	// SELECT * FROM timer WHERE alive = true AND trigger_at > NOW();
+	// SELECT * FrOM timer WHERE alive = true AND trigger_at > NOW() AND deleted_at IS NULL;
 	return db.Where("alive = ? AND trigger_at > NOW()", true).Find(timers).Error
 }
 
+// GetAllPending gets all pending timers.
+// A timer is "pending" if it is not deleted and not triggerred yet.
 func (s *timerStore) GetAllPending() ([]model.Timer, error) {
 	var timers []model.Timer
 	err := dbGetAllPendingFunc(s.db, &timers)

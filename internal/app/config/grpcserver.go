@@ -5,6 +5,7 @@ import (
 	"strconv"
 )
 
+// GRPCServerConfig is the root struct for gRPC server related configs
 type GRPCServerConfig struct {
 	Insecure *GRPCInsecureServingConfig `json:"insecure" mapstructure:"insecure"`
 }
@@ -15,6 +16,8 @@ func newEmptyGRPCServerConfig() *GRPCServerConfig {
 	}
 }
 
+// GRPCInsecureServingConfig holds the configs for the insecure serving
+// of gRPC server
 type GRPCInsecureServingConfig struct {
 	Host string `json:"host" mapstructure:"host"`
 	Port int    `json:"port" mapstructure:"port"`

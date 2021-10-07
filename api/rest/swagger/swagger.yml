@@ -74,15 +74,15 @@ paths:
   /timers:
     get:
       description: Get all timers
-      operationId: getTimersReq
+      operationId: getTimersRequest
       responses:
         "200":
-          $ref: '#/responses/getTimersResp'
+          $ref: '#/responses/getTimersResponse'
         default:
           $ref: '#/responses/errResp'
     post:
       description: Create a timer
-      operationId: createTimerReq
+      operationId: createTimerRequest
       parameters:
       - in: body
         name: Body
@@ -90,7 +90,7 @@ paths:
           $ref: '#/definitions/TimerCore'
       responses:
         "200":
-          $ref: '#/responses/createTimerResp'
+          $ref: '#/responses/createTimerResponse'
         default:
           $ref: '#/responses/errResp'
       tags:
@@ -98,7 +98,7 @@ paths:
   /timers/{name}:
     delete:
       description: Delete a timer
-      operationId: deleteTimerReq
+      operationId: deleteTimerRequest
       parameters:
       - description: The name of the timer
         in: path
@@ -108,12 +108,12 @@ paths:
         x-go-name: Name
       responses:
         "200":
-          $ref: '#/responses/deleteTimerResp'
+          $ref: '#/responses/deleteTimerResponse'
         default:
           $ref: '#/responses/errResp'
     get:
       description: Get a timer
-      operationId: getTimerReq
+      operationId: getTimerRequest
       parameters:
       - description: The name of the timer
         in: path
@@ -123,12 +123,12 @@ paths:
         x-go-name: Name
       responses:
         "200":
-          $ref: '#/responses/getTimerResp'
+          $ref: '#/responses/getTimerResponse'
         default:
           $ref: '#/responses/errResp'
     put:
       description: Update a timer
-      operationId: updateTimerReq
+      operationId: updateTimerRequest
       parameters:
       - description: The name of the timer
         in: path
@@ -142,33 +142,33 @@ paths:
           $ref: '#/definitions/TimerCore'
       responses:
         "200":
-          $ref: '#/responses/updateTimerResp'
+          $ref: '#/responses/updateTimerResponse'
         default:
           $ref: '#/responses/errResp'
 produces:
 - application/json
 responses:
-  createTimerResp:
+  createTimerResponse:
     description: ""
     schema:
       $ref: '#/definitions/dataObjField'
-  deleteTimerResp:
+  deleteTimerResponse:
     description: ""
   errResp:
     description: ""
     schema:
       $ref: '#/definitions/errField'
-  getTimerResp:
+  getTimerResponse:
     description: ""
     schema:
       $ref: '#/definitions/dataObjField'
-  getTimersResp:
+  getTimersResponse:
     description: ""
     headers:
       Body: {}
     schema:
       $ref: '#/definitions/dataColField'
-  updateTimerResp:
+  updateTimerResponse:
     description: ""
 schemes:
 - http

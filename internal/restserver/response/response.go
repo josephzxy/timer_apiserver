@@ -1,3 +1,6 @@
+// Package response provides a uniformed interface for writing HTTP responses.
+// It defines the formats of response bodies and populates them properly according to
+// the given error and data.
 package response
 
 import (
@@ -21,6 +24,8 @@ type errInfo struct {
 	Msg  string `json:"msg"`
 }
 
+// WriteResponse writes HTTP responses according to
+// the given error and data.
 func WriteResponse(c *gin.Context, err error, data interface{}) {
 	if err != nil {
 		agent := pkgerr.GetRESTAgentByError(err)

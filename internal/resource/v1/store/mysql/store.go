@@ -1,3 +1,4 @@
+// Package mysql provides MySQL-specific implementations of interface store.StoreRouter
 package mysql
 
 import (
@@ -16,10 +17,13 @@ type mysqlStoreRouter struct {
 	db *gorm.DB
 }
 
+// Timer routes to a concrete MySQL-dedicated value of interface store.TimerStore.
 func (r *mysqlStoreRouter) Timer() store.TimerStore {
 	return timer.NewTimerStore(r.db)
 }
 
+// NewStoreRouter creates and configures a MySQL session and returns
+// a mysqlStoreRouter with it.
 func NewStoreRouter(cfg *Config) (store.StoreRouter, error) {
 	dsn := fmt.Sprintf(
 		`%s:%s@tcp(%s:%d)/%s?charset=%s&parseTime=%t&loc=%s`,

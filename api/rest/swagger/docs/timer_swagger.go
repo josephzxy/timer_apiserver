@@ -3,34 +3,34 @@ package docs
 
 import "github.com/josephzxy/timer_apiserver/internal/resource/v1/model"
 
-// swagger:route POST /timers timer createTimerReq
+// swagger:route POST /timers timer createTimerRequest
 // Create a timer
 // responses:
-//		200: createTimerResp
+//		200: createTimerResponse
 //		default: errResp
 
-// swagger:route GET /timers/{name} getTimerReq
+// swagger:route GET /timers/{name} getTimerRequest
 // Get a timer
 // responses:
-// 		200: getTimerResp
+// 		200: getTimerResponse
 //		default: errResp
 
-// swagger:route GET /timers getTimersReq
+// swagger:route GET /timers getTimersRequest
 // Get all timers
 // responses:
-//		200: getTimersResp
+//		200: getTimersResponse
 // 		default: errResp
 
-// swagger:route PUT /timers/{name} updateTimerReq
+// swagger:route PUT /timers/{name} updateTimerRequest
 // Update a timer
 // responses:
-// 		200: updateTimerResp
+// 		200: updateTimerResponse
 //		default: errResp
 
-// swagger:route DELETE /timers/{name} deleteTimerReq
+// swagger:route DELETE /timers/{name} deleteTimerRequest
 // Delete a timer
 // responses:
-// 		200: deleteTimerResp
+// 		200: deleteTimerResponse
 //		default: errResp
 
 type dataObjField struct {
@@ -54,42 +54,42 @@ type errInfo struct {
 	Msg string `json:"msg"`
 }
 
-// swagger:parameters createTimerReq
-type createTimerReq struct {
+// swagger:parameters createTimerRequest
+type createTimerRequest struct {
 	// in:body
 	Body model.TimerCore
 }
 
-// swagger:response createTimerResp
-type createTimerResp struct {
+// swagger:response createTimerResponse
+type createTimerResponse struct {
 	// in:body
 	Body dataObjField
 }
 
-// swagger:parameters getTimerReq
-type getTimerReq struct {
+// swagger:parameters getTimerRequest
+type getTimerRequest struct {
 	// The name of the timer
 	// in:path
 	Name string `json:"name"`
 }
 
-// swagger:response getTimerResp
-type getTimerResp struct {
+// swagger:response getTimerResponse
+type getTimerResponse struct {
 	// in:body
 	Body dataObjField
 }
 
-// swagger:parameters getTimersReq
-type getTimersReq struct {
+// swagger:parameters getTimersRequest
+type getTimersRequest struct {
 }
 
-// swagger:response getTimersResp
-type getTimersResp struct {
+// swagger:response getTimersResponse
+type getTimersResponse struct {
 	Body dataColField
 }
 
-// swagger:parameters updateTimerReq
-type updateTimerReq struct {
+// swagger:parameters updateTimerRequest
+type updateTimerRequest struct {
 	// The name of the timer
 	// in:path
 	Name string `json:"name"`
@@ -97,19 +97,19 @@ type updateTimerReq struct {
 	Body model.TimerCore
 }
 
-// swagger:response updateTimerResp
-type updateTimerResp struct {
+// swagger:response updateTimerResponse
+type updateTimerResponse struct {
 }
 
-// swagger:parameters deleteTimerReq
-type deleteTimerReq struct {
+// swagger:parameters deleteTimerRequest
+type deleteTimerRequest struct {
 	// The name of the timer
 	// in:path
 	Name string `json:"name"`
 }
 
-// swagger:response deleteTimerResp
-type deleteTimerResp struct {
+// swagger:response deleteTimerResponse
+type deleteTimerResponse struct {
 }
 
 // swagger:response errResp

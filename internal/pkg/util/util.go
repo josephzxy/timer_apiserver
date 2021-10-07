@@ -1,3 +1,4 @@
+// Package util provides utility functions
 package util
 
 import (
@@ -19,7 +20,7 @@ func PanicIfErr(e error) {
 // BatchGoOrErr starts multiple goroutines and returns the error
 // once a goroutine stops with an error.
 // CAUTION: Other goroutines aren't and won't be closed when a goroutine stops with an error.
-// In other words, those still-running goroutines "leaks"
+// In other words, those still-running goroutines "leak"
 // It is safe only when the error returned by BatchGoOrEr will eventually quit
 // the program
 func BatchGoOrErr(fs ...func() error) error {

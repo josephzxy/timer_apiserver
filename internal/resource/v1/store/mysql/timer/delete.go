@@ -13,9 +13,11 @@ import (
 var dbDeleteByNameFunc = func(db *gorm.DB, name string) error {
 	return db.Transaction(func(tx *gorm.DB) error {
 		var timer model.Timer
+		// SELECT * FROM timer WHERE name = ? AND deleted_at IS NULL LIMIT 1;
 		if err := tx.Where("name = ?", name).First(&timer).Error; err != nil {
 			return err
 		}
+		// UPDATE timer SET delete_at = NOW() WHERE name = ?;
 		if err := tx.Where("name = ?", name).Delete(&timer).Error; err != nil {
 			return err
 		}
@@ -26,6 +28,7 @@ var dbDeleteByNameFunc = func(db *gorm.DB, name string) error {
 	})
 }
 
+// DeleteByName deleted a timer by the given name.
 func (s *timerStore) DeleteByName(name string) error {
 	err := dbDeleteByNameFunc(s.db, name)
 	if err == nil {

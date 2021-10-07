@@ -1,3 +1,5 @@
+// Package timer provides an implementation to interface store.TimerStore
+// for MySQL operations of RESTful resource Timer.
 package timer
 
 import (

@@ -1,3 +1,5 @@
+// Package timer provides an interface of HTTP controller for RESTful resource Timer
+// as well as an implementation.
 package timer
 
 import (
@@ -6,6 +8,8 @@ import (
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/service"
 )
 
+// TimerController defines actions for RESTful resource Timer
+// on data storage level.
 type TimerController interface {
 	Create(*gin.Context)
 	Get(*gin.Context)
@@ -18,6 +22,7 @@ type timerController struct {
 	serviceRouter service.ServiceRouter
 }
 
+// NewController returns a concrete value of interface TimerController.
 func NewController(serviceRouter service.ServiceRouter) TimerController {
 	return &timerController{serviceRouter}
 }

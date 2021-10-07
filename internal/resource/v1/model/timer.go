@@ -13,10 +13,12 @@ type TimerCore struct {
 	TriggerAt time.Time `json:"triggerAt" gorm:"index:idx_trigger_at" validate:"required,gte=time.Now().Add(time.Minute)"`
 }
 
+// ValidateTimerCore validates the given value of TimerCore
 func ValidateTimerCore(tc *TimerCore) error {
 	return validator.New().Struct(tc)
 }
 
+// Timer is the data model for RESTful resource timer.
 type Timer struct {
 	model
 	TimerCore
@@ -24,10 +26,12 @@ type Timer struct {
 	DeletedAt gorm.DeletedAt `json:"-"`
 }
 
+// TableName tells gorm the name of the corresponding database table.
 func (t *Timer) TableName() string {
 	return "timer"
 }
 
+// ValidateTimer validates the given value of Timer
 func ValidateTimer(t *Timer) error {
 	return validator.New().Struct(t)
 }

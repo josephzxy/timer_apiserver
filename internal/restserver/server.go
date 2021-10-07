@@ -1,3 +1,4 @@
+// Package grpcserver implements a pluggable library for REST servers.
 package restserver
 
 import (
@@ -16,6 +17,7 @@ import (
 	resp "github.com/josephzxy/timer_apiserver/internal/restserver/response"
 )
 
+// RESTServer defines the interface of a REST server.
 type RESTServer interface {
 	Start() error
 	Stop() error
@@ -28,6 +30,7 @@ type restServer struct {
 	insecureServer *http.Server
 }
 
+// New returns the concrete value of interface RESTServer
 func New(cfg *Config, serviceRouter service.ServiceRouter) RESTServer {
 	s := &restServer{
 		cfg:           *cfg,
@@ -75,6 +78,7 @@ func (s *restServer) installRoutes() {
 	}
 }
 
+// startInsecureServing starts the insecure serving of restServer.
 func (s *restServer) startInsecureServing() error {
 	addr := s.cfg.InsecureServing.Addr()
 	s.insecureServer = &http.Server{
@@ -88,12 +92,14 @@ func (s *restServer) startInsecureServing() error {
 	return nil
 }
 
+// Start starts the REST server.
 func (s *restServer) Start() error {
 	return util.BatchGoOrErr(
 		s.startInsecureServing,
 	)
 }
 
+// Stop gracefully stops the REST server.
 func (s *restServer) Stop() error {
 	zap.L().Info("rest server starts shutting down gracefully")
 

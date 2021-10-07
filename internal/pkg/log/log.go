@@ -1,3 +1,4 @@
+// Package log provides a simple encapsulation of the logging library "go.uber.org/zap"
 package log
 
 import (
@@ -18,6 +19,8 @@ func init() {
 	zap.ReplaceGlobals(l)
 }
 
+// Flush flushes any bufferred log entries.
+// It should be called before the program exits
 func Flush() error {
 	zap.L().Info("flushing log")
 	return zap.L().Sync()

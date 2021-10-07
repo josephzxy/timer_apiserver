@@ -1,3 +1,4 @@
+// Package model defines data models used in the app
 package model
 
 import (

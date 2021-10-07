@@ -71,6 +71,9 @@ func registerRESTAgent(code AppErrCode, httpStatus int, msg string) error {
 	return nil
 }
 
+// GetRESTAgentByError returns a RESTAgent by the given error.
+// It tries to parse the associated AppErrCode and return the RESTAgent accordingly.
+// If no AppErrCode is found, the default RESTAgent for ErrUnknown will be returned.
 func GetRESTAgentByError(err error) RESTAgent {
 	rwmtx.RLock()
 	defer rwmtx.RUnlock()
