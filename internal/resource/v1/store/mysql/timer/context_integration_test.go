@@ -40,7 +40,7 @@ func queryRaw(db *gorm.DB, sql string, result interface{}, args ...interface{}) 
 }
 
 func execRaw(db *gorm.DB, sql string, args ...interface{}) *gorm.DB {
-	return db.Raw(sql, args...)
+	return db.Exec(sql, args...)
 }
 
 func assertTimerNotExistByName(t *testing.T, db *gorm.DB, name string) {
