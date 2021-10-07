@@ -7,6 +7,8 @@ import (
 	pb "github.com/josephzxy/timer_apiserver/api/grpc"
 )
 
+// GetAllPendingTimers gets all pending timers.
+// A timer is "pending" if it is not deleted, and not triggerred yet.
 func (s *timerServer) GetAllPendingTimers(context.Context, *pb.GetAllPendingTimersReq) (*pb.GetAllPendingTimersResp, error) {
 	timers, err := s.serviceRouter.Timer().GetAllPending()
 	if err != nil {
