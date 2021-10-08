@@ -15,6 +15,7 @@ definitions:
         format: date-time
         type: string
         x-go-name: TriggerAt
+    title: Timer is the data model for RESTful resource timer.
     type: object
     x-go-package: github.com/josephzxy/timer_apiserver/internal/resource/v1/model
   TimerCore:
