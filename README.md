@@ -24,11 +24,11 @@ Golang, Gin, gRPC, MariaDB, GORM, Cobra, Pflag, Viper, Docker, GNU make
     ```
 4. Try out RESTful APIs
     ```sh
-    # Display current content in the table
-    make demo.db.show
-
     # Create a timer named "hello"
     make demo.rest.post.hello
+
+    # Display current content in the table
+    make demo.db.show
 
     # Get the timer named "hello"
     make demo.rest.get.hello
