@@ -39,6 +39,8 @@ func Test_TimerStore_Create(t *testing.T) {
 			switch tt.name {
 			case "record already exists":
 				assert.Equal(t, pkgerr.ErrTimerAlreadyExists, err.(*pkgerr.WithCode).Code())
+			case "unknown mysql error":
+				assert.Equal(t, err.(*pkgerr.WithCode).Code(), pkgerr.ErrDatabase)
 			default:
 				assert.Equal(t, tt.dbErr, err)
 			}

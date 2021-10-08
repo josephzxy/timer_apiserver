@@ -4,6 +4,7 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/go-sql-driver/mysql"
 	"github.com/stretchr/testify/assert"
 	"gorm.io/gorm"
 
@@ -24,6 +25,7 @@ func Test_TimerStore_DeleteByName(t *testing.T) {
 	}{
 		{"success", nil},
 		{"other error", errors.New("")},
+		{"unknown mysql error", &mysql.MySQLError{}},
 		{"record not found", gorm.ErrRecordNotFound},
 	}
 
@@ -36,6 +38,8 @@ func Test_TimerStore_DeleteByName(t *testing.T) {
 			switch tt.name {
 			case "record not found":
 				assert.Equal(t, err.(*pkgerr.WithCode).Code(), pkgerr.ErrTimerNotFound)
+			case "unknown mysql error":
+				assert.Equal(t, err.(*pkgerr.WithCode).Code(), pkgerr.ErrDatabase)
 			default:
 				assert.Equal(t, err, tt.dbErr)
 			}
