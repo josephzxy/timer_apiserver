@@ -22,7 +22,7 @@ Golang, Gin, gRPC, MariaDB, GORM, Cobra, Pflag, Viper, Docker, GNU make
     ```sh
     make docker.compose.up
     ```
-4. Try out RESTful APIs
+4. Try out RESTful APIs & gRPC APIs
     ```sh
     # Create a timer named "hello"
     make demo.rest.post.hello
@@ -38,14 +38,12 @@ Golang, Gin, gRPC, MariaDB, GORM, Cobra, Pflag, Viper, Docker, GNU make
     # Update the timer named "hello" to a new name "hello_again"
     make demo.rest.put.hello DEMO_REST_PUT_NAME=hello_again
     
-    # Delete the timer named "hello"
-    make demo.rest.delete.hello
-    ```
-5. Try out gRPC APIs
-    ```sh
     # Get all pending timers
     # Timers are pending if they are not deleted and not triggered yet
     make demo.grpc.getallpending
+
+    # Delete the timer named "hello"
+    make demo.rest.delete.hello
     ```
 
 ## RESTful API Doc
