@@ -6,6 +6,8 @@ import (
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 
+	"github.com/go-sql-driver/mysql"
+
 	pkgerr "github.com/josephzxy/timer_apiserver/internal/pkg/err"
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/model"
 )
@@ -27,7 +29,12 @@ func (s *timerStore) GetByName(name string) (*model.Timer, error) {
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, pkgerr.New(pkgerr.ErrTimerNotFound, "")
 	}
-	return nil, err
+
+	me, ok := err.(*mysql.MySQLError)
+	if !ok {
+		return nil, err
+	}
+	return nil, pkgerr.New(pkgerr.ErrDatabase, me.Error())
 }
 
 var dbGetAllFunc = func(db *gorm.DB, timers *[]model.Timer) error {
@@ -43,7 +50,11 @@ func (s *timerStore) GetAll() ([]model.Timer, error) {
 		return timers, nil
 	}
 	zap.S().Errorw("failed to get all timers", "err", err)
-	return nil, err
+	me, ok := err.(*mysql.MySQLError)
+	if !ok {
+		return nil, err
+	}
+	return nil, pkgerr.New(pkgerr.ErrDatabase, me.Error())
 }
 
 var dbGetAllPendingFunc = func(db *gorm.DB, timers *[]model.Timer) error {
@@ -60,5 +71,9 @@ func (s *timerStore) GetAllPending() ([]model.Timer, error) {
 		return timers, nil
 	}
 	zap.S().Errorw("failed to get all pending timers", "err", err)
-	return nil, err
+	me, ok := err.(*mysql.MySQLError)
+	if !ok {
+		return nil, err
+	}
+	return nil, pkgerr.New(pkgerr.ErrDatabase, me.Error())
 }

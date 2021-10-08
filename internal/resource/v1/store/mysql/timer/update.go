@@ -40,10 +40,13 @@ func (s *timerStore) UpdateByName(name string, want *model.TimerCore) error {
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return pkgerr.New(pkgerr.ErrTimerNotFound, "")
 	}
-	if me, ok := err.(*mysql.MySQLError); ok {
-		if me.Number == 1062 {
-			return pkgerr.New(pkgerr.ErrTimerAlreadyExists, "")
-		}
+	me, ok := err.(*mysql.MySQLError)
+	if !ok {
+		return err
 	}
-	return err
+
+	if me.Number == 1062 {
+		return pkgerr.New(pkgerr.ErrTimerAlreadyExists, "")
+	}
+	return pkgerr.New(pkgerr.ErrDatabase, me.Error())
 }

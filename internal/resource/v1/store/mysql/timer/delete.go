@@ -6,6 +6,8 @@ import (
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 
+	"github.com/go-sql-driver/mysql"
+
 	pkgerr "github.com/josephzxy/timer_apiserver/internal/pkg/err"
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/model"
 )
@@ -39,5 +41,9 @@ func (s *timerStore) DeleteByName(name string) error {
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return pkgerr.New(pkgerr.ErrTimerNotFound, "")
 	}
-	return err
+	me, ok := err.(*mysql.MySQLError)
+	if !ok {
+		return err
+	}
+	return pkgerr.New(pkgerr.ErrDatabase, me.Error())
 }

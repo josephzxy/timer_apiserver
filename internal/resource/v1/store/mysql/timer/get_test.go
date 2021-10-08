@@ -4,6 +4,7 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/go-sql-driver/mysql"
 	"github.com/stretchr/testify/assert"
 	"gorm.io/gorm"
 
@@ -48,13 +49,13 @@ func monkeyPatch_dbGetAllPendingFunc(ret error) (restore func()) {
 }
 
 func Test_TimerStore_GetByName(t *testing.T) {
-
 	tests := []struct {
 		name  string
 		dbErr error
 	}{
 		{"success", nil},
 		{"record not found", gorm.ErrRecordNotFound},
+		{"unknown mysql error", &mysql.MySQLError{}},
 		{"other error", errors.New("")},
 	}
 
@@ -71,6 +72,9 @@ func Test_TimerStore_GetByName(t *testing.T) {
 			case "record not found":
 				assert.Nil(t, timer)
 				assert.Equal(t, pkgerr.ErrTimerNotFound, err.(*pkgerr.WithCode).Code())
+			case "unknown mysql error":
+				assert.Nil(t, timer)
+				assert.Equal(t, err.(*pkgerr.WithCode).Code(), pkgerr.ErrDatabase)
 			default:
 				assert.Nil(t, timer)
 				assert.Equal(t, err, tt.dbErr)
@@ -85,7 +89,8 @@ func Test_TimerStore_GetAll(t *testing.T) {
 		dbErr error
 	}{
 		{"success", nil},
-		{"failure", errors.New("")},
+		{"unknown mysql error", &mysql.MySQLError{}},
+		{"other error", errors.New("")},
 	}
 
 	for _, tt := range tests {
@@ -97,7 +102,10 @@ func Test_TimerStore_GetAll(t *testing.T) {
 			case "success":
 				assert.Equal(t, err, tt.dbErr)
 				assert.NotNil(t, data)
-			case "failure":
+			case "unknown mysql error":
+				assert.Equal(t, err.(*pkgerr.WithCode).Code(), pkgerr.ErrDatabase)
+				assert.Nil(t, data)
+			case "other error":
 				assert.Equal(t, err, tt.dbErr)
 				assert.Nil(t, data)
 			}
@@ -111,7 +119,8 @@ func Test_TimerStore_GetAllPending(t *testing.T) {
 		dbErr error
 	}{
 		{"success", nil},
-		{"failure", errors.New("")},
+		{"unknown mysql error", &mysql.MySQLError{}},
+		{"other error", errors.New("")},
 	}
 
 	for _, tt := range tests {
@@ -124,7 +133,10 @@ func Test_TimerStore_GetAllPending(t *testing.T) {
 			case "success":
 				assert.Equal(t, err, tt.dbErr)
 				assert.NotNil(t, data)
-			case "failure":
+			case "unknown mysql error":
+				assert.Equal(t, err.(*pkgerr.WithCode).Code(), pkgerr.ErrDatabase)
+				assert.Nil(t, data)
+			case "other error":
 				assert.Equal(t, err, tt.dbErr)
 				assert.Nil(t, data)
 			}
