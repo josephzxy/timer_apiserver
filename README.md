@@ -42,8 +42,8 @@ Golang, Gin, gRPC, MariaDB, GORM, Cobra, Pflag, Viper, Docker, GNU make
     # Timers are pending if they are not deleted and not triggered yet
     make demo.grpc.getallpending
 
-    # Delete the timer named "hello"
-    make demo.rest.delete.hello
+    # Delete the timer named "hello_again"
+    make demo.rest.delete.hello_again
     ```
 
 ## RESTful API Doc
