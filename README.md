@@ -6,11 +6,6 @@
 **Major Tech stacks:**
 Golang, Gin, gRPC, MariaDB, GORM, Cobra, pflag, viper, Docker, GNU make
 
-- [⏳ Timer API Server](#-timer-api-server)
-  - [Try It Out!](#try-it-out)
-  - [RESTful API Doc](#restful-api-doc)
-  - [gRPC API Doc](#grpc-api-doc)
-
 ## Try It Out!
 
 1. Check prerequisites
