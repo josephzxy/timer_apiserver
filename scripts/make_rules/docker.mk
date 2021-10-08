@@ -10,6 +10,7 @@ docker.build:
 
 .PHONY: docker.compose.up
 docker.compose.up: 
+	@cp $(PROJECT_ROOT)/config/example.yml $(PROJECT_ROOT)/config/config.yml
 	@GIT_COMMIT=$(GIT_COMMIT) docker compose -f $(DKR_COMPOSE_FILE) -p $(APP_NAME) up --build --detach --force-recreate
 	@$(MAKE) mysql.migrate.up
 
