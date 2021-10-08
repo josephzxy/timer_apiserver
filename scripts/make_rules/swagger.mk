@@ -12,6 +12,6 @@ swagger.generate: tools.verify.swagger
 	@swagger generate spec -o $(SWGR_SPEC_FILE)
 
 .PHONY: swagger.serve
-swagger.serve: swagger.generate
+swagger.serve: tools.verify.swagger
 	@echo "=======> $(SWGR_MK_PREFIX) serving swagger specification at http://localhost:$(SWGR_SRV_PORT)/docs"
 	@swagger serve -F=redoc --port $(SWGR_SRV_PORT) $(SWGR_SPEC_FILE)

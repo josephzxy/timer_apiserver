@@ -60,7 +60,7 @@ docker: docker.build
 
 ## swagger: Generate swagger doc for RESTful API and launch a local HTTP server to display
 .PHONY: swagger
-swagger: swagger.serve
+swagger: swagger.generate swagger.serve
 
 ## clean: Remove temporary files generated during building
 .PHONY: clean
