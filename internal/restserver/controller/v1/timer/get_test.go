@@ -11,7 +11,7 @@ import (
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/service"
 )
 
-func Test_TimerController_Get(t *testing.T) {
+func Test_timerController_Get(t *testing.T) {
 	ctrl := gomock.NewController(t)
 
 	tests := []struct {
@@ -43,7 +43,7 @@ func Test_TimerController_Get(t *testing.T) {
 	}
 }
 
-func Test_TimerController_GetAll(t *testing.T) {
+func Test_timerController_GetAll(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	tests := []struct {
 		name string
