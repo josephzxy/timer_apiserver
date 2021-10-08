@@ -4,7 +4,7 @@
 Timer API server is a demo Golang project that implements both external-facing RESTful APIs and internal-facing gRPC APIs for managing RESTful resource Timer.
 
 **Major Tech stacks:**
-Golang, Gin, gRPC, MariaDB, GORM, Cobra, pflag, viper, Docker, GNU make
+Golang, Gin, gRPC, MariaDB, GORM, Cobra, Pflag, Viper, Docker, GNU make
 
 ## Try It Out!
 
