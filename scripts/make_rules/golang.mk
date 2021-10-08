@@ -67,7 +67,6 @@ go.build.%:
 go.clean:
 	@echo "=======> $(GOLANG_MK_PREFIX) cleaning"
 	@go clean -x `go list $(PROJECT_ROOT)/...`
-	@$(MAKE) go.mock.clean
 
 # Packages for which mock files should be generated
 # Supports internal packages only
