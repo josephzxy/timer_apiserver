@@ -15,6 +15,7 @@ include scripts/make_rules/docker.mk
 include scripts/make_rules/swagger.mk
 include scripts/make_rules/mysql.mk
 include scripts/make_rules/grpc.mk
+include scripts/make_rules/demo.mk
 
 # Usages
 define USAGE_OPTIONS
