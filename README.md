@@ -1,7 +1,7 @@
 # ⏳ Timer API Server
 [![codecov](https://codecov.io/gh/josephzxy/timer_apiserver/branch/develop/graph/badge.svg?token=AU3193CPC3)](https://codecov.io/gh/josephzxy/timer_apiserver)
 
-⏳ Timer API server is a demo Golang project that implements both external-facing RESTful APIs and internal-facing gRPC APIs for managing RESTful resource Timer.
+Timer API server is a demo Golang project that implements both external-facing RESTful APIs and internal-facing gRPC APIs for managing RESTful resource Timer.
 
 **Major Tech stacks:**
 Golang, Gin, gRPC, MariaDB, GORM, Cobra, pflag, viper, Docker, GNU make
