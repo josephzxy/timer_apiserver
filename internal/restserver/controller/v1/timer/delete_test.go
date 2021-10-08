@@ -10,7 +10,7 @@ import (
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/service"
 )
 
-func Test_TimerController_Delete(t *testing.T) {
+func Test_timerController_Delete(t *testing.T) {
 	ctrl := gomock.NewController(t)
 
 	tests := []struct {

@@ -4,11 +4,14 @@ package timer
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/model"
 )
@@ -49,4 +52,32 @@ func monkeypatch_validateTimerCoreFunc(ret error) (restore func()) {
 	restore = func() { validateTimerCoreFunc = old }
 	validateTimerCoreFunc = func(tc *model.TimerCore) error { return ret }
 	return
+}
+
+var testDB = getGormDBOrDie()
+
+// getGormDBOrDie returns a value of gorm.DB or panic error occurs
+func getGormDBOrDie() *gorm.DB {
+	dsn := fmt.Sprintf(
+		`%s:%s@tcp(%s:%d)/%s?charset=%s&parseTime=%t&loc=%s`,
+		"root",
+		"root",
+		"localhost",
+		3306,
+		"test",
+		"utf8mb4",
+		true,
+		"Local",
+	)
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	if err != nil {
+		panic("failed to get db session for test")
+	}
+	return db
+}
+
+func timerExistsInDBByName(db *gorm.DB, name string) bool {
+	var fetchedName string
+	db.Raw("SELECT name FROM timer WHERE name = ?", name).Scan(&fetchedName)
+	return fetchedName != ""
 }
