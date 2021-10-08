@@ -9,7 +9,7 @@ Golang, Gin, gRPC, MariaDB, GORM, Cobra, Pflag, Viper, Docker, GNU make
 ## Try It Out!
 
 1. Check prerequisites
-  - [Docker 20.10+](https://docs.docker.com/engine/release-notes/#version-2010)
+  - [Docker 20.10+](https://docs.docker.com/get-docker/)
   - [GNU make](https://www.gnu.org/software/make/)
 
 2. Check out the repository to your local machine and go to the project root directory.
