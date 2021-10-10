@@ -24,12 +24,12 @@ type GRPCServer interface {
 
 type grpcServer struct {
 	cfg            Config
-	serviceRouter  service.ServiceRouter
+	serviceRouter  service.Router
 	insecureServer *grpc.Server
 }
 
 // New returns the value of the implementation of interface GRPCServer
-func New(cfg *Config, serviceRouter service.ServiceRouter) GRPCServer {
+func New(cfg *Config, serviceRouter service.Router) GRPCServer {
 	s := &grpcServer{
 		cfg:           *cfg,
 		serviceRouter: serviceRouter,

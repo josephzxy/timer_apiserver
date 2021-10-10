@@ -7,22 +7,22 @@ import (
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/store"
 )
 
-// ServiceRouter is an interface that provides routes to services
+// Router is an interface that provides routes to services
 // dedicated to a specific scope of RESTful resource.
-type ServiceRouter interface {
+type Router interface {
 	Timer() TimerService
 }
 
-type serviceRouter struct {
+type router struct {
 	storeRouter store.StoreRouter
 }
 
 // Timer routes to the service for RESTful resource Timer
-func (r *serviceRouter) Timer() TimerService {
+func (r *router) Timer() TimerService {
 	return &timerService{r.storeRouter}
 }
 
-// NewRouter returns a concrete value for interface ServiceRouter
-func NewRouter(r store.StoreRouter) ServiceRouter {
-	return &serviceRouter{r}
+// NewRouter returns a concrete value for interface Router
+func NewRouter(r store.StoreRouter) Router {
+	return &router{r}
 }

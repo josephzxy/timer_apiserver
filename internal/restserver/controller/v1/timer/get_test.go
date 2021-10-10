@@ -27,10 +27,10 @@ func Test_timerController_Get(t *testing.T) {
 			mockTimerService := service.NewMockTimerService(ctrl)
 			mockTimerService.EXPECT().GetByName(gomock.Any()).AnyTimes().Return(&model.Timer{}, tt.err)
 
-			mockServiceRouter := service.NewMockServiceRouter(ctrl)
-			mockServiceRouter.EXPECT().Timer().AnyTimes().Return(mockTimerService)
+			mockRouter := service.NewMockRouter(ctrl)
+			mockRouter.EXPECT().Timer().AnyTimes().Return(mockTimerService)
 
-			tc := &timerController{serviceRouter: mockServiceRouter}
+			tc := &timerController{serviceRouter: mockRouter}
 			c := newTestGinCtxWithReq("GET", "/v1/timers/name", nil)
 			tc.Get(c)
 			switch tt.name {
@@ -58,10 +58,10 @@ func Test_timerController_GetAll(t *testing.T) {
 			mockTimerService := service.NewMockTimerService(ctrl)
 			mockTimerService.EXPECT().GetAll().AnyTimes().Return(nil, tt.err)
 
-			mockServiceRouter := service.NewMockServiceRouter(ctrl)
-			mockServiceRouter.EXPECT().Timer().AnyTimes().Return(mockTimerService)
+			mockRouter := service.NewMockRouter(ctrl)
+			mockRouter.EXPECT().Timer().AnyTimes().Return(mockTimerService)
 
-			tc := &timerController{serviceRouter: mockServiceRouter}
+			tc := &timerController{serviceRouter: mockRouter}
 			c := newTestGinCtxWithReq("GET", "/v1/timers", nil)
 			tc.GetAll(c)
 

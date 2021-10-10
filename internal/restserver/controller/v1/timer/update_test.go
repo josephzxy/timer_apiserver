@@ -47,10 +47,10 @@ func Test_timerController_Update(t *testing.T) {
 			mockTimerService := service.NewMockTimerService(ctrl)
 			mockTimerService.EXPECT().UpdateByName(gomock.Any(), gomock.Any()).AnyTimes().Return(tt.updateErr)
 
-			mockServiceRouter := service.NewMockServiceRouter(ctrl)
-			mockServiceRouter.EXPECT().Timer().AnyTimes().Return(mockTimerService)
+			mockRouter := service.NewMockRouter(ctrl)
+			mockRouter.EXPECT().Timer().AnyTimes().Return(mockTimerService)
 
-			tc := &timerController{serviceRouter: mockServiceRouter}
+			tc := &timerController{serviceRouter: mockRouter}
 			c := newTestGinCtxWithReq("PUT", "/v1/timers/test", nil)
 			tc.Update(c)
 

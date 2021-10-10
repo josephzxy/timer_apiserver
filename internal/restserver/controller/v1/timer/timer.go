@@ -19,10 +19,10 @@ type TimerController interface {
 }
 
 type timerController struct {
-	serviceRouter service.ServiceRouter
+	serviceRouter service.Router
 }
 
 // NewController returns a concrete value of interface TimerController.
-func NewController(serviceRouter service.ServiceRouter) TimerController {
+func NewController(serviceRouter service.Router) TimerController {
 	return &timerController{serviceRouter}
 }

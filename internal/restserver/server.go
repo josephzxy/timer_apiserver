@@ -25,13 +25,13 @@ type RESTServer interface {
 
 type restServer struct {
 	cfg           Config
-	serviceRouter service.ServiceRouter
+	serviceRouter service.Router
 	*gin.Engine
 	insecureServer *http.Server
 }
 
 // New returns the concrete value of interface RESTServer
-func New(cfg *Config, serviceRouter service.ServiceRouter) RESTServer {
+func New(cfg *Config, serviceRouter service.Router) RESTServer {
 	s := &restServer{
 		cfg:           *cfg,
 		serviceRouter: serviceRouter,
