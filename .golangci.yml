@@ -37,7 +37,6 @@ linters:
     - errcheck
     - errorlint
     - exhaustive
-    - exhaustivestruct
     - exportloopref
     - forbidigo
     - funlen
