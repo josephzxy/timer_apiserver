@@ -23,11 +23,19 @@ go.tidy:
 	@$(GO) mod tidy
 
 .PHONY: go.format
-go.format: tools.verify.goimports tools.verify.gci
+go.format: tools.verify.goimports tools.verify.gci tools.verify.gofumpt
 	@echo "=======> $(GOLANG_MK_PREFIX) formatting source code"
+	@echo "=======> $(GOLANG_MK_PREFIX) gofmt"
 	@gofmt -s -w $(PROJECT_ROOT)
+
+	@echo "=======> $(GOLANG_MK_PREFIX) goimports"
 	@goimports -w -local $(GO_MODULE) $(PROJECT_ROOT)
+
+	@echo "=======> $(GOLANG_MK_PREFIX) gci"
 	@gci -w -local $(GO_MODULE) $(PROJECT_ROOT)
+
+	@echo "=======> $(GOLANG_MK_PREFIX) gofumpt"
+	@gofumpt -l -s -w $(PROJECT_ROOT)
 
 .PHONY: go.lint
 go.lint: tools.verify.golangci-lint
