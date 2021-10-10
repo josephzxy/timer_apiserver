@@ -11,14 +11,14 @@ import (
 )
 
 var validateTimerFunc = model.ValidateTimer
-var bindJsonFunc = func(c *gin.Context, obj interface{}) error {
+var bindJSONFunc = func(c *gin.Context, obj interface{}) error {
 	return c.ShouldBindJSON(obj)
 }
 
 // Create creates a timer by the data provided in the request body.
 func (tc *timerController) Create(c *gin.Context) {
 	var timer model.Timer
-	if err := bindJsonFunc(c, &timer); err != nil {
+	if err := bindJSONFunc(c, &timer); err != nil {
 		zap.S().Errorw("failed to bind data to model", "err", err)
 		resp.WriteResponse(c, pkgerr.New(pkgerr.ErrValidation, err.Error()), nil)
 		return

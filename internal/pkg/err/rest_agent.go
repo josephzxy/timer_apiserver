@@ -48,10 +48,10 @@ var (
 )
 
 func registerRESTAgent(code AppErrCode, httpStatus int, msg string) error {
-	allowedHttpStatus := []int{400, 404, 500}
+	allowedHTTPStatus := []int{400, 404, 500}
 
 	found := func() bool {
-		for _, v := range allowedHttpStatus {
+		for _, v := range allowedHTTPStatus {
 			if v == httpStatus {
 				return true
 			}
@@ -59,7 +59,7 @@ func registerRESTAgent(code AppErrCode, httpStatus int, msg string) error {
 		return false
 	}()
 	if !found {
-		msg := fmt.Sprintf("http status not allowed, will skip. should be one of %v, got %d", allowedHttpStatus, httpStatus)
+		msg := fmt.Sprintf("http status not allowed, will skip. should be one of %v, got %d", allowedHTTPStatus, httpStatus)
 		zap.L().Error(msg)
 		return errors.New(msg)
 	}

@@ -40,10 +40,10 @@ func monkeyPatchValidateTimerFunc(ret error) (restore func()) {
 	return
 }
 
-func monkeyPatchBindJsonFunc(ret error) (restore func()) {
-	old := bindJsonFunc
-	restore = func() { bindJsonFunc = old }
-	bindJsonFunc = func(c *gin.Context, obj interface{}) error { return ret }
+func monkeyPatchBindJSONFunc(ret error) (restore func()) {
+	old := bindJSONFunc
+	restore = func() { bindJSONFunc = old }
+	bindJSONFunc = func(c *gin.Context, obj interface{}) error { return ret }
 	return
 }
 

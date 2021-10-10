@@ -15,7 +15,7 @@ var validateTimerCoreFunc = model.ValidateTimerCore
 // to the desired state provided in the request body.
 func (tc *timerController) Update(c *gin.Context) {
 	var want model.TimerCore
-	if err := bindJsonFunc(c, &want); err != nil {
+	if err := bindJSONFunc(c, &want); err != nil {
 		zap.S().Errorw("failed to bind data to model", "err", err)
 		resp.WriteResponse(c, pkgerr.New(pkgerr.ErrValidation, err.Error()), nil)
 		return
