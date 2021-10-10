@@ -169,7 +169,7 @@ func (a *app) runCmd(cmd *cobra.Command, args []string) error {
 // run is the entry point for the business logic part of the app where
 // database connections are created, server instances are launched, etc.
 func (a *app) run() error {
-	mysqlStoreRouter, err := mysql.NewStoreRouter(&mysql.Config{
+	mysqlRouter, err := mysql.NewRouter(&mysql.Config{
 		User:            a.cfg.MySQL.User,
 		Pwd:             a.cfg.MySQL.Pwd,
 		Host:            a.cfg.MySQL.Host,
@@ -189,7 +189,7 @@ func (a *app) run() error {
 		return errors.WithMessage(err, msg)
 	}
 
-	serviceRouter := service.NewRouter(mysqlStoreRouter)
+	serviceRouter := service.NewRouter(mysqlRouter)
 	restServer := restserver.New(
 		&restserver.Config{
 			InsecureServing: restserver.InsecureServingConfig{

@@ -14,7 +14,7 @@ type Router interface {
 }
 
 type router struct {
-	storeRouter store.StoreRouter
+	storeRouter store.Router
 }
 
 // Timer routes to the service for RESTful resource Timer
@@ -23,6 +23,6 @@ func (r *router) Timer() TimerService {
 }
 
 // NewRouter returns a concrete value for interface Router
-func NewRouter(r store.StoreRouter) Router {
+func NewRouter(r store.Router) Router {
 	return &router{r}
 }

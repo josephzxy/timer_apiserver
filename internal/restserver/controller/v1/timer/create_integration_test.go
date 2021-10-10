@@ -24,7 +24,7 @@ func Test_timerController_Create_integration(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			storeRouter, _ := mysql.NewStoreRouter(&mysql.Config{
+			storeRouter, _ := mysql.NewRouter(&mysql.Config{
 				User:            "root",
 				Pwd:             "root",
 				Host:            "localhost",
