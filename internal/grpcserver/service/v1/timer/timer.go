@@ -8,10 +8,10 @@ import (
 type timerServer struct {
 	pb.UnimplementedTimerServer
 
-	serviceRouter service.ServiceRouter
+	serviceRouter service.Router
 }
 
 // NewTimerServer returns a value of the implementation of the interface TimerServer
-func NewTimerServer(serviceRouter service.ServiceRouter) pb.TimerServer {
+func NewTimerServer(serviceRouter service.Router) pb.TimerServer {
 	return &timerServer{serviceRouter: serviceRouter}
 }

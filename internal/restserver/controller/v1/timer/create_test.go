@@ -18,7 +18,7 @@ func Test_timerController_Create(t *testing.T) {
 	tests := []struct {
 		name        string
 		c           *gin.Context
-		bindJsonErr error
+		bindJSONErr error
 		validateErr error
 		createErr   error
 		http        int
@@ -55,13 +55,13 @@ func Test_timerController_Create(t *testing.T) {
 			mockTimerService := service.NewMockTimerService(ctrl)
 			mockTimerService.EXPECT().Create(gomock.Any()).AnyTimes().Return(tt.createErr)
 
-			mockServiceRouter := service.NewMockServiceRouter(ctrl)
-			mockServiceRouter.EXPECT().Timer().AnyTimes().Return(mockTimerService)
+			mockRouter := service.NewMockRouter(ctrl)
+			mockRouter.EXPECT().Timer().AnyTimes().Return(mockTimerService)
 
 			defer monkeyPatchValidateTimerFunc(tt.validateErr)()
-			defer monkeyPatchBindJsonFunc(tt.bindJsonErr)()
+			defer monkeyPatchBindJSONFunc(tt.bindJSONErr)()
 
-			tc := &timerController{serviceRouter: mockServiceRouter}
+			tc := &timerController{serviceRouter: mockRouter}
 			tc.Create(tt.c)
 			assert.Equal(t, tt.c.Writer.Status(), tt.http)
 		})

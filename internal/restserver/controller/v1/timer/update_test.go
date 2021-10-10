@@ -16,7 +16,7 @@ func Test_timerController_Update(t *testing.T) {
 
 	tests := []struct {
 		name        string
-		bindJsonErr error
+		bindJSONErr error
 		validateErr error
 		updateErr   error
 		http        int
@@ -41,16 +41,16 @@ func Test_timerController_Update(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			defer monkeyPatchBindJsonFunc(tt.bindJsonErr)()
-			defer monkeypatch_validateTimerCoreFunc(tt.validateErr)()
+			defer monkeyPatchBindJSONFunc(tt.bindJSONErr)()
+			defer monkeyPatchValidateTimerCoreFunc(tt.validateErr)()
 
 			mockTimerService := service.NewMockTimerService(ctrl)
 			mockTimerService.EXPECT().UpdateByName(gomock.Any(), gomock.Any()).AnyTimes().Return(tt.updateErr)
 
-			mockServiceRouter := service.NewMockServiceRouter(ctrl)
-			mockServiceRouter.EXPECT().Timer().AnyTimes().Return(mockTimerService)
+			mockRouter := service.NewMockRouter(ctrl)
+			mockRouter.EXPECT().Timer().AnyTimes().Return(mockTimerService)
 
-			tc := &timerController{serviceRouter: mockServiceRouter}
+			tc := &timerController{serviceRouter: mockRouter}
 			c := newTestGinCtxWithReq("PUT", "/v1/timers/test", nil)
 			tc.Update(c)
 

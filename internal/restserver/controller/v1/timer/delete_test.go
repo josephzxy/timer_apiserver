@@ -26,10 +26,10 @@ func Test_timerController_Delete(t *testing.T) {
 			mockTimerService := service.NewMockTimerService(ctrl)
 			mockTimerService.EXPECT().DeleteByName(gomock.Any()).AnyTimes().Return(tt.err)
 
-			mockServiceRouter := service.NewMockServiceRouter(ctrl)
-			mockServiceRouter.EXPECT().Timer().AnyTimes().Return(mockTimerService)
+			mockRouter := service.NewMockRouter(ctrl)
+			mockRouter.EXPECT().Timer().AnyTimes().Return(mockTimerService)
 
-			tc := &timerController{serviceRouter: mockServiceRouter}
+			tc := &timerController{serviceRouter: mockRouter}
 			c := newTestGinCtxWithReq("DELETE", "/v1/timers/name", nil)
 			tc.Delete(c)
 

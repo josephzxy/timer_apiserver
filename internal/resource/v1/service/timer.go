@@ -17,7 +17,7 @@ type TimerService interface {
 }
 
 type timerService struct {
-	storeRouter store.StoreRouter
+	storeRouter store.Router
 }
 
 // Create creates a new timer.

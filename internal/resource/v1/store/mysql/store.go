@@ -1,4 +1,4 @@
-// Package mysql provides MySQL-specific implementations of interface store.StoreRouter
+// Package mysql provides MySQL-specific implementations of interface store.Router
 package mysql
 
 import (
@@ -13,18 +13,18 @@ import (
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/store/mysql/timer"
 )
 
-type mysqlStoreRouter struct {
+type mysqlRouter struct {
 	db *gorm.DB
 }
 
 // Timer routes to a concrete MySQL-dedicated value of interface store.TimerStore.
-func (r *mysqlStoreRouter) Timer() store.TimerStore {
+func (r *mysqlRouter) Timer() store.TimerStore {
 	return timer.NewTimerStore(r.db)
 }
 
-// NewStoreRouter creates and configures a MySQL session and returns
-// a mysqlStoreRouter with it.
-func NewStoreRouter(cfg *Config) (store.StoreRouter, error) {
+// NewRouter creates and configures a MySQL session and returns
+// a mysqlRouter with it.
+func NewRouter(cfg *Config) (store.Router, error) {
 	dsn := fmt.Sprintf(
 		`%s:%s@tcp(%s:%d)/%s?charset=%s&parseTime=%t&loc=%s`,
 		cfg.User,
@@ -54,5 +54,5 @@ func NewStoreRouter(cfg *Config) (store.StoreRouter, error) {
 	sqlDB.SetMaxOpenConns(cfg.MaxOpenConns)
 	sqlDB.SetConnMaxLifetime(cfg.MaxConnLifetime)
 
-	return &mysqlStoreRouter{db}, nil
+	return &mysqlRouter{db}, nil
 }

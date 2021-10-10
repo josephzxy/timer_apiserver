@@ -10,31 +10,31 @@ import (
 	gomock "github.com/golang/mock/gomock"
 )
 
-// MockServiceRouter is a mock of ServiceRouter interface.
-type MockServiceRouter struct {
+// MockRouter is a mock of Router interface.
+type MockRouter struct {
 	ctrl     *gomock.Controller
-	recorder *MockServiceRouterMockRecorder
+	recorder *MockRouterMockRecorder
 }
 
-// MockServiceRouterMockRecorder is the mock recorder for MockServiceRouter.
-type MockServiceRouterMockRecorder struct {
-	mock *MockServiceRouter
+// MockRouterMockRecorder is the mock recorder for MockRouter.
+type MockRouterMockRecorder struct {
+	mock *MockRouter
 }
 
-// NewMockServiceRouter creates a new mock instance.
-func NewMockServiceRouter(ctrl *gomock.Controller) *MockServiceRouter {
-	mock := &MockServiceRouter{ctrl: ctrl}
-	mock.recorder = &MockServiceRouterMockRecorder{mock}
+// NewMockRouter creates a new mock instance.
+func NewMockRouter(ctrl *gomock.Controller) *MockRouter {
+	mock := &MockRouter{ctrl: ctrl}
+	mock.recorder = &MockRouterMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockServiceRouter) EXPECT() *MockServiceRouterMockRecorder {
+func (m *MockRouter) EXPECT() *MockRouterMockRecorder {
 	return m.recorder
 }
 
 // Timer mocks base method.
-func (m *MockServiceRouter) Timer() TimerService {
+func (m *MockRouter) Timer() TimerService {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Timer")
 	ret0, _ := ret[0].(TimerService)
@@ -42,7 +42,7 @@ func (m *MockServiceRouter) Timer() TimerService {
 }
 
 // Timer indicates an expected call of Timer.
-func (mr *MockServiceRouterMockRecorder) Timer() *gomock.Call {
+func (mr *MockRouterMockRecorder) Timer() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Timer", reflect.TypeOf((*MockServiceRouter)(nil).Timer))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Timer", reflect.TypeOf((*MockRouter)(nil).Timer))
 }

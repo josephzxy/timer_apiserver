@@ -1,5 +1,3 @@
-// Package docs provides necessary elements for generating swagger speficiation.
-
 //nolint:deadcode,unused
 package docs
 
