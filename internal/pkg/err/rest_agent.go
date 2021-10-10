@@ -87,7 +87,7 @@ func GetRESTAgentByError(err error) RESTAgent {
 	rwmtx.RLock()
 	defer rwmtx.RUnlock()
 
-	w, ok := err.(*WithCode)
+	w, ok := err.(*WithCode) //nolint: errorlint
 	if !ok {
 		return restAgents[ErrUnknown]
 	}

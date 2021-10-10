@@ -29,7 +29,7 @@ func (s *timerStore) GetByName(name string) (*model.Timer, error) {
 		return nil, pkgerr.New(pkgerr.ErrTimerNotFound, "")
 	}
 
-	me, ok := err.(*mysql.MySQLError)
+	me, ok := err.(*mysql.MySQLError) //nolint: errorlint
 	if !ok {
 		return nil, err
 	}
@@ -50,7 +50,7 @@ func (s *timerStore) GetAll() ([]model.Timer, error) {
 		return timers, nil
 	}
 	zap.S().Errorw("failed to get all timers", "err", err)
-	me, ok := err.(*mysql.MySQLError)
+	me, ok := err.(*mysql.MySQLError) //nolint: errorlint
 	if !ok {
 		return nil, err
 	}
@@ -72,7 +72,7 @@ func (s *timerStore) GetAllPending() ([]model.Timer, error) {
 		return timers, nil
 	}
 	zap.S().Errorw("failed to get all pending timers", "err", err)
-	me, ok := err.(*mysql.MySQLError)
+	me, ok := err.(*mysql.MySQLError) //nolint: errorlint
 	if !ok {
 		return nil, err
 	}

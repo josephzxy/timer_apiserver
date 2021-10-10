@@ -41,7 +41,7 @@ func (s *timerStore) UpdateByName(name string, want *model.TimerCore) error {
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return pkgerr.New(pkgerr.ErrTimerNotFound, "")
 	}
-	me, ok := err.(*mysql.MySQLError)
+	me, ok := err.(*mysql.MySQLError) //nolint: errorlint
 	if !ok {
 		return err
 	}

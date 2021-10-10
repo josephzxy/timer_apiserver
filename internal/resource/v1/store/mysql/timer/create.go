@@ -24,7 +24,7 @@ func (s *timerStore) Create(timer *model.Timer) error {
 	}
 	zap.S().Errorw("failed to create timer", "err", err, "data", timer)
 
-	me, ok := err.(*mysql.MySQLError)
+	me, ok := err.(*mysql.MySQLError) //nolint: errorlint
 	if !ok {
 		return err
 	}
