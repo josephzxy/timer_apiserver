@@ -200,12 +200,15 @@ func file_api_grpc_timer_proto_rawDescGZIP() []byte {
 	return file_api_grpc_timer_proto_rawDescData
 }
 
-var file_api_grpc_timer_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
-var file_api_grpc_timer_proto_goTypes = []interface{}{
-	(*TimerInfo)(nil),               // 0: timer.TimerInfo
-	(*GetAllPendingTimersReq)(nil),  // 1: timer.GetAllPendingTimersReq
-	(*GetAllPendingTimersResp)(nil), // 2: timer.GetAllPendingTimersResp
-}
+var (
+	file_api_grpc_timer_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+	file_api_grpc_timer_proto_goTypes  = []interface{}{
+		(*TimerInfo)(nil),               // 0: timer.TimerInfo
+		(*GetAllPendingTimersReq)(nil),  // 1: timer.GetAllPendingTimersReq
+		(*GetAllPendingTimersResp)(nil), // 2: timer.GetAllPendingTimersResp
+	}
+)
+
 var file_api_grpc_timer_proto_depIdxs = []int32{
 	0, // 0: timer.GetAllPendingTimersResp.items:type_name -> timer.TimerInfo
 	1, // 1: timer.Timer.GetAllPendingTimers:input_type -> timer.GetAllPendingTimersReq

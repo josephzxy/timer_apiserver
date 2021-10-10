@@ -48,8 +48,7 @@ type TimerServer interface {
 }
 
 // UnimplementedTimerServer must be embedded to have forward compatible implementations.
-type UnimplementedTimerServer struct {
-}
+type UnimplementedTimerServer struct{}
 
 func (UnimplementedTimerServer) GetAllPendingTimers(context.Context, *GetAllPendingTimersReq) (*GetAllPendingTimersResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllPendingTimers not implemented")

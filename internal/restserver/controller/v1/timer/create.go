@@ -9,10 +9,12 @@ import (
 	resp "github.com/josephzxy/timer_apiserver/internal/restserver/response"
 )
 
-var validateTimerFunc = model.ValidateTimer
-var bindJSONFunc = func(c *gin.Context, obj interface{}) error {
-	return c.ShouldBindJSON(obj)
-}
+var (
+	validateTimerFunc = model.ValidateTimer
+	bindJSONFunc      = func(c *gin.Context, obj interface{}) error {
+		return c.ShouldBindJSON(obj)
+	}
+)
 
 // Create creates a timer by the data provided in the request body.
 func (tc *timerController) Create(c *gin.Context) {
