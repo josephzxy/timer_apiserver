@@ -1,4 +1,4 @@
-// Package grpcserver implements a pluggable library for REST servers.
+// Package restserver implements a pluggable library for REST servers.
 package restserver
 
 import (

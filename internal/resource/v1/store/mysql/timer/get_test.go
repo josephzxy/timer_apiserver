@@ -12,7 +12,7 @@ import (
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/model"
 )
 
-func monkeyPatch_dbGetByNameFunc(ret error) (restore func()) {
+func monkeyPatchDbGetByNameFunc(ret error) (restore func()) {
 	old := dbGetByNameFunc
 	restore = func() { dbGetByNameFunc = old }
 	dbGetByNameFunc = func(db *gorm.DB, name string, timer *model.Timer) error {
@@ -24,7 +24,7 @@ func monkeyPatch_dbGetByNameFunc(ret error) (restore func()) {
 	return
 }
 
-func monkeyPatch_dbGetAllFunc(ret error) (restore func()) {
+func monkeyPatchDbGetAllFunc(ret error) (restore func()) {
 	old := dbGetAllFunc
 	restore = func() { dbGetAllFunc = old }
 	dbGetAllFunc = func(db *gorm.DB, timers *[]model.Timer) error {
@@ -36,7 +36,7 @@ func monkeyPatch_dbGetAllFunc(ret error) (restore func()) {
 	return
 }
 
-func monkeyPatch_dbGetAllPendingFunc(ret error) (restore func()) {
+func monkeyPatchDbGetAllPendingFunc(ret error) (restore func()) {
 	old := dbGetAllPendingFunc
 	restore = func() { dbGetAllPendingFunc = old }
 	dbGetAllPendingFunc = func(db *gorm.DB, timers *[]model.Timer) error {
@@ -61,7 +61,7 @@ func Test_TimerStore_GetByName(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			defer monkeyPatch_dbGetByNameFunc(tt.dbErr)()
+			defer monkeyPatchDbGetByNameFunc(tt.dbErr)()
 			ts := &timerStore{&gorm.DB{}}
 			timer, err := ts.GetByName("")
 
@@ -95,7 +95,7 @@ func Test_TimerStore_GetAll(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			defer monkeyPatch_dbGetAllFunc(tt.dbErr)()
+			defer monkeyPatchDbGetAllFunc(tt.dbErr)()
 			ts := &timerStore{&gorm.DB{}}
 			data, err := ts.GetAll()
 			switch tt.name {
@@ -125,7 +125,7 @@ func Test_TimerStore_GetAllPending(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			defer monkeyPatch_dbGetAllPendingFunc(tt.dbErr)()
+			defer monkeyPatchDbGetAllPendingFunc(tt.dbErr)()
 			ts := &timerStore{&gorm.DB{}}
 			data, err := ts.GetAllPending()
 

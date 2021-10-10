@@ -33,14 +33,14 @@ func newTestGinCtxWithReq(method, url string, body map[string]interface{}) *gin.
 	return c
 }
 
-func monkeyPatch_validateTimerFunc(ret error) (restore func()) {
+func monkeyPatchValidateTimerFunc(ret error) (restore func()) {
 	old := validateTimerFunc
 	restore = func() { validateTimerFunc = old }
 	validateTimerFunc = func(*model.Timer) error { return ret }
 	return
 }
 
-func monkeyPatch_bindJsonFunc(ret error) (restore func()) {
+func monkeyPatchBindJsonFunc(ret error) (restore func()) {
 	old := bindJsonFunc
 	restore = func() { bindJsonFunc = old }
 	bindJsonFunc = func(c *gin.Context, obj interface{}) error { return ret }

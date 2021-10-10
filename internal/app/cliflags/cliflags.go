@@ -3,7 +3,7 @@ package cliflags
 
 import "github.com/spf13/pflag"
 
-// Cliflags defines the behavior of the app-level
+// CliFlags defines the behavior of the app-level
 // command line flags manager
 type CliFlags interface {
 	GetAllFlagSets() []*pflag.FlagSet

@@ -12,7 +12,7 @@ import (
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/model"
 )
 
-func monkeyPatch_dbUpdateByNameFunc(ret error) (restore func()) {
+func monkeyPatchDbUpdateByNameFunc(ret error) (restore func()) {
 	old := dbUpdateByNameFunc
 	restore = func() { dbUpdateByNameFunc = old }
 	dbUpdateByNameFunc = func(db *gorm.DB, name string, want *model.TimerCore) error { return ret }
@@ -33,7 +33,7 @@ func Test_TimerStore_UpdateByName(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			defer monkeyPatch_dbUpdateByNameFunc(tt.dbErr)()
+			defer monkeyPatchDbUpdateByNameFunc(tt.dbErr)()
 			ts := &timerStore{&gorm.DB{}}
 			err := ts.UpdateByName("", nil)
 

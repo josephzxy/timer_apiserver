@@ -13,7 +13,7 @@ type Config struct {
 	UseHealthz      bool
 }
 
-// InsecureServing holds insecure serving configs for REST server.
+// InsecureServingConfig holds insecure serving configs for REST server.
 type InsecureServingConfig struct {
 	Host string
 	Port int

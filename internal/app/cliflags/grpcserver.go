@@ -3,15 +3,15 @@ package cliflags
 import "github.com/spf13/pflag"
 
 type grpcServerCliFlags struct {
-	Insecure *GRPCInsecureServingCliFlags
-	Mode     string
+	insecure *grpcInsecureServingCliFlags
+	mode     string
 
 	flagSet *pflag.FlagSet
 }
 
 func newGrpcServerCliFlags() *grpcServerCliFlags {
 	return &grpcServerCliFlags{
-		Insecure: &GRPCInsecureServingCliFlags{},
+		insecure: &grpcInsecureServingCliFlags{},
 	}
 }
 
@@ -21,14 +21,15 @@ func (f *grpcServerCliFlags) getFlagSet() *pflag.FlagSet {
 	}
 	fs := pflag.NewFlagSet("grpcserver", pflag.ExitOnError)
 
-	fs.StringVar(&f.Insecure.Host, "grpc.insecure.host", f.Insecure.Host, `GRPC server insecure serving host`)
-	fs.IntVar(&f.Insecure.Port, "grpc.insecure.port", f.Insecure.Port, `GRPC server insecure serving port`)
+	fs.String("grpc.insecure.host", f.insecure.host, `GRPC server insecure serving host`)
+	fs.Int("grpc.insecure.port", f.insecure.port, `GRPC server insecure serving port`)
+	fs.String("grpc.mode", f.mode, `GRPC server mode`)
 
 	f.flagSet = fs
 	return f.flagSet
 }
 
-type GRPCInsecureServingCliFlags struct {
-	Host string
-	Port int
+type grpcInsecureServingCliFlags struct {
+	host string
+	port int
 }

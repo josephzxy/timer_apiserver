@@ -2,7 +2,7 @@ package mysql
 
 import "time"
 
-// Configs holds configs for MySQL session.
+// Config holds configs for MySQL session.
 type Config struct {
 	User            string
 	Pwd             string

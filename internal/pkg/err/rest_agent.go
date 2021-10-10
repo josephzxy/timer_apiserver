@@ -33,8 +33,13 @@ func newSimpleRESTAgent(httpStatus int, msg string, code AppErrCode) *SimpleREST
 	return &SimpleRESTAgent{http: httpStatus, msg: msg, code: code}
 }
 
-func (s *SimpleRESTAgent) HTTPStatus() int  { return s.http }
-func (s *SimpleRESTAgent) Msg() string      { return s.msg }
+// HTTPStatus returns the HTTP status code
+func (s *SimpleRESTAgent) HTTPStatus() int { return s.http }
+
+// Msg returns the user-facing message
+func (s *SimpleRESTAgent) Msg() string { return s.msg }
+
+// Code returns the application error code
 func (s *SimpleRESTAgent) Code() AppErrCode { return s.code }
 
 var (

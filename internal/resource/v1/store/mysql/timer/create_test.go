@@ -12,7 +12,7 @@ import (
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/model"
 )
 
-func monkeyPatch_dbCreateFunc(ret error) (restore func()) {
+func monkeyPatchDbCreateFunc(ret error) (restore func()) {
 	old := dbCreateFunc
 	restore = func() { dbCreateFunc = old }
 	dbCreateFunc = func(db *gorm.DB, timer *model.Timer) error { return ret }
@@ -32,7 +32,7 @@ func Test_TimerStore_Create(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			defer monkeyPatch_dbCreateFunc(tt.dbErr)()
+			defer monkeyPatchDbCreateFunc(tt.dbErr)()
 			ts := &timerStore{&gorm.DB{}}
 			err := ts.Create(&model.Timer{})
 
