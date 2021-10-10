@@ -1,0 +1,92 @@
+run:
+  skip-dirs:
+    - api/*
+  skip-files:
+    - _test.go
+
+linters-settings:
+  gci:
+    local-prefixes: github.com/josephzxy/timer_apiserver
+  godox: 
+    keywords:
+      - TODO
+      - BUG
+      - FIXME
+      - HACK
+      - OPTIMIZE
+  goimports:
+    local-prefixes: github.com/josephzxy/timer_apiserver
+  lll:
+    line-length: 240
+  importas:
+    pb: github.com/josephzxy/timer_apiserver/api/grpc
+    pkgerr: github.com/josephzxy/timer_apiserver/internal/pkg/err
+    resp: github.com/josephzxy/timer_apiserver/internal/restserver/response
+
+linters:
+  disable-all: true
+  enable:
+    - typecheck
+    - asciicheck
+    - bodyclose
+    - cyclop
+    - deadcode
+    - depguard
+    - dogsled
+    - dupl
+    - durationcheck
+    - errcheck
+    - errorlint
+    - exhaustive
+    - exhaustivestruct
+    - exportloopref
+    - forbidigo
+    - funlen
+    - gci
+    - gochecknoinits
+    - gocognit
+    - goconst
+    - gocyclo
+    - godot
+    - godox
+    - gofmt
+    - gofumpt
+    - goheader
+    - goimports
+    - gomoddirectives
+    - gomodguard
+    - goprintffuncname
+    - gosec
+    - gosimple
+    - govet
+    - ifshort
+    - importas
+    - ineffassign
+    - lll
+    - makezero
+    - misspell
+    - nakedret
+    - nestif
+    - nilerr
+    - nlreturn
+    - noctx
+    - nolintlint
+    - paralleltest
+    - prealloc
+    - predeclared
+    - promlinter
+    - revive
+    - rowserrcheck
+    - sqlclosecheck
+    - staticcheck
+    - structcheck
+    - stylecheck
+    - thelper
+    - tparallel
+    - unconvert
+    - unparam
+    - unused
+    - varcheck
+    - wastedassign
+    - whitespace
+  fast: false
