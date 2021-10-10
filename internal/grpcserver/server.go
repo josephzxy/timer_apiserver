@@ -4,11 +4,10 @@ package grpcserver
 import (
 	"net"
 
+	"github.com/pkg/errors"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
-
-	"github.com/pkg/errors"
 
 	pb "github.com/josephzxy/timer_apiserver/api/grpc"
 	"github.com/josephzxy/timer_apiserver/internal/grpcserver/service/v1/timer"

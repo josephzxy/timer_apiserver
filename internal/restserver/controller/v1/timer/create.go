@@ -6,7 +6,6 @@ import (
 
 	pkgerr "github.com/josephzxy/timer_apiserver/internal/pkg/err"
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/model"
-
 	resp "github.com/josephzxy/timer_apiserver/internal/restserver/response"
 )
 

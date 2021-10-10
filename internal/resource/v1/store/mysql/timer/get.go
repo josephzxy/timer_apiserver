@@ -3,10 +3,9 @@ package timer
 import (
 	"errors"
 
+	"github.com/go-sql-driver/mysql"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
-
-	"github.com/go-sql-driver/mysql"
 
 	pkgerr "github.com/josephzxy/timer_apiserver/internal/pkg/err"
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/model"
