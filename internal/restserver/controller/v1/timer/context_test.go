@@ -47,7 +47,7 @@ func monkeyPatchBindJsonFunc(ret error) (restore func()) {
 	return
 }
 
-func monkeypatch_validateTimerCoreFunc(ret error) (restore func()) {
+func monkeyPatchValidateTimerCoreFunc(ret error) (restore func()) {
 	old := validateTimerCoreFunc
 	restore = func() { validateTimerCoreFunc = old }
 	validateTimerCoreFunc = func(tc *model.TimerCore) error { return ret }

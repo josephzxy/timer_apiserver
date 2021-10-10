@@ -42,7 +42,7 @@ func Test_timerController_Update(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			defer monkeyPatchBindJsonFunc(tt.bindJsonErr)()
-			defer monkeypatch_validateTimerCoreFunc(tt.validateErr)()
+			defer monkeyPatchValidateTimerCoreFunc(tt.validateErr)()
 
 			mockTimerService := service.NewMockTimerService(ctrl)
 			mockTimerService.EXPECT().UpdateByName(gomock.Any(), gomock.Any()).AnyTimes().Return(tt.updateErr)
