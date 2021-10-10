@@ -1,4 +1,4 @@
-// Package util provides utility functions
+// Package util provides utility functions.
 package util
 
 import (
@@ -10,7 +10,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-// PanicIfErr panics only if the given error is non-nil
+// PanicIfErr panics only if the given error is non-nil.
 func PanicIfErr(e error) {
 	if e != nil {
 		panic(e)
@@ -22,7 +22,7 @@ func PanicIfErr(e error) {
 // CAUTION: Other goroutines aren't and won't be closed when a goroutine stops with an error.
 // In other words, those still-running goroutines "leak"
 // It is safe only when the error returned by BatchGoOrEr will eventually quit
-// the program
+// the program.
 func BatchGoOrErr(fs ...func() error) error {
 	waitDone := make(chan struct{}, 1)
 	var firstErr error

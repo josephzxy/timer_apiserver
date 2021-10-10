@@ -99,7 +99,7 @@ func (a *app) bindConfigFromEnv() {
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_", "-", "_"))
 }
 
-// bindConfigFromFile binds a config file to viper
+// bindConfigFromFile binds a config file to viper.
 func (a *app) bindConfigFromFile() error {
 	viper.SetConfigFile(a.cfg.Config)
 	if err := viper.ReadInConfig(); err != nil {
@@ -155,7 +155,7 @@ func (a *app) Run() {
 }
 
 // runCmd is the entry point for the app-level cobra command.
-// Note that cli flags and env vars will NOT be read BEFORE calling runCmd
+// Note that cli flags and env vars will NOT be read BEFORE calling runCmd.
 func (a *app) runCmd(cmd *cobra.Command, args []string) error {
 	if err := a.loadConfig(); err != nil {
 		return err

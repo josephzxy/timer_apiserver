@@ -36,10 +36,10 @@ func newSimpleRESTAgent(httpStatus int, msg string, code AppErrCode) *SimpleREST
 // HTTPStatus returns the HTTP status code.
 func (s *SimpleRESTAgent) HTTPStatus() int { return s.http }
 
-// Msg returns the user-facing message
+// Msg returns the user-facing message.
 func (s *SimpleRESTAgent) Msg() string { return s.msg }
 
-// Code returns the application error code
+// Code returns the application error code.
 func (s *SimpleRESTAgent) Code() AppErrCode { return s.code }
 
 var (

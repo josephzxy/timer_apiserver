@@ -30,7 +30,7 @@ type restServer struct {
 	insecureServer *http.Server
 }
 
-// New returns the concrete value of interface RESTServer
+// New returns the concrete value of interface RESTServer.
 func New(cfg *Config, serviceRouter service.Router) RESTServer {
 	s := &restServer{
 		cfg:           *cfg,

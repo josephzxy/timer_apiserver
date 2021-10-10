@@ -1,6 +1,6 @@
 // Package gracefulshutdown implements a simple library
 // for enabling app-level graceful shutdown on receiving shutdown OS
-// signals like SIGTERM and SIGINT
+// signals like SIGTERM and SIGINT.
 package gracefulshutdown
 
 import (
