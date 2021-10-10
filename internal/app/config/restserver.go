@@ -26,6 +26,7 @@ type RESTInsecureServingConfig struct {
 	Port int    `json:"port" mapstructure:"port"`
 }
 
+// Addr returns the full address(host:port)
 func (c *RESTInsecureServingConfig) Addr() string {
 	return net.JoinHostPort(c.Host, strconv.Itoa(c.Port))
 }
