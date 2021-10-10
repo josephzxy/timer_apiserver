@@ -31,7 +31,7 @@ go.format: tools.verify.goimports
 .PHONY: go.lint
 go.lint: tools.verify.golangci-lint
 	@echo "=======> $(GOLANG_MK_PREFIX) linting source code"
-	@golangci-lint run $(PROJECT_ROOT)/...
+	@golangci-lint run -c $(PROJECT_ROOT)/.golangci.yml $(PROJECT_ROOT)/...
 
 .PHONY: go.test
 go.test: go.mock
