@@ -7,18 +7,18 @@ import (
 )
 
 type mysqlCliFlags struct {
-	User            string
-	Pwd             string
-	Host            string
-	Port            int
-	Database        string
-	Charset         string
-	ParseTime       bool
-	Loc             string
-	MaxIdleConns    int
-	MaxOpenConns    int
-	MaxConnLifetime time.Duration
-	LogLevel        int
+	user            string
+	pwd             string
+	host            string
+	port            int
+	database        string
+	charset         string
+	parseTime       bool
+	loc             string
+	maxIdleConns    int
+	maxOpenConns    int
+	maxConnLifetime time.Duration
+	logLevel        int
 
 	flagSet *pflag.FlagSet
 }
@@ -33,18 +33,18 @@ func (f *mysqlCliFlags) getFlagSet() *pflag.FlagSet {
 	}
 	fs := pflag.NewFlagSet("mysql", pflag.ExitOnError)
 
-	fs.StringVar(&f.User, "mysql.user", f.User, `MySQL service user`)
-	fs.StringVar(&f.Pwd, "mysql.pwd", f.Pwd, `MySQL service password`)
-	fs.StringVar(&f.Host, "mysql.host", f.Host, `MySQL service host address`)
-	fs.IntVar(&f.Port, "mysql.port", f.Port, `MySQL service port`)
-	fs.StringVar(&f.Database, "mysql.database", f.Database, `MySQL service database`)
-	fs.StringVar(&f.Charset, "mysql.charset", f.Charset, `MySQL service charset`)
-	fs.BoolVar(&f.ParseTime, "mysql.parse-time", f.ParseTime, `Whether or not to parse time in the query`)
-	fs.StringVar(&f.Loc, "mysql.loc", f.Loc, `The timezone used in the query to MySQL server`)
-	fs.IntVar(&f.MaxIdleConns, "mysql.max-idle-conns", f.MaxIdleConns, `The max number of idle connections allowed to the MySQL server`)
-	fs.IntVar(&f.MaxOpenConns, "mysql.max-open-conns", f.MaxOpenConns, `The max number of open connections allowed to the MySQL server`)
-	fs.DurationVar(&f.MaxConnLifetime, "mysql.max-conn-lifetime", f.MaxConnLifetime, `The max lifetime of a connection to the MySQL server`)
-	fs.IntVar(&f.LogLevel, "mysql.log-level", f.LogLevel, `Gorm log level`)
+	fs.String("mysql.user", f.user, `MySQL service user`)
+	fs.String("mysql.pwd", f.pwd, `MySQL service password`)
+	fs.String("mysql.host", f.host, `MySQL service host address`)
+	fs.Int("mysql.port", f.port, `MySQL service port`)
+	fs.String("mysql.database", f.database, `MySQL service database`)
+	fs.String("mysql.charset", f.charset, `MySQL service charset`)
+	fs.Bool("mysql.parse-time", f.parseTime, `Whether or not to parse time in the query`)
+	fs.String("mysql.loc", f.loc, `The timezone used in the query to MySQL server`)
+	fs.Int("mysql.max-idle-conns", f.maxIdleConns, `The max number of idle connections allowed to the MySQL server`)
+	fs.Int("mysql.max-open-conns", f.maxOpenConns, `The max number of open connections allowed to the MySQL server`)
+	fs.Duration("mysql.max-conn-lifetime", f.maxConnLifetime, `The max lifetime of a connection to the MySQL server`)
+	fs.Int("mysql.log-level", f.logLevel, `Gorm log level`)
 
 	f.flagSet = fs
 	return f.flagSet

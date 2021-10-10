@@ -3,17 +3,17 @@ package cliflags
 import "github.com/spf13/pflag"
 
 type restServerCliFlags struct {
-	Insecure    *RESTInsecureServingCliFlags
-	Mode        string
-	Middlewares []string
-	UseHealthz  bool
+	insecure    *restInsecureServingCliFlags
+	mode        string
+	middlewares []string
+	useHealthz  bool
 
 	flagSet *pflag.FlagSet
 }
 
 func newRestServerCliFlags() *restServerCliFlags {
 	return &restServerCliFlags{
-		Insecure: &RESTInsecureServingCliFlags{},
+		insecure: &restInsecureServingCliFlags{},
 	}
 }
 
@@ -23,17 +23,17 @@ func (f *restServerCliFlags) getFlagSet() *pflag.FlagSet {
 	}
 	fs := pflag.NewFlagSet("restserver", pflag.ExitOnError)
 
-	fs.StringVar(&f.Insecure.Host, "rest.insecure.host", f.Insecure.Host, `REST server insecure serving host`)
-	fs.IntVar(&f.Insecure.Port, "rest.insecure.port", f.Insecure.Port, `REST server insecure serving port`)
-	fs.StringVar(&f.Mode, "rest.mode", f.Mode, `REST server mode(e.g. debug, release)`)
-	fs.StringArrayVar(&f.Middlewares, "rest.middlewares", f.Middlewares, `REST server middlewares`)
-	fs.BoolVar(&f.UseHealthz, "rest.use-healthz", f.UseHealthz, `Whether or not to enable health checking endpoint /healthz for REST server`)
+	fs.String("rest.insecure.host", f.insecure.host, `REST server insecure serving host`)
+	fs.Int("rest.insecure.port", f.insecure.port, `REST server insecure serving port`)
+	fs.String("rest.mode", f.mode, `REST server mode(e.g. debug, release)`)
+	fs.StringArray("rest.middlewares", f.middlewares, `REST server middlewares`)
+	fs.Bool("rest.use-healthz", f.useHealthz, `Whether or not to enable health checking endpoint /healthz for REST server`)
 
 	f.flagSet = fs
 	return f.flagSet
 }
 
-type RESTInsecureServingCliFlags struct {
-	Host string
-	Port int
+type restInsecureServingCliFlags struct {
+	host string
+	port int
 }
