@@ -100,6 +100,7 @@ func GetRESTAgentByError(err error) RESTAgent {
 	return agent
 }
 
+//nolint: gochecknoinits
 func init() {
 	util.PanicIfErr(registerRESTAgent(ErrUnknown, 500, "Internal server error"))
 	util.PanicIfErr(registerRESTAgent(ErrValidation, 400, "Request validation failed"))

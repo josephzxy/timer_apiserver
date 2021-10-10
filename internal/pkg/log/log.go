@@ -3,20 +3,25 @@ package log
 
 import (
 	"log"
+	"sync"
 	"time"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
 
-func init() {
-	cfg := zap.NewProductionConfig()
-	cfg.EncoderConfig.EncodeTime = zapcore.TimeEncoderOfLayout(time.RFC3339)
-	l, err := cfg.Build()
-	if err != nil {
-		log.Fatalf("failed to get zap production logger: %s", err)
-	}
-	zap.ReplaceGlobals(l)
+var once sync.Once
+
+func Init() {
+	once.Do(func() {
+		cfg := zap.NewProductionConfig()
+		cfg.EncoderConfig.EncodeTime = zapcore.TimeEncoderOfLayout(time.RFC3339)
+		l, err := cfg.Build()
+		if err != nil {
+			log.Fatalf("failed to get zap production logger: %s", err)
+		}
+		zap.ReplaceGlobals(l)
+	})
 }
 
 // Flush flushes any bufferred log entries.

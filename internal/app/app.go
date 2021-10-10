@@ -156,6 +156,7 @@ func (a *app) loadConfig() error {
 
 // Run is the entry point for the app.
 func (a *app) Run() {
+	log.Init()
 	defer log.Flush()
 	if err := a.cmd.Execute(); err != nil {
 		zap.S().Panicw("app failed during running", "err", err)

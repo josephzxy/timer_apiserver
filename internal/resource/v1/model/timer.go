@@ -8,13 +8,16 @@ import (
 	"gorm.io/gorm"
 )
 
-var val *validator.Validate
+var val = getValidator()
 
-func init() {
-	val = validator.New()
-	if err := val.RegisterValidation("notblank", validators.NotBlank); err != nil {
+// initValidator initializes and returns the global internal validator.
+func getValidator() *validator.Validate {
+	v := validator.New()
+	if err := v.RegisterValidation("notblank", validators.NotBlank); err != nil {
 		panic("failed to register validation notblank")
 	}
+
+	return v
 }
 
 // TimerCore contains fields that can be specified directly via APIs.
