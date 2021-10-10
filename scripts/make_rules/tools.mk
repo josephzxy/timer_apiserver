@@ -6,6 +6,14 @@ tools.verify.%:
 tools.install.goimports:
 	@$(GO) install golang.org/x/tools/cmd/goimports@latest
 
+.PHONY: tools.install.gci
+tools.install.gci:
+	@$(GO) install github.com/daixiang0/gci@latest
+
+.PHONY: tools.install.gofumpt
+tools.install.gofumpt:
+	@$(GO) install mvdan.cc/gofumpt@latest
+
 .PHONY: tools.install.golangci-lint
 tools.install.golangci-lint:
 	@$(GO) install github.com/golangci/golangci-lint/cmd/golangci-lint@latest

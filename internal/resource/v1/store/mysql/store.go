@@ -41,12 +41,14 @@ func NewRouter(cfg *Config) (store.Router, error) {
 	})
 	if err != nil {
 		zap.S().Errorw("failed to create mysql connection", "err", err)
+
 		return nil, err
 	}
 
 	sqlDB, err := db.DB()
 	if err != nil {
 		zap.S().Errorw("failed to configure mysql connection", "err", err)
+
 		return nil, err
 	}
 

@@ -47,5 +47,6 @@ func (f *mysqlCliFlags) getFlagSet() *pflag.FlagSet {
 	fs.Int("mysql.log-level", f.logLevel, `Gorm log level`)
 
 	f.flagSet = fs
+
 	return f.flagSet
 }

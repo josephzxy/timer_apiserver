@@ -3,10 +3,9 @@ package timer
 import (
 	"errors"
 
+	"github.com/go-sql-driver/mysql"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
-
-	"github.com/go-sql-driver/mysql"
 
 	pkgerr "github.com/josephzxy/timer_apiserver/internal/pkg/err"
 	"github.com/josephzxy/timer_apiserver/internal/resource/v1/model"
@@ -26,6 +25,7 @@ var dbDeleteByNameFunc = func(db *gorm.DB, name string) error {
 		if err := tx.Exec("UPDATE `timer` SET `alive`=NULL WHERE `id`= ?", timer.ID).Error; err != nil {
 			return err
 		}
+
 		return nil
 	})
 }
@@ -41,9 +41,10 @@ func (s *timerStore) DeleteByName(name string) error {
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return pkgerr.New(pkgerr.ErrTimerNotFound, "")
 	}
-	me, ok := err.(*mysql.MySQLError)
+	me, ok := err.(*mysql.MySQLError) //nolint: errorlint
 	if !ok {
 		return err
 	}
+
 	return pkgerr.New(pkgerr.ErrDatabase, me.Error())
 }

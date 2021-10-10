@@ -2,7 +2,7 @@ package config
 
 import "time"
 
-// MySQLConfig is the root struct for MySQL related configs
+// MySQLConfig is the root struct for MySQL related configs.
 type MySQLConfig struct {
 	User            string        `json:"user" mapstructure:"user"`
 	Pwd             string        `json:"pwd" mapstructure:"pwd"`

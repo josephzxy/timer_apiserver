@@ -30,7 +30,7 @@ type restServer struct {
 	insecureServer *http.Server
 }
 
-// New returns the concrete value of interface RESTServer
+// New returns the concrete value of interface RESTServer.
 func New(cfg *Config, serviceRouter service.Router) RESTServer {
 	s := &restServer{
 		cfg:           *cfg,
@@ -38,6 +38,7 @@ func New(cfg *Config, serviceRouter service.Router) RESTServer {
 		Engine:        gin.New(),
 	}
 	s.init()
+
 	return s
 }
 
@@ -89,6 +90,7 @@ func (s *restServer) startInsecureServing() error {
 	if err := s.insecureServer.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		return err
 	}
+
 	return nil
 }
 
@@ -108,7 +110,9 @@ func (s *restServer) Stop() error {
 	if err := s.insecureServer.Shutdown(ctx); err != nil {
 		msg := "rest server failed to shut down gracefully"
 		zap.S().Warnw(msg, "err", err)
+
 		return errors.WithMessage(err, msg)
 	}
+
 	return nil
 }

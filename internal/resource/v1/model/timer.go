@@ -8,22 +8,25 @@ import (
 	"gorm.io/gorm"
 )
 
-var val *validator.Validate
+var val = getValidator()
 
-func init() {
-	val = validator.New()
-	if err := val.RegisterValidation("notblank", validators.NotBlank); err != nil {
+// initValidator initializes and returns the global internal validator.
+func getValidator() *validator.Validate {
+	v := validator.New()
+	if err := v.RegisterValidation("notblank", validators.NotBlank); err != nil {
 		panic("failed to register validation notblank")
 	}
+
+	return v
 }
 
-// TimerCore contains fields that can be specified directly via APIs
+// TimerCore contains fields that can be specified directly via APIs.
 type TimerCore struct {
 	Name      string    `json:"name" gorm:"index:uniq_name_alive,unique,priority:1" validate:"required,notblank"`
 	TriggerAt time.Time `json:"triggerAt" gorm:"index:idx_trigger_at" validate:"required,gte=time.Now().Add(time.Minute),notblank"`
 }
 
-// ValidateTimerCore validates the given value of TimerCore
+// ValidateTimerCore validates the given value of TimerCore.
 func ValidateTimerCore(tc *TimerCore) error {
 	return val.Struct(tc)
 }
@@ -41,7 +44,7 @@ func (t *Timer) TableName() string {
 	return "timer"
 }
 
-// ValidateTimer validates the given value of Timer
+// ValidateTimer validates the given value of Timer.
 func ValidateTimer(t *Timer) error {
 	return val.Struct(t)
 }

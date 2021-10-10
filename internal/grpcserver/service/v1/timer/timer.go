@@ -11,7 +11,7 @@ type timerServer struct {
 	serviceRouter service.Router
 }
 
-// NewTimerServer returns a value of the implementation of the interface TimerServer
+// NewTimerServer returns a value of the implementation of the interface TimerServer.
 func NewTimerServer(serviceRouter service.Router) pb.TimerServer {
 	return &timerServer{serviceRouter: serviceRouter}
 }

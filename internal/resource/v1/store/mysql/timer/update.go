@@ -25,6 +25,7 @@ var dbUpdateByNameFunc = func(db *gorm.DB, name string, want *model.TimerCore) e
 		).Error; err != nil {
 			return err
 		}
+
 		return nil
 	})
 }
@@ -40,7 +41,7 @@ func (s *timerStore) UpdateByName(name string, want *model.TimerCore) error {
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return pkgerr.New(pkgerr.ErrTimerNotFound, "")
 	}
-	me, ok := err.(*mysql.MySQLError)
+	me, ok := err.(*mysql.MySQLError) //nolint: errorlint
 	if !ok {
 		return err
 	}
@@ -48,5 +49,6 @@ func (s *timerStore) UpdateByName(name string, want *model.TimerCore) error {
 	if me.Number == 1062 {
 		return pkgerr.New(pkgerr.ErrTimerAlreadyExists, "")
 	}
+
 	return pkgerr.New(pkgerr.ErrDatabase, me.Error())
 }

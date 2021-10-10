@@ -1,6 +1,6 @@
-// Package docs Timer API Server
+// Package docs Timer API Server.
 //
-// The RESTful API server for managing timers
+// The RESTful API server for managing timers.
 //
 // 		Schemes: http
 // 		Host: localhost

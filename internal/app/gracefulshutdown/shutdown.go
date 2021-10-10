@@ -1,6 +1,6 @@
 // Package gracefulshutdown implements a simple library
 // for enabling app-level graceful shutdown on receiving shutdown OS
-// signals like SIGTERM and SIGINT
+// signals like SIGTERM and SIGINT.
 package gracefulshutdown
 
 import (
@@ -37,9 +37,7 @@ func enable(handler func() error) {
 	}()
 }
 
-var (
-	once sync.Once
-)
+var once sync.Once
 
 // Enable enables app-level graceful shutdown and invokes the given
 // handler once graceful shutdown is triggerred. Note that Enable can ONLY

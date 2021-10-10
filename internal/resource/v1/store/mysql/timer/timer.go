@@ -12,7 +12,7 @@ type timerStore struct {
 	db *gorm.DB
 }
 
-// NewTimerStore returns a MySQL-specific concrete value of store.TimerStore
+// NewTimerStore returns a MySQL-specific concrete value of store.TimerStore.
 func NewTimerStore(db *gorm.DB) store.TimerStore {
 	return &timerStore{db}
 }

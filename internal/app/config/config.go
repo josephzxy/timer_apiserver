@@ -1,4 +1,4 @@
-// Package config manages all app-level configs
+// Package config manages all app-level configs.
 package config
 
 // Config is the root struct that holds all app-level configs.
@@ -14,7 +14,7 @@ type Config struct {
 	Config string `json:"config" mapstructure:"config"`
 }
 
-// NewEmptyConfig returns an empty value of Config
+// NewEmptyConfig returns an empty value of Config.
 func NewEmptyConfig() *Config {
 	return &Config{
 		MySQL: newEmptyMySQLConfig(),

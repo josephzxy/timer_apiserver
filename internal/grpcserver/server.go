@@ -4,11 +4,10 @@ package grpcserver
 import (
 	"net"
 
+	"github.com/pkg/errors"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
-
-	"github.com/pkg/errors"
 
 	pb "github.com/josephzxy/timer_apiserver/api/grpc"
 	"github.com/josephzxy/timer_apiserver/internal/grpcserver/service/v1/timer"
@@ -28,13 +27,14 @@ type grpcServer struct {
 	insecureServer *grpc.Server
 }
 
-// New returns the value of the implementation of interface GRPCServer
+// New returns the value of the implementation of interface GRPCServer.
 func New(cfg *Config, serviceRouter service.Router) GRPCServer {
 	s := &grpcServer{
 		cfg:           *cfg,
 		serviceRouter: serviceRouter,
 	}
 	s.init()
+
 	return s
 }
 
@@ -44,7 +44,7 @@ func (s *grpcServer) init() {
 	reflection.Register(s.insecureServer)
 }
 
-// startInsecureServing starts the insecure serving of grpcServer
+// startInsecureServing starts the insecure serving of grpcServer.
 func (s *grpcServer) startInsecureServing() error {
 	addr := s.cfg.InsecureServing.Addr()
 	lis, err := net.Listen("tcp", addr)
@@ -56,17 +56,18 @@ func (s *grpcServer) startInsecureServing() error {
 	if err := s.insecureServer.Serve(lis); err != nil && !errors.Is(err, grpc.ErrServerStopped) {
 		return err
 	}
+
 	return nil
 }
 
-// Start starts the gRPC server
+// Start starts the gRPC server.
 func (s *grpcServer) Start() error {
 	return util.BatchGoOrErr(
 		s.startInsecureServing,
 	)
 }
 
-// Stop gracefully stops the gRPC server
+// Stop gracefully stops the gRPC server.
 func (s *grpcServer) Stop() {
 	zap.L().Info("grpc server starts shutting down gracefully")
 	s.insecureServer.GracefulStop()

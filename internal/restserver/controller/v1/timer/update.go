@@ -18,18 +18,21 @@ func (tc *timerController) Update(c *gin.Context) {
 	if err := bindJSONFunc(c, &want); err != nil {
 		zap.S().Errorw("failed to bind data to model", "err", err)
 		resp.WriteResponse(c, pkgerr.New(pkgerr.ErrValidation, err.Error()), nil)
+
 		return
 	}
 
 	if err := validateTimerCoreFunc(&want); err != nil {
 		zap.S().Errorw("failed to validate data", "err", err, "data", want)
 		resp.WriteResponse(c, pkgerr.New(pkgerr.ErrValidation, err.Error()), nil)
+
 		return
 	}
 
 	name := c.Param("name")
 	if err := tc.serviceRouter.Timer().UpdateByName(name, &want); err != nil {
 		resp.WriteResponse(c, err, nil)
+
 		return
 	}
 	resp.WriteResponse(c, nil, nil)

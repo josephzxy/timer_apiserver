@@ -4,11 +4,10 @@ package app
 import (
 	"strings"
 
-	"go.uber.org/zap"
-
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"go.uber.org/zap"
 
 	"github.com/josephzxy/timer_apiserver/internal/app/cliflags"
 	"github.com/josephzxy/timer_apiserver/internal/app/config"
@@ -47,6 +46,7 @@ func newApp(basename string) *app {
 		cliflags: cliflags.NewCliFlags(),
 	}
 	a.buildCmd()
+
 	return a
 }
 
@@ -87,8 +87,10 @@ func (a *app) bindConfigFromCliFlags() error {
 	if err := viper.BindPFlags(a.cmd.Flags()); err != nil {
 		msg := "failed to bind configs with cli flags"
 		zap.S().Errorw(msg, "err", err)
+
 		return errors.WithMessage(err, msg)
 	}
+
 	return nil
 }
 
@@ -99,14 +101,16 @@ func (a *app) bindConfigFromEnv() {
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_", "-", "_"))
 }
 
-// bindConfigFromFile binds a config file to viper
+// bindConfigFromFile binds a config file to viper.
 func (a *app) bindConfigFromFile() error {
 	viper.SetConfigFile(a.cfg.Config)
 	if err := viper.ReadInConfig(); err != nil {
 		msg := "failed to bind configs with config file"
 		zap.S().Errorw(msg, "err", err)
+
 		return errors.WithMessage(err, msg)
 	}
+
 	return nil
 }
 
@@ -115,8 +119,10 @@ func (a *app) unmarshalConfig() error {
 	if err := viper.Unmarshal(a.cfg); err != nil {
 		msg := "failed to unmarshal from viper to app config"
 		zap.S().Errorw(msg, "err", err)
+
 		return errors.WithMessage(err, msg)
 	}
+
 	return nil
 }
 
@@ -140,14 +146,17 @@ func (a *app) loadConfig() error {
 		if err := a.unmarshalConfig(); err != nil {
 			return err
 		}
+
 		return nil
 	}
 	zap.L().Info("config file path not set, will skip reading from config file")
+
 	return nil
 }
 
 // Run is the entry point for the app.
 func (a *app) Run() {
+	log.Init()
 	defer log.Flush()
 	if err := a.cmd.Execute(); err != nil {
 		zap.S().Panicw("app failed during running", "err", err)
@@ -155,7 +164,7 @@ func (a *app) Run() {
 }
 
 // runCmd is the entry point for the app-level cobra command.
-// Note that cli flags and env vars will NOT be read BEFORE calling runCmd
+// Note that cli flags and env vars will NOT be read BEFORE calling runCmd.
 func (a *app) runCmd(cmd *cobra.Command, args []string) error {
 	if err := a.loadConfig(); err != nil {
 		return err
@@ -163,6 +172,7 @@ func (a *app) runCmd(cmd *cobra.Command, args []string) error {
 	if err := a.run(); err != nil {
 		return err
 	}
+
 	return nil
 }
 
@@ -186,6 +196,7 @@ func (a *app) run() error {
 	if err != nil {
 		msg := "failed to get mysql store router"
 		zap.S().Errorw(msg, "err", err)
+
 		return errors.WithMessage(err, msg)
 	}
 
@@ -217,6 +228,7 @@ func (a *app) run() error {
 			restServer.Stop,
 			func() error {
 				grpcServer.Stop()
+
 				return nil
 			},
 		)

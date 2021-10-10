@@ -80,8 +80,7 @@ type getTimerResponse struct {
 }
 
 // swagger:parameters getTimersRequest
-type getTimersRequest struct {
-}
+type getTimersRequest struct{}
 
 // swagger:response getTimersResponse
 type getTimersResponse struct {
@@ -98,8 +97,7 @@ type updateTimerRequest struct {
 }
 
 // swagger:response updateTimerResponse
-type updateTimerResponse struct {
-}
+type updateTimerResponse struct{}
 
 // swagger:parameters deleteTimerRequest
 type deleteTimerRequest struct {
@@ -109,8 +107,7 @@ type deleteTimerRequest struct {
 }
 
 // swagger:response deleteTimerResponse
-type deleteTimerResponse struct {
-}
+type deleteTimerResponse struct{}
 
 // swagger:response errResp
 type errResp struct {
