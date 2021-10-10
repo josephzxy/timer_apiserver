@@ -34,8 +34,10 @@ func BatchGoOrErr(fs ...func() error) error {
 			if err := fn(); err != nil {
 				zap.S().Errorw("Function failed in BatchGoOrErr", "func", GetFuncName(fn), "err", err)
 				firstErr = err
+
 				return err
 			}
+
 			return nil
 		})
 	}

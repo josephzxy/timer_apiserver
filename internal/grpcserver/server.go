@@ -35,6 +35,7 @@ func New(cfg *Config, serviceRouter service.Router) GRPCServer {
 		serviceRouter: serviceRouter,
 	}
 	s.init()
+
 	return s
 }
 
@@ -56,6 +57,7 @@ func (s *grpcServer) startInsecureServing() error {
 	if err := s.insecureServer.Serve(lis); err != nil && !errors.Is(err, grpc.ErrServerStopped) {
 		return err
 	}
+
 	return nil
 }
 

@@ -34,6 +34,7 @@ func (s *timerStore) GetByName(name string) (*model.Timer, error) {
 	if !ok {
 		return nil, err
 	}
+
 	return nil, pkgerr.New(pkgerr.ErrDatabase, me.Error())
 }
 
@@ -54,6 +55,7 @@ func (s *timerStore) GetAll() ([]model.Timer, error) {
 	if !ok {
 		return nil, err
 	}
+
 	return nil, pkgerr.New(pkgerr.ErrDatabase, me.Error())
 }
 
@@ -75,5 +77,6 @@ func (s *timerStore) GetAllPending() ([]model.Timer, error) {
 	if !ok {
 		return nil, err
 	}
+
 	return nil, pkgerr.New(pkgerr.ErrDatabase, me.Error())
 }

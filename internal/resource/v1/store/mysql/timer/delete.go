@@ -26,6 +26,7 @@ var dbDeleteByNameFunc = func(db *gorm.DB, name string) error {
 		if err := tx.Exec("UPDATE `timer` SET `alive`=NULL WHERE `id`= ?", timer.ID).Error; err != nil {
 			return err
 		}
+
 		return nil
 	})
 }
@@ -45,5 +46,6 @@ func (s *timerStore) DeleteByName(name string) error {
 	if !ok {
 		return err
 	}
+
 	return pkgerr.New(pkgerr.ErrDatabase, me.Error())
 }

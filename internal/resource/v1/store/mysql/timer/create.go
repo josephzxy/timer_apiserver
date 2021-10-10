@@ -32,5 +32,6 @@ func (s *timerStore) Create(timer *model.Timer) error {
 	if me.Number == 1062 {
 		return pkgerr.New(pkgerr.ErrTimerAlreadyExists, me.Error())
 	}
+
 	return pkgerr.New(pkgerr.ErrDatabase, me.Error())
 }

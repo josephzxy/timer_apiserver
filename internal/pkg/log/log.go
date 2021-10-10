@@ -23,5 +23,6 @@ func init() {
 // It should be called before the program exits.
 func Flush() error {
 	zap.L().Info("flushing log")
+
 	return zap.L().Sync()
 }

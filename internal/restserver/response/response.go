@@ -35,10 +35,12 @@ func WriteResponse(c *gin.Context, err error, data interface{}) {
 				errInfo{Code: int(agent.Code()), Msg: agent.Msg()},
 			},
 		)
+
 		return
 	}
 	if data != nil {
 		c.JSON(http.StatusOK, dataRespBodyWrapper{data})
+
 		return
 	}
 	c.JSON(http.StatusOK, nil)

@@ -30,6 +30,7 @@ func (f *restServerCliFlags) getFlagSet() *pflag.FlagSet {
 	fs.Bool("rest.use-healthz", f.useHealthz, `Whether or not to enable health checking endpoint /healthz for REST server`)
 
 	f.flagSet = fs
+
 	return f.flagSet
 }
 

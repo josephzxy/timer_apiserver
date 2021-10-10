@@ -26,6 +26,7 @@ func (f *grpcServerCliFlags) getFlagSet() *pflag.FlagSet {
 	fs.String("grpc.mode", f.mode, `GRPC server mode`)
 
 	f.flagSet = fs
+
 	return f.flagSet
 }
 

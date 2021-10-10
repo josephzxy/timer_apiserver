@@ -21,5 +21,6 @@ func (f *globalCliFlags) getFlagSet() *pflag.FlagSet {
 	fs.String("config", f.config, `The path to config file. Reading from config file will be skipped if path not set`)
 
 	f.flagSet = fs
+
 	return f.flagSet
 }

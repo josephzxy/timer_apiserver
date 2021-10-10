@@ -56,11 +56,13 @@ func registerRESTAgent(code AppErrCode, httpStatus int, msg string) error {
 				return true
 			}
 		}
+
 		return false
 	}()
 	if !found {
 		msg := fmt.Sprintf("http status not allowed, will skip. should be one of %v, got %d", allowedHTTPStatus, httpStatus)
 		zap.L().Error(msg)
+
 		return errors.New(msg)
 	}
 
@@ -70,9 +72,11 @@ func registerRESTAgent(code AppErrCode, httpStatus int, msg string) error {
 	if _, ok := restAgents[code]; ok {
 		msg := fmt.Sprintf("error code already registered, will skip. got %d", code)
 		zap.L().Error(msg)
+
 		return errors.New(msg)
 	}
 	restAgents[code] = newSimpleRESTAgent(httpStatus, msg, code)
+
 	return nil
 }
 
@@ -92,6 +96,7 @@ func GetRESTAgentByError(err error) RESTAgent {
 	if !ok {
 		return restAgents[ErrUnknown]
 	}
+
 	return agent
 }
 

@@ -12,6 +12,7 @@ func (tc *timerController) Delete(c *gin.Context) {
 	err := tc.serviceRouter.Timer().DeleteByName(name)
 	if err != nil {
 		resp.WriteResponse(c, err, nil)
+
 		return
 	}
 	resp.WriteResponse(c, nil, nil)

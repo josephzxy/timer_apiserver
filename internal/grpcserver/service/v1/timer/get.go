@@ -25,5 +25,6 @@ func (s *timerServer) GetAllPendingTimers(context.Context, *pb.GetAllPendingTime
 	resp := &pb.GetAllPendingTimersResp{
 		Items: data,
 	}
+
 	return resp, nil
 }
