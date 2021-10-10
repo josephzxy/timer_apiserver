@@ -58,8 +58,8 @@ func Test_timerController_Create(t *testing.T) {
 			mockServiceRouter := service.NewMockServiceRouter(ctrl)
 			mockServiceRouter.EXPECT().Timer().AnyTimes().Return(mockTimerService)
 
-			defer monkeyPatch_validateTimerFunc(tt.validateErr)()
-			defer monkeyPatch_bindJsonFunc(tt.bindJsonErr)()
+			defer monkeyPatchValidateTimerFunc(tt.validateErr)()
+			defer monkeyPatchBindJsonFunc(tt.bindJsonErr)()
 
 			tc := &timerController{serviceRouter: mockServiceRouter}
 			tc.Create(tt.c)
