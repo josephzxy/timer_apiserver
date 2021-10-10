@@ -1,8 +1,7 @@
 run:
+  tests: false
   skip-dirs:
     - api/*
-  skip-files:
-    - _test.go
 
 linters-settings:
   gci:
