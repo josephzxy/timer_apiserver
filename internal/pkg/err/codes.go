@@ -3,7 +3,7 @@ package err
 // AppErrCode defines the type of Application error code
 // Application error codes are made of 4 digits.
 // The first 2 digits denotes the component while
-// the last 2 digits is the error index
+// the last 2 digits is the error index.
 type AppErrCode int
 
 // 10: common

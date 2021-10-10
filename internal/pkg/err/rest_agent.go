@@ -22,7 +22,7 @@ type RESTAgent interface {
 	Code() AppErrCode
 }
 
-// SimpleRESTAgent is a simple internal implementation of RESTAgent interface
+// SimpleRESTAgent is a simple internal implementation of RESTAgent interface.
 type SimpleRESTAgent struct {
 	http int
 	msg  string
@@ -33,7 +33,7 @@ func newSimpleRESTAgent(httpStatus int, msg string, code AppErrCode) *SimpleREST
 	return &SimpleRESTAgent{http: httpStatus, msg: msg, code: code}
 }
 
-// HTTPStatus returns the HTTP status code
+// HTTPStatus returns the HTTP status code.
 func (s *SimpleRESTAgent) HTTPStatus() int { return s.http }
 
 // Msg returns the user-facing message
