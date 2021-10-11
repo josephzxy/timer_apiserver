@@ -73,3 +73,6 @@ Timer API Server is a demo Golang project that implements RESTful APIs and gRPC 
 - **gRPC API**
 
     Please check out [timer.proto](api/grpc/timer.proto).
+
+## Dev Doc
+See [Development Documentation](docs/dev/development.md).
