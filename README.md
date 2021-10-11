@@ -13,6 +13,7 @@ Golang, Gin, gRPC, MariaDB, GORM, Cobra, Pflag, Viper, Docker, GNU Make
 
 1. Check prerequisites
   - [Docker 20.10+](https://docs.docker.com/get-docker/)
+  - [Docker Compose](https://docs.docker.com/compose/install/) (NOTE: we are using the one with the standalone binary `docker-compose` instead of docker's subcommand `docker compose` to be compatible with Linux)
   - [GNU make](https://www.gnu.org/software/make/)
 
 2. Check out the repository to your local machine and go to the project root directory.
