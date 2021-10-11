@@ -70,7 +70,7 @@ clean:
 	@rm -rvf $(OUTPUT_DIR)
 	@$(MAKE) go.clean
 
-## help: print the help message and exit
+## help: Print the help message and exit
 .PHONY: help
 help: Makefile
 	@echo -e "Usage: make <TARGETS> <OPTIONS>... \n\nTargets:"
