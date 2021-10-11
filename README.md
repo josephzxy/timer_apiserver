@@ -1,10 +1,13 @@
 # ⏳ Timer API Server
 [![codecov](https://codecov.io/gh/josephzxy/timer_apiserver/branch/develop/graph/badge.svg?token=AU3193CPC3)](https://codecov.io/gh/josephzxy/timer_apiserver)
+[![CircleCI](https://circleci.com/gh/josephzxy/timer_apiserver.svg?style=svg)](https://circleci.com/gh/josephzxy/timer_apiserver)
+[![Go Report Card](https://goreportcard.com/badge/github.com/josephzxy/timer_apiserver)](https://goreportcard.com/report/github.com/josephzxy/timer_apiserver)
+[![GitHub go.mod Go version of a Go module](https://img.shields.io/github/go-mod/go-version/josephzxy/timer_apiserver.svg)](https://github.com/josephzxy/timer_apiserver)
 
-Timer API server is a demo Golang project that implements both external-facing RESTful APIs and internal-facing gRPC APIs for managing RESTful resource Timer.
+Timer API Server is a demo Golang project that implements RESTful APIs and gRPC APIs for Timer.
 
 **Major Tech stacks:**
-Golang, Gin, gRPC, MariaDB, GORM, Cobra, Pflag, Viper, Docker, GNU make
+Golang, Gin, gRPC, MariaDB, GORM, Cobra, Pflag, Viper, Docker, GNU Make
 
 ## Try It Out!
 
@@ -46,13 +49,24 @@ Golang, Gin, gRPC, MariaDB, GORM, Cobra, Pflag, Viper, Docker, GNU make
     make demo.rest.delete.hello_again
     ```
 
-## RESTful API Doc
+## Overview
 
-View swagger doc as a webpage by
-```bash
-make swagger
-```
-Or check out [swagger.yml](api/rest/swagger/swagger.yml) directly.
+Timer API Server is a demo Golang project that implements RESTful APIs and gRPC APIs for Timer.
 
-## gRPC API Doc
-Please check out [timer.proto](api/grpc/timer.proto).
+- Loose-coupling design where high-level pluggable controllers(e.g. REST API Server) share layered low-level resource managing service(e.g. MySQL middleware).
+- Aligned with [12-factor-app](https://12factor.net/) methodology with supports for taking configurations from various sources, treating logs as event streams, launching the app as stateless processes, etc.
+- Achieved [95% test coverage on CodeCov](https://app.codecov.io/gh/josephzxy/timer_apiserver) and [A+ on Go Report Card](https://goreportcard.com/report/github.com/josephzxy/timer_apiserver). Leverages GNU Make to automate trivial tasks. [Lints, tests, and builds on each commit with CircleCI](https://circleci.com/gh/josephzxy/timer_apiserver).
+- Enabled automated building and serving with Docker Compose.
+
+## API Doc
+- **RESTful API**
+
+    View swagger doc as a webpage by
+    ```bash
+    make swagger
+    ```
+    Or check out [swagger.yml](api/rest/swagger/swagger.yml) directly.
+
+- **gRPC API**
+
+    Please check out [timer.proto](api/grpc/timer.proto).
