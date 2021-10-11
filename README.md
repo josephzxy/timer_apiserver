@@ -21,7 +21,7 @@ Golang, Gin, gRPC, MariaDB, GORM, Cobra, Pflag, Viper, Docker, GNU Make
     cd timer_apiserver
     ```
 
-3. Build & launch with `docker compose`
+3. Build & launch with `docker-compose`
     ```sh
     make docker.compose.up
     ```
