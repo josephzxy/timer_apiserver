@@ -7,3 +7,4 @@ grpc.protoc: tools.verify.protoc-gen-go tools.verify.protoc-gen-go-grpc
 	@protoc --go_opt=paths=source_relative --go_out=. \
 	--go-grpc_opt=paths=source_relative --go-grpc_out=. \
 	./api/grpc/timer.proto
+
