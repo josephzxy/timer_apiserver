@@ -1,4 +1,4 @@
-//nolint:deadcode,unused
+// Package docs provides elements for swagger specification auto-generation.
 package docs
 
 import "github.com/josephzxy/timer_apiserver/internal/resource/v1/model"

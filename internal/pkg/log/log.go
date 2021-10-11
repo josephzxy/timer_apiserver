@@ -12,6 +12,7 @@ import (
 
 var once sync.Once
 
+// Init initializes the package.
 func Init() {
 	once.Do(func() {
 		cfg := zap.NewProductionConfig()
