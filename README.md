@@ -51,6 +51,8 @@ Golang, Gin, gRPC, MariaDB, GORM, Cobra, Pflag, Viper, Docker, GNU Make
 
 ## Overview
 
+[![System overview](docs/images/system_overview.svg)](https://drive.google.com/file/d/1B9L1sRXv4_FnJyslSze-C8GQ56jMQzyy/view?usp=sharing)
+
 Timer API Server is a demo Golang project that implements RESTful APIs and gRPC APIs for Timer.
 
 - Loose-coupling design where high-level pluggable controllers(e.g. REST API Server) share layered low-level resource managing service(e.g. MySQL middleware).
