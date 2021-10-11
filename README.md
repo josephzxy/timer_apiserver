@@ -57,8 +57,9 @@ Timer API Server is a demo Golang project that implements RESTful APIs and gRPC 
 
 - Loose-coupling design where high-level pluggable controllers(e.g. REST API Server) share layered low-level resource managing service(e.g. MySQL middleware).
 - Aligned with [12-factor-app](https://12factor.net/) methodology with supports for taking configurations from various sources, treating logs as event streams, launching the app as stateless processes, etc.
-- Achieved [95% test coverage on CodeCov](https://app.codecov.io/gh/josephzxy/timer_apiserver) and [A+ on Go Report Card](https://goreportcard.com/report/github.com/josephzxy/timer_apiserver). Leverages GNU Make to automate trivial tasks. [Lints, tests, and builds on each commit with CircleCI](https://circleci.com/gh/josephzxy/timer_apiserver).
+- Achieved [95% test coverage on CodeCov](https://app.codecov.io/gh/josephzxy/timer_apiserver) and [A+ on Go Report Card](https://goreportcard.com/report/github.com/josephzxy/timer_apiserver). Leverages GNU Make to automate trivial tasks. [Lints, tests, and builds on each commit with CircleCI](https://circleci.com/gh/josephzxy/timer_apiserver). Adapted Angular-style Git commit message and Gitflow workflow.
 - Enabled automated building and serving with Docker Compose.
+- Enabled auto-generation of RESTful API Swagger documentation.
 
 ## API Doc
 - **RESTful API**
