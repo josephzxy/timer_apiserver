@@ -34,6 +34,7 @@ services:
       - ../../log:/app/log:wo
     environment:
       - APISERVER_CONFIG=/app/config/config.yml
+      - APISERVER_MYSQL_HOST=db
     depends_on:
       db:
         condition: service_healthy
