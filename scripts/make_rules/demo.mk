@@ -1,7 +1,16 @@
 # demo.mk provides handy phonies for trying out timer_apiserver
 
-DEMO_HOST = localhost
-DEMO_CONTAINER_HOST = host.docker.internal
+ifeq ($(PLATFORM), darwin_arm64)
+	HTTPIE := docker run -it --rm alpine/httpie
+	GRPC_CLI := docker run -it --rm namely/grpc-cli
+	DEMO_CONTAINER_HOST := host.docker.internal
+else
+	HTTPIE := docker run -it --rm --network=host alpine/httpie
+	GRPC_CLI := docker run -it --rm --network=host namely/grpc-cli
+	DEMO_CONTAINER_HOST := localhost
+endif
+
+MYSQL := docker run -it --rm --network=host mariadb mysql
 
 DEMO_REST_PORT = 8081
 DEMO_REST_CONTAINER_ADDR = http://$(DEMO_CONTAINER_HOST):$(DEMO_REST_PORT)
@@ -12,11 +21,6 @@ DEMO_REST_PUT_TRIGGER_AT ?= $(DEMO_REST_DEFAULT_TRIGGER_AT)
 
 DEMO_GRPC_PORT = 8082
 DEMO_GRPC_CONTAINER_ADDR = $(DEMO_CONTAINER_HOST):$(DEMO_GRPC_PORT)
-
-# demo clients
-HTTPIE := docker run -it --rm --add-host host.docker.internal:host-gateway alpine/httpie
-MYSQL := docker run -it --rm --network=host mariadb mysql
-GRPC_CLI := docker run -it --rm --add-host host.docker.internal:host-gateway namely/grpc-cli
 
 DEMO_MK_PREFIX := "Demo:"
 
