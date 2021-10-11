@@ -20,47 +20,53 @@ GRPC_CLI := docker run -it --rm --add-host host.docker.internal:host-gateway nam
 
 DEMO_MK_PREFIX := "Demo:"
 
-# demo for grpc server
+## demo.grpc.getallpending: Call gRPC method GetAllPendingTimers with gRPC Cli
 .PHONY: demo.grpc.getallpending
 demo.grpc.getallpending:
 	@echo "=======> $(DEMO_MK_PREFIX) [GRPC] getting all pending timers"
 	$(GRPC_CLI) call $(DEMO_GRPC_CONTAINER_ADDR) timer.Timer.GetAllPendingTimers ""
 	@echo
 
-# demo for rest server
+## demo.rest.get.all: Call RESTful API to get all timers
 .PHONY: demo.rest.get.all
 demo.rest.get.all:
 	@echo "=======> $(DEMO_MK_PREFIX) [REST] getting all timers"
 	$(HTTPIE) GET $(DEMO_REST_CONTAINER_ADDR)/v1/timers
 	@echo
 
+## demo.rest.get.%: Call RESTful API to get the timer with the given name
 .PHONY: demo.rest.get.%
 demo.rest.get.%:
 	@echo "=======> $(DEMO_MK_PREFIX) [REST] getting timer $*"
 	$(HTTPIE) GET $(DEMO_REST_CONTAINER_ADDR)/v1/timers/$*
 	@echo
 
+## demo.rest.post.%: Call RESTful API to create a timer with the given name
 .PHONY: demo.rest.post.%
 demo.rest.post.%:
 	@echo "=======> $(DEMO_MK_PREFIX) [REST] creating timer $*"
 	$(HTTPIE) POST $(DEMO_REST_CONTAINER_ADDR)/v1/timers name=$* triggerAt=$(DEMO_REST_DEFAULT_TRIGGER_AT)
 	@echo
 
+## demo.rest.put.%: Call RESTful API to update a timer with the given name
 .PHONY: demo.rest.put.%
 demo.rest.put.%:
 	@echo "=======> $(DEMO_MK_PREFIX) [REST] updating timer $*"
 	$(HTTPIE) PUT $(DEMO_REST_CONTAINER_ADDR)/v1/timers/$* name=$(DEMO_REST_PUT_NAME) triggerAt=$(DEMO_REST_PUT_TRIGGER_AT)
 	@echo
 
+## demo.rest.delete.%: Call RESTful API to delete a timer with the given name
 .PHONY: demo.rest.delete.%
 demo.rest.delete.%:
 	@echo "=======> $(DEMO_MK_PREFIX) [REST] deleting timer $*"
 	$(HTTPIE) DELETE $(DEMO_REST_CONTAINER_ADDR)/v1/timers/$*
 	@echo
 
-# demo for db
+
+## demo.db.show: Display the current content of table "timer" 
 .PHONY: demo.db.show
 demo.db.show:
 	@echo "=======> $(DEMO_MK_PREFIX) [DB] displaying current content of table"
 	$(MYSQL) -P 3306 --protocol=tcp -uroot -proot -e 'use test; select * from timer;'
 	@echo
+
