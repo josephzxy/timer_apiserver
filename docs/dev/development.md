@@ -2,6 +2,7 @@
 
 - [Development Documentation](#development-documentation)
   - [Development Prerequisites](#development-prerequisites)
+  - [Functional Tests](#functional-tests)
   - [Commit Message Scope](#commit-message-scope)
   - [Workflow](#workflow)
     - [Naming Convention for Feature branches](#naming-convention-for-feature-branches)
@@ -11,6 +12,15 @@
 ## Development Prerequisites
 In addition to prerequisites in [the main README](../../README.md), we also need
 - [protoc](https://grpc.io/docs/protoc-installation/#install-using-a-package-manager)
+
+## Functional Tests
+Unit tests and integration tests are run by CircleCI on each commit pushed to Github. To be more confident after making a change, it is highly recommended to run functional tests locally.
+
+```
+make func_test
+```
+
+Functional tests make requests to RESTful APIs and gRPC APIs and print responses as well as data in the test database.
 
 ## Commit Message Scope
 Timer API Server adopts [Angular Commit style](https://github.com/angular/angular/blob/master/CONTRIBUTING.md#-commit-message-format).
