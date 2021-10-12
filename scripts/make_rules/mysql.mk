@@ -96,8 +96,8 @@ mysql.docker.start:
 	 -e MARIADB_ROOT_PASSWORD=$(MYSQL_PWD) \
 	 -e MYSQL_PWD=$(MYSQL_PWD) \
 	 mariadb
-	@echo "=======> $(MYSQL_MK_PREFIX) waiting 5 seconds for the container to fully start"
-	@sleep 5
+	@echo "=======> $(MYSQL_MK_PREFIX) waiting 10 seconds for the container to fully start"
+	@sleep 10
 	@$(MAKE) mysql.migrate.up
 
 ## mysql.docker.stop: Stops (and removes) the MySQL docker container launched earlier
