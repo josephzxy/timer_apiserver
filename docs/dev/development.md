@@ -23,6 +23,7 @@ Below are scopes used in Timer API Server for each commit type.
 - migration: changes related to migration files.
 - config: changes related to config files(e.g. `config/example.yml`).
 - git: changes related to git(e.g. `.gitignore`).
+- script: changes to scripts(in `scripts/` other than makefiles)
 
 **feat, fix, style, refactor, perf, test**
 - resource: changes to `internal/resource`.
