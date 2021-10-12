@@ -12,7 +12,7 @@ GOLANG_MK_PREFIX := "Golang:"
 NO_TEST_PKGS := "\
 github.com/josephzxy/timer_apiserver/cmd|\
 github.com/josephzxy/timer_apiserver/api/rest/swagger/docs|\
-github.com/josephzxy/timer_apiserver/internal/resource/v1/model/v1|\
+github.com/josephzxy/timer_apiserver/internal/resource/v1/model|\
 github.com/josephzxy/timer_apiserver/internal/pkg/log\
 "
 NO_TEST_PKGS := $(shell echo '$(NO_TEST_PKGS)' | tr -d '[:space:]')
