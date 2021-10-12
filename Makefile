@@ -70,6 +70,11 @@ clean:
 	@rm -rvf $(OUTPUT_DIR)
 	@$(MAKE) go.clean
 
+.PHONY: func_test
+func_test:
+	@ echo "=======> $(MAIN_PREFIX) running functional tests"
+	@$(PROJECT_ROOT)/scripts/functional_test/test.sh
+
 ## help: Print the help message and exit
 .PHONY: help
 help: Makefile
