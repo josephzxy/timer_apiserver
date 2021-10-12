@@ -1,11 +1,16 @@
 # Development Documentation
 
 - [Development Documentation](#development-documentation)
+  - [Development Prerequisites](#development-prerequisites)
   - [Commit Message Scope](#commit-message-scope)
   - [Workflow](#workflow)
     - [Naming Convention for Feature branches](#naming-convention-for-feature-branches)
   - [Makefile](#makefile)
 
+
+## Development Prerequisites
+In addition to prerequisites in [the main README](../../README.md), we also need
+- [protoc](https://grpc.io/docs/protoc-installation/#install-using-a-package-manager)
 
 ## Commit Message Scope
 Timer API Server adopts [Angular Commit style](https://github.com/angular/angular/blob/master/CONTRIBUTING.md#-commit-message-format).
