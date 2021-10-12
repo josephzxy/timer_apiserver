@@ -24,6 +24,13 @@ DEMO_GRPC_CONTAINER_ADDR = $(DEMO_CONTAINER_HOST):$(DEMO_GRPC_PORT)
 
 DEMO_MK_PREFIX := "Demo:"
 
+## demo.rest.healthz: Call health checking endpoint
+.PHONY: demo.rest.healthz
+demo.rest.healthz:
+	@echo "=======> $(DEMO_MK_PREFIX) [REST] calling health checking endpoint"
+	$(HTTPIE) GET $(DEMO_REST_CONTAINER_ADDR)/healthz
+	@echo
+
 ## demo.grpc.getallpending: Call gRPC method GetAllPendingTimers with gRPC Cli
 .PHONY: demo.grpc.getallpending
 demo.grpc.getallpending:
